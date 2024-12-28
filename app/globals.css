@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+  font-family: "Roboto Condensed", sans-serif !important;
+}
+
+.bg_hero {
+  background: url("/appbg.png") center/cover no-repeat;
+  height: 170px;
+  width: 100%;
+}
+
+.games_bg {
+  background: url("/allgamesbg.png") center/cover no-repeat;
+  height: 500px;
+  @media (max-width: 640px) {
+    height: 200px;
+  }
+}
+
+.bg_linear_card {
+  background: linear-gradient(180deg, rgba(239, 174, 0, 0) 0%, #efae00 100%);
+}
+.game__content_bg {
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.353);
+}
