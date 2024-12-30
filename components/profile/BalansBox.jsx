@@ -155,6 +155,7 @@ export default function BalansBox() {
         // onClose();
         setError(false);
         setSuccess(false);
+        location.reload();
       }, 3000);
     }
   };
@@ -410,7 +411,7 @@ export default function BalansBox() {
                 </button>
               </div>
               {photo.length ? (
-                <div className="flex flex-col">
+                <div className="flex flex-col mb-[120px]">
                   <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
                     <div>
                       <p>check</p>
