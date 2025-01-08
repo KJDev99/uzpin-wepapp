@@ -1,16 +1,21 @@
 "use client";
 
 import axiosInstance from "@/libs/axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+
 const HeaderSwiper = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const bot = searchParams.get("bot");
   const [data, setData] = useState([]);
+  const bot = searchParams?.get("bot") || null;
+
   useEffect(() => {
     const fetchBanner = async () => {
+      if (!bot) {
+        console.error("Bot ID mavjud emas");
+        return;
+      }
+
       try {
         const response = await axiosInstance.get(
           `/client/webapp/banner/${bot}`
@@ -21,9 +26,10 @@ const HeaderSwiper = () => {
         console.error("Ma'lumotlarni yuklashda xatolik:", error);
       }
     };
+
     fetchBanner();
-    console.log(searchParams, "router");
-  }, []);
+  }, [bot]);
+
   return (
     <div className="mx-auto w-full">
       <div className="bg_hero"></div>

@@ -1,6 +1,7 @@
 import BestSales from "@/components/hero/BestSales";
 import HeaderSwiper from "@/components/hero/HeaderSwiper";
 import TopGameCards from "@/components/hero/TopGameCard";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Home Page",
@@ -11,7 +12,9 @@ export default function Home() {
   return (
     <div>
       <div>
-        <HeaderSwiper />
+        <Suspense>
+          <HeaderSwiper />
+        </Suspense>
         <TopGameCards />
         <BestSales />
       </div>
