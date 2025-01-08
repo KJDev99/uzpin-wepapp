@@ -1,12 +1,11 @@
 "use client";
 
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const HeaderSwiper = () => {
   const params = useParams();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { id } = params;
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -22,7 +21,6 @@ const HeaderSwiper = () => {
     fetchBanner();
     console.log(params, "params");
     console.log(pathname, "pathname");
-    console.log(searchParams, "searchParams");
   }, []);
   return (
     <div className="mx-auto w-full">
