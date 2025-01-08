@@ -10,9 +10,9 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "uzpin.uz",
+        hostname: "api.uzpin.games",
         port: "",
-        pathname: "/uploads/game/**",
+        pathname: "/media/uploads/**",
       },
     ],
   },

@@ -1,3 +1,5 @@
+"use client";
+
 import axiosInstance from "@/libs/axios";
 import { X } from "lucide-react";
 import Link from "next/link";
@@ -5,8 +7,10 @@ import { useRef, useState } from "react";
 import { Toast } from "../Toast";
 import Image from "next/image";
 import { FaChevronLeft } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 
-export default function PasswordCheck({ setLogin, mainEmail }) {
+export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
+  const { t } = useTranslation();
   const [code, setCode] = useState(["", "", "", ""]);
   const [disabledBtn, setDisabledBtn] = useState(true);
   const [error, setError] = useState();
@@ -41,15 +45,27 @@ export default function PasswordCheck({ setLogin, mainEmail }) {
     if (code.every((num) => num !== "")) {
       const enteredCode = code.join("");
       try {
-        await axiosInstance.post("client/auth/reset/verify", {
+        const response = await axiosInstance.post("client/auth/reset/verify", {
           email: mainEmail,
           code: enteredCode,
         });
         setLogin(6);
+        setAccess(response.data.access);
+        console.log(response.data.access, "access");
       } catch (error) {
         setError(true);
         setTimeout(() => setError(false), [3000]);
       }
+    }
+  };
+
+  const TryPassWord = async () => {
+    try {
+      await axiosInstance.post("client/auth/reset", {
+        email: mainEmail,
+      });
+    } catch (error) {
+      console.error("Xatolik yuz berdi:", error);
     }
   };
 
@@ -58,7 +74,7 @@ export default function PasswordCheck({ setLogin, mainEmail }) {
       {error && (
         <Toast status="false" text="Kirish Jarayonida nimadir xato bo'ldi" />
       )}
-      <div className="bg-white rounded-lg p-8 w-full max-w-md max-sm:p-0 max-sm:shadow-none">
+      <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md max-sm:p-0 max-sm:shadow-none">
         <div className="flex justify-end mb-[20px] max-sm:hidden">
           <Link href="/">
             <button className="text-[#313131]">
@@ -77,11 +93,11 @@ export default function PasswordCheck({ setLogin, mainEmail }) {
           <Link href="/">
             <FaChevronLeft className="h-6 w-6 absolute top-[60%] left-[0%] sm:hidden" />
           </Link>
-          <h2 className="text-[#141311] font-medium text-center text-3xl max-sm:mt-[46px]">
-            Tasdiqlash.
+          <h2 className="text-[#141311] font-medium redux_pro text-center text-[32px] leading-[40px] max-sm:mt-[46px]">
+            {t("login-text19")}
           </h2>
-          <p className="mb-3 text-center text-[#909090] text-sm">
-            Emailingizga yuborilgan 4 xonali kodni kiriting
+          <p className="mb-3 redux_pro font-light text-center text-[#909090] text-sm">
+            {t("login-text20")}
           </p>
         </div>
         <form onSubmit={handleSubmit}>
@@ -104,16 +120,20 @@ export default function PasswordCheck({ setLogin, mainEmail }) {
             id="submit-button"
             onClick={() => setLogin(4)}
             disabled={disabledBtn}
-            className="w-full bg-[#FFBA00] text-[#313131] py-2 px-4 rounded-lg mt-2 font-medium border-2 border-[transparent] border-b-[#313131] disabled:bg-gray-300 disabled:border-none disabled:cursor-not-allowed"
+            className="w-full bg-[#FFBA00] text-[#313131] py-2 px-4 rounded-lg mt-2 font-medium text-[20px] leading-[23px] border-2 border-[transparent] border-b-[#313131] disabled:bg-gray-300 disabled:border-none disabled:cursor-not-allowed"
           >
-            Tasdiqlash
+            {t("login-text19")}
           </button>
-          <div className="text-center text-sm text-[black] mt-3 mb-5">
-            Agar kod kelmagan bo‘lsa{" "}
-            <Link href="#" className="text-[#FFBA00]">
-              qayta yuborishni
-            </Link>{" "}
-            bosing
+          <div className="text-center font-light text-sm text-[#909090] mt-3 mb-5">
+            {t("login-text21")}{" "}
+            <button
+              onClick={() => TryPassWord()}
+              href="#"
+              className="text-[#FFBA00] font-normal"
+            >
+              {t("login-text22")}
+            </button>{" "}
+            {t("login-text23")}
           </div>
         </form>
       </div>

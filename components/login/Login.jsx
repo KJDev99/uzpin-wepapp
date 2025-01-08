@@ -10,8 +10,11 @@ import { signIn } from "next-auth/react";
 import axiosInstance from "@/libs/axios";
 import { Toast } from "../Toast";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import Image from "next/image";
 
 export default function Login({ setLogin, loginCount }) {
+  const { t } = useTranslation();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -81,21 +84,21 @@ export default function Login({ setLogin, loginCount }) {
     await signIn("apple", { callbackUrl: "/" });
   };
 
-  const handleTelegramLogin = () => {
-    alert("Telegram orqali kirish");
-  };
-
   return (
     <div className="flex justify-center items-center">
       {error && (
         <Toast status="false" text="Kirish Jarayonida nimadir xato bo'ldi" />
       )}
       <div className="bg-white  rounded-lg p-8 w-full max-w-md max-sm:p-4">
-        <div className="flex justify-end mb-[20px]">
+        <div className="flex relative flex-col items-center gap-4 mb-10">
           <Link href="/">
-            <button className="text-[#313131]">
-              <X className="h-6 w-6" />
-            </button>
+            <Image
+              src="/logo.svg"
+              className="sm:hidden"
+              width={162}
+              height={31}
+              alt="logo"
+            />
           </Link>
         </div>
         <div className="flex gap-4">
@@ -191,30 +194,32 @@ export default function Login({ setLogin, loginCount }) {
             <div className="w-[130px] bg-[#828282] h-[1px]"></div>
           </div>
 
-          <div className="flex flex-col justify-between items-center my-4">
-            <button
-              type="button"
-              onClick={handleTelegramLogin}
-              className="flex text-[black] items-center justify-center font-semibold py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
-            >
-              <RiTelegram2Fill className="bg-[#2AABEE] text-[white] p-1 text-[28px] rounded-full" />
-              Telegram orqali
-            </button>
+          <div className="flex flex-col justify-between items-center my-5">
+            <Link href="/telegram-login.html" className="w-full">
+              <button
+                type="button"
+                className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
+              >
+                <RiTelegram2Fill className="bg-[#2AABEE] text-[white] p-1 text-[28px] rounded-full" />
+                {t("login-text6")}
+              </button>
+            </Link>
+
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="flex items-center justify-center text-[black] font-semibold py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
+              className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
             >
               <FcGoogle className="p-0 text-[28px] rounded-full" />
-              Google orqali
+              {t("login-text7")}
             </button>
             <button
               type="button"
               onClick={handleAppleLogin}
-              className="flex items-center justify-center  text-[black] font-semibold py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131] "
+              className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
             >
               <IoLogoApple className=" text-[28px] rounded-full" />
-              Apple orqali
+              {t("login-text8")}
             </button>
           </div>
 

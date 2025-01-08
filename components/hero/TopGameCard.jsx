@@ -40,13 +40,16 @@ export default function TopGameCards() {
   return (
     <div className="w-full px-0 py-6">
       <h2 className=" font-medium text-lg mb-4 text-black ml-[10px]  ">
-        {t("popular-games")}
+        {t("all_games")}
       </h2>
       <div className="overflow-x-auto pb-6">
         <div className="flex gap-2 min-w-full snap-mandatory">
           {games.map((game, indx) => (
             <div key={indx} className="flex-shrink-0  snap-center w-[80px]">
-              <div className="p-[5px]">
+              <Link
+                href={`/all-games/${game.id}`}
+                className="p-[5px] overflow-hidden flex flex-col items-center"
+              >
                 <div className="relative aspect-square">
                   <Image
                     src={game.image}
@@ -57,11 +60,13 @@ export default function TopGameCards() {
                   />
                 </div>
                 <div className="pt-2">
-                  <h3 className="font-medium text-nowrap text-center text-[#313131] text-xs">
-                    {game.title}
+                  <h3 className="font-medium text-nowrap text-[#313131] text-xs text-left">
+                    {game.title.length > 11
+                      ? `${game.title.substring(0, 11)}...`
+                      : game.title}
                   </h3>
                 </div>
-              </div>
+              </Link>
             </div>
           ))}
         </div>

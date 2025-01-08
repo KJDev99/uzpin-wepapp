@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Loader from "../Loader";
 import axiosInstance from "@/libs/axios";
@@ -45,7 +44,7 @@ export default function AllGames() {
         {games.map((game) => (
           <div
             key={game.id}
-            className="overflow-hidden  game__content_bg transition-shadow duration-200 bg-white  rounded-[10px] max-w-[166px] max-md:mx-auto"
+            className="game__content_bg transition-shadow duration-200 bg-white  rounded-[10px] max-w-[166px] max-md:mx-auto"
           >
             <Link href={`/all-games/${game.id}`} className="p-0">
               <div className="flex items-start h-max flex-col p-[10px] gap-[10px]">
@@ -62,11 +61,6 @@ export default function AllGames() {
                   <h3 className="text-[28px] text-[#313131]  font-medium text-sm grow">
                     {game.name}
                   </h3>
-                  <div>
-                    <button className="max-w-[146px] w-full mt-[18px] rounded-[5px] py-2 bg-[#ffba00] font-medium text-xs sm:hidden">
-                      <span>{t("see-more")}</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             </Link>

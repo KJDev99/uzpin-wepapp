@@ -135,7 +135,7 @@ export default function BottomNavbar() {
                 active === "profile" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
-              {profileData.fullname || "profile"}
+              {profileData.fullname.split(" ")[0] || "profile"}
             </p>
           </div>
         </Link>
