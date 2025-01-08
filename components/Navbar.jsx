@@ -55,26 +55,6 @@ export default function Navbar() {
               className="ml-1 mr-20 max-sm:mr-5 max-sm:max-w-[108px] max-sm:max-h-[20px]"
             />
           </Link>
-          <div className="hidden md:flex items-center space-x-10 font-medium text-[20px] leading-[23px]">
-            <Link
-              href="/"
-              className="text-[#acacac] hover:text-[#FDB000] transition-colors"
-            >
-              {t("home")}
-            </Link>
-            <Link
-              href="/all-games"
-              className="text-[#acacac] hover:text-[#FDB000] transition-colors"
-            >
-              {t("all_games")}
-            </Link>
-            <Link
-              href="/help-me"
-              className="text-[#acacac] hover:text-[#FDB000] transition-colors"
-            >
-              {t("help")}
-            </Link>
-          </div>
 
           <div className="flex gap-0 items-center">
             <div className="flex w-[200px] max-md:w-max items-center space-x-10 max-sm:space-x-0">

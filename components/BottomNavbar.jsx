@@ -19,6 +19,8 @@ export default function BottomNavbar() {
         return "helpme";
       case "/login":
         return "login";
+      case "/profile/balance":
+        return "balance";
       case "/profile":
       case "/profile/profile-mobile":
       case "/profile/balance":
@@ -92,26 +94,41 @@ export default function BottomNavbar() {
           </p>
         </div>
       </Link>
-      {/* <Link href="/profile/balance">
-        <div className="flex flex-col items-center">
-          <IoWalletOutline
-            className={`font-normal text-2xl  ${
-              active === "/profile/balance"
-                ? "text-[#FFBA00]"
-                : "text-[#828282]"
-            }`}
-          />
-          <p
-            className={`font-normal text-xs leading-[14px] mt-1 ${
-              active === "/profile/balance"
-                ? "text-[#FFBA00]"
-                : "text-[#828282]"
-            }`}
-          >
-            Hisob to’ldirish
-          </p>
-        </div>
-      </Link> */}
+      {profileData ? (
+        <Link href="/profile/balance">
+          <div className="flex flex-col items-center">
+            <IoWalletOutline
+              className={`font-normal text-2xl  ${
+                active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
+              }`}
+            />
+            <p
+              className={`font-normal text-xs leading-[14px] mt-1 ${
+                active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
+              }`}
+            >
+              Hisob to’ldirish
+            </p>
+          </div>
+        </Link>
+      ) : (
+        <Link href="/login">
+          <div className="flex flex-col items-center">
+            <IoWalletOutline
+              className={`font-normal text-2xl  ${
+                active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
+              }`}
+            />
+            <p
+              className={`font-normal text-xs leading-[14px] mt-1 ${
+                active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
+              }`}
+            >
+              Hisob to’ldirish
+            </p>
+          </div>
+        </Link>
+      )}
       {profileData ? (
         <Link href="/profile/profile-mobile">
           <div className="flex flex-col items-center">
