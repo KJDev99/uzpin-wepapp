@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <body>
+      <body className="bg-white">
         <ClientProvider>
           <Navbar />
           {children}
