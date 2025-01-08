@@ -1,17 +1,17 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
+import axiosInstance from "@/libs/axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const HeaderSwiper = () => {
-  const params = useParams();
-  const pathname = usePathname();
-  const { id } = params;
+  const router = useRouter();
+  // const { bot } = router.query;
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetchBanner = async () => {
       try {
-        const response = await axiosInstance.get(`/client/webapp/banner/${id}`);
+        const response = await axiosInstance.get(`/client/webapp/banner/`);
         setData(response.data || []);
         console.log(response.data);
       } catch (error) {
@@ -19,8 +19,7 @@ const HeaderSwiper = () => {
       }
     };
     fetchBanner();
-    console.log(params, "params");
-    console.log(pathname, "pathname");
+    console.log(router, "router");
   }, []);
   return (
     <div className="mx-auto w-full">
