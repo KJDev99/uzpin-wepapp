@@ -3,15 +3,18 @@
 import axiosInstance from "@/libs/axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { useSearchParams } from "next/navigation";
 const HeaderSwiper = () => {
   const router = useRouter();
-  // const { bot } = router.query;
+  const searchParams = useSearchParams();
+  const bot = searchParams.get("bot");
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetchBanner = async () => {
       try {
-        const response = await axiosInstance.get(`/client/webapp/banner/`);
+        const response = await axiosInstance.get(
+          `/client/webapp/banner/${bot}`
+        );
         setData(response.data || []);
         console.log(response.data);
       } catch (error) {
@@ -19,7 +22,7 @@ const HeaderSwiper = () => {
       }
     };
     fetchBanner();
-    console.log(router, "router");
+    console.log(searchParams, "router");
   }, []);
   return (
     <div className="mx-auto w-full">
