@@ -34,9 +34,9 @@ const HeaderSwiper = () => {
     fetchBanner();
   }, [bot]);
 
-  if (loading) {
-    return <Loader />;
-  }
+  // if (loading) {
+  //   return <Loader />;
+  // }
 
   return (
     <div className="mx-auto w-full">
