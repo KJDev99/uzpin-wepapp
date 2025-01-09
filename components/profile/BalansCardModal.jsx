@@ -208,7 +208,7 @@ export default function BalansCardModal({
               <div className="flex flex-col">
                 <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
                   <div>
-                    <p>check</p>
+                    <p>{photo.split("/").pop()}</p>
                   </div>
                   <button onClick={clearFile} className="text-black underline">
                     <X className="h-6 w-6" />

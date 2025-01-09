@@ -412,7 +412,7 @@ export default function BalansBox() {
                 <div className="flex flex-col mb-[120px]">
                   <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
                     <div>
-                      <p>check</p>
+                      <p>{photo.split("/").pop()}</p>
                     </div>
                     <button
                       onClick={clearFile}
