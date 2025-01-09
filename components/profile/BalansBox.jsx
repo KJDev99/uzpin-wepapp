@@ -169,7 +169,7 @@ export default function BalansBox() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-4">
+    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-4 mb-20">
       {error && (
         <Alert
           status={false}
@@ -310,7 +310,7 @@ export default function BalansBox() {
               onClick={toggleCardVisibile}
               className="w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden"
             >
-              To&apos;ldirisha
+              To&apos;ldirish
             </button>
           </div>
 

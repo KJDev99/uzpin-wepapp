@@ -60,7 +60,7 @@ export default function BottomNavbar() {
           )}
 
           <p
-            className={`font-normal text-xs leading-[14px] mt-1 ${
+            className={`font-normal text-xs leading-[14px] mt-1 text-nowrap ${
               active === "home" ? "text-[#FFBA00]" : "text-[#828282]"
             }`}
           >
@@ -86,7 +86,7 @@ export default function BottomNavbar() {
             />
           )}
           <p
-            className={`font-normal text-xs leading-[14px] mt-1 ${
+            className={`font-normal text-xs leading-[14px] mt-1 text-nowrap ${
               active === "allgames" ? "text-[#FFBA00]" : "text-[#828282]"
             }`}
           >
@@ -103,7 +103,7 @@ export default function BottomNavbar() {
               }`}
             />
             <p
-              className={`font-normal text-xs leading-[14px] mt-1 ${
+              className={`font-normal text-xs leading-[14px] mt-1 text-nowrap ${
                 active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
@@ -120,7 +120,7 @@ export default function BottomNavbar() {
               }`}
             />
             <p
-              className={`font-normal text-xs leading-[14px] mt-1 ${
+              className={`font-normal text-xs leading-[14px] mt-1 text-nowrap ${
                 active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
