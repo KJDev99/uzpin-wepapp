@@ -52,7 +52,11 @@ export default function BalansBox() {
   };
 
   const toggleCardVisibile = () => {
-    setVisibleCard((prev) => !prev);
+    setVisibleCard((prev) => true);
+    window.scrollTo({
+      top: 500,
+      behavior: "smooth",
+    });
   };
 
   useEffect(() => {
@@ -226,7 +230,7 @@ export default function BalansBox() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 max-sm:mt-5 max-sm:gap-20">
+      <div className="grid md:grid-cols-2 gap-8 max-sm:mt-5 max-sm:gap-12">
         <div className="bg-[#FFFCF6] p-6 rounded-2xl shadow-custom max-sm:pt-0 max-sm:pb-[10px] max-sm:px-5">
           <div className="space-y-4 max-sm:space-y-[10px]">
             <h2 className="text-gray-600 max-sm:hidden">Uzpin hamyon</h2>
@@ -303,16 +307,10 @@ export default function BalansBox() {
               />
             </div>
             <button
-              onClick={openModal}
-              className="w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors max-sm:hidden"
-            >
-              To&apos;ldirish
-            </button>
-            <button
               onClick={toggleCardVisibile}
               className="w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden"
             >
-              To&apos;ldirish
+              To&apos;ldirisha
             </button>
           </div>
 

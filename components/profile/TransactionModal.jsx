@@ -16,9 +16,15 @@ export default function TransactionModal({ isOpen, onClose, checkUrl }) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-[10px] shadow-lg">
+      <div className="rounded-[10px] shadow-lg">
         <div className="flex relative justify-between min-w-10 min-h-10">
-          <Image src={checkUrl} width={400} height={800} alt="Image 1" />
+          <Image
+            src={checkUrl}
+            width={400}
+            height={800}
+            alt="Image 1"
+            className="w-[90%] mx-auto max-h-[70vh]"
+          />
         </div>
       </div>
     </div>

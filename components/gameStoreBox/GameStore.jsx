@@ -187,7 +187,7 @@ export default function GameStore({ data }) {
           </div>
 
           <div
-            className={` bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max fixed bottom-[110px] left-0 right-0 w-[90%] mx-auto ${
+            className={` bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max w-[100%] mx-auto mt-5 ${
               cart.length > 0 ? "block" : "hidden"
             }`}
           >
@@ -205,7 +205,7 @@ export default function GameStore({ data }) {
                 <div className="mt-2 mb-8">
                   <div className="border-t pt-4">
                     <div className="flex flex-col">
-                      <span className="hidden">{t("all-games-text8")}</span>
+                      {/* <span className="hidden">{t("all-games-text8")}</span> */}
                       <div className="flex justify-between font-medium leading-[18px]">
                         <div className="w-full flex justify-between items-center">
                           <p>
@@ -223,13 +223,13 @@ export default function GameStore({ data }) {
                 <div className="flex items-center gap-2 mt-[11px] space-y-0">
                   <button
                     onClick={() => setShowPurchaseModal(1)}
-                    className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black]"
+                    className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black] text-nowrap px-2"
                   >
                     {t("all-games-text10")}
                   </button>
                   <button
                     onClick={() => setShowPurchaseModal(2)}
-                    className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black]"
+                    className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black] text-nowrap px-2"
                   >
                     {t("all-games-text11")}
                   </button>
