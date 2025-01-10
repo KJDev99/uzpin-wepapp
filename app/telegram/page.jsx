@@ -19,17 +19,20 @@ const TelegramPage = () => {
 
     const fetchBanners = async () => {
       try {
-        const response = await axiosInstance.get("client/auth/telegram/login", {
-          params: {
-            id,
-            first_name: firstName,
-            last_name: lastName,
-            username,
-            photo_url,
-            auth_date,
-            hash,
-          },
-        });
+        const response = await axiosInstance.get(
+          "client/auth/telegram/login?webapp=1",
+          {
+            params: {
+              id,
+              first_name: firstName,
+              last_name: lastName,
+              username,
+              photo_url,
+              auth_date,
+              hash,
+            },
+          }
+        );
         localStorage.setItem("profileData", JSON.stringify(response.data));
         rounter.push("/");
         setTimeout(() => {
