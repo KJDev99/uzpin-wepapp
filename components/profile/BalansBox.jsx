@@ -11,8 +11,10 @@ import Image from "next/image";
 import { MdCheck, MdOutlineContentCopy } from "react-icons/md";
 import UploadComponent from "../UploadComponent";
 import { Alert } from "../Alert";
+import { useTranslation } from "react-i18next";
 
 export default function BalansBox() {
+  const { t } = useTranslation();
   const modalRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("UZS");
@@ -173,26 +175,26 @@ export default function BalansBox() {
       {error && (
         <Alert
           status={false}
-          title="Mablag’ yetarli emas!"
-          message="Iltimos hisobingizni to’ldiring"
+          title={t('profile14')}
+          message={t('profile15')}
         />
       )}
       {success && (
         <Alert
           status={true}
-          title="Muvaffaqiyatli bajarildi!"
-          message="Iltimos haridingiz tasdiqlanishini kuting"
+          title={t('profile16')}
+          message={t('profile17')}
         />
       )}
       <div className="px-6 py-4 max-md:border-b max-md:hidden">
-        <h2 className="text-xl font-bold md:mb-4">Profil ma&apos;lumotlari</h2>
+        <h2 className="text-xl font-bold md:mb-4">{t('profile1')}</h2>
       </div>
       <Link
         href={"/profile/profile-mobile"}
         className="md:px-6 py-4 max-md:border-b flex items-center max-md:gap-5 md:hidden"
       >
         <IoIosArrowBack className="text-2xl md:hidden" />
-        <h2 className="text-xl font-bold md:mb-4">Balans</h2>
+        <h2 className="text-xl font-bold md:mb-4">{t('profile2')}</h2>
       </Link>
       <div className="flex justify-between items-center mt-5 mb-8 max-sm:hidden">
         <h1 className="text-2xl font-semibold">Balans</h1>
