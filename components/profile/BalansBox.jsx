@@ -308,7 +308,12 @@ export default function BalansBox() {
             </div>
             <button
               onClick={toggleCardVisibile}
-              className="w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden"
+              disabled={!inputValue}
+              className={`w-full py-3 text-black font-medium rounded-lg transition-colors sm:hidden ${
+                inputValue
+                  ? "bg-[#FFC149] hover:bg-[#FFB529]"
+                  : "bg-[#9d9d9d] cursor-not-allowed"
+              }`}
             >
               To&apos;ldirish
             </button>

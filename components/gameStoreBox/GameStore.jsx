@@ -101,7 +101,9 @@ export default function GameStore({ data }) {
           <IoIosArrowBack className="text-2xl" />
           <h2 className="text-xl font-bold md:mb-4">{data.name}</h2>
         </Link>
-        <div className="grid mb-[110px]">
+        <div
+          className={`grid ${cart.length > 0 ? "mb-[300px]" : " mb-[110px]"}`}
+        >
           <div className="grid grid-cols-2  gap-2">
             {code.map((pkg) => (
               <div
@@ -187,7 +189,7 @@ export default function GameStore({ data }) {
           </div>
 
           <div
-            className={` bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max w-[100%] mx-auto mt-5 ${
+            className={` bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max w-[90%] bottom-[100px] left-[50%] translate-x-[-50%] fixed mx-auto mt-5 ${
               cart.length > 0 ? "block" : "hidden"
             }`}
           >
