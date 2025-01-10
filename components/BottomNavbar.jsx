@@ -6,8 +6,10 @@ import { usePathname } from "next/navigation";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { IoWalletOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 export default function BottomNavbar() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const isActive = (path) => {
     switch (path) {
@@ -64,7 +66,7 @@ export default function BottomNavbar() {
               active === "home" ? "text-[#FFBA00]" : "text-[#828282]"
             }`}
           >
-            Bosh sahifa
+            {t('home1')}
           </p>
         </div>
       </Link>
@@ -90,7 +92,7 @@ export default function BottomNavbar() {
               active === "allgames" ? "text-[#FFBA00]" : "text-[#828282]"
             }`}
           >
-            Barcha o&apos;yinlar
+            {t('all_games')}
           </p>
         </div>
       </Link>
@@ -107,7 +109,7 @@ export default function BottomNavbar() {
                 active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
-              Hisob to’ldirish
+              {t('profile20')}
             </p>
           </div>
         </Link>
@@ -124,7 +126,7 @@ export default function BottomNavbar() {
                 active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
-              Hisob to’ldirish
+              {t('profile20')}
             </p>
           </div>
         </Link>
@@ -179,7 +181,7 @@ export default function BottomNavbar() {
                 active === "login" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
-              Profil
+              {t('login1')}
             </p>
           </div>
         </Link>

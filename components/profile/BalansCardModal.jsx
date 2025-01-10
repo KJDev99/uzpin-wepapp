@@ -8,6 +8,7 @@ import UploadComponent from "../UploadComponent";
 import axiosInstance from "@/libs/axios";
 import { Alert } from "../Alert";
 import Loader from "../Loader";
+import { t } from "i18next";
 
 export default function BalansCardModal({
   isOpen,
@@ -132,25 +133,16 @@ export default function BalansCardModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
       {error && (
-        <Alert
-          status={false}
-          title="Mablag’ yetarli emas!"
-          message="Iltimos hisobingizni to’ldiring"
-        />
+        <Alert status={false} title={t("profile14")} message={t("profile15")} />
       )}
       {success && (
-        <Alert
-          status={true}
-          title="Muvaffaqiyatli bajarildi!"
-          message="Iltimos haridingiz tasdiqlanishini kuting"
-        />
+        <Alert status={true} title={t("profile16")} message={t("profile17")} />
       )}
       <div className="bg-white rounded-[10px] shadow-lg">
         <div className="flex relative justify-between">
           <div className="w-[682px] mt-8 ml-8 mb-8">
             <p className="font-medium text-[20px] leading-[22px]">
-              To&apos;lovni amalga oshirish uchun quyidagi kartalardan birini
-              tanlang
+              {t("profile25")}
             </p>
             <div className="flex gap-[30px] mt-[18px]">
               {cart.length > 0 &&
@@ -171,7 +163,7 @@ export default function BalansCardModal({
                 ))}
             </div>
             <p className="mt-[38px] font-medium text-[20px] leading-[22px]">
-              Pul o&apos;tkazmasi chekini yuklang
+              {t("profile29")}
             </p>
             <div
               className={`max-w-[482px] mt-5 p-[35px] mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
@@ -186,10 +178,10 @@ export default function BalansCardModal({
                 alt="img"
               />
               <p className="mt-2.5 text-[14px] leading-4 text-[#828282]">
-                Nusxa olingan chekni qo&apos;ying
+                {t("profile26")}
               </p>
               <p className="mt-2.5 text-[14px] leading-4 text-[#828282]">
-                yoki
+                {t("login-text12")}
               </p>
               <div className="hidden">
                 <UploadComponent
@@ -201,7 +193,7 @@ export default function BalansCardModal({
                 onClick={() => modalRef.current.click()}
                 className="mt-2.5 font-medium text-xl border border-black py-2 px-8 rounded-[10px]"
               >
-                Faylni tanlang
+                {t("profile27")}
               </button>
             </div>
             {photo.length && (
@@ -218,7 +210,7 @@ export default function BalansCardModal({
                   onClick={fetchHandle}
                   className="mx-auto mt-5 font-medium leading-[18px] bg-[#ffba00] py-[10px] px-[60px] rounded-[10px]"
                 >
-                  Yuborish
+                  {t("profile28")}
                 </button>
               </div>
             )}
@@ -247,14 +239,12 @@ export default function BalansCardModal({
                 ) : (
                   <MdOutlineContentCopy size={24} />
                 )}
-                {copied
-                  ? "Karta raqamidan nusxa olindi"
-                  : "Karta raqamidan nusxa olish"}
+                {copied ? t("profile49") : t("profile50")}
               </button>
               <p className="mt-[87px] text-[14px] leading-[18px]">
-                *Balansni to&apos;ldirishda muammoga duch kelsangiz Telegram
-                orqali <a href="t.me/Barbossa_gaming">@Barbossa_gaming</a> ga
-                murojaat qiling
+                {t("profile30")}{" "}
+                <a href="t.me/Barbossa_gaming">@Barbossa_gaming</a>{" "}
+                {t("profile31")}
               </p>
             </div>
           )}

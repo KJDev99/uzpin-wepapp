@@ -58,7 +58,7 @@ export default function PasswordVerify({ setLogin, mainEmail }) {
   return (
     <div className="flex justify-center items-center">
       {error && (
-        <Toast status="false" text="Kirish Jarayonida nimadir xato bo'ldi" />
+        <Toast status="false" text={t("login-text16")} />
       )}
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
         <div className="flex justify-end mb-[20px]">

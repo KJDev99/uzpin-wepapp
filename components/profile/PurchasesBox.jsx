@@ -7,8 +7,10 @@ import Pagination from "../Pagination";
 import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import Loader from "../Loader";
+import { useTranslation } from "react-i18next";
 
 export default function PurchasesBox() {
+  const { t } = useTranslation();
   const [purchases, setPurchases] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -68,14 +70,14 @@ export default function PurchasesBox() {
 
   return (
     <div className="w-full max-w-[1200px] mx-auto p-4 mb-10 ">
-      <h1 className="text-2xl font-bold mb-4 max-md:hidden">Xaridlar tarixi</h1>
+      <h1 className="text-2xl font-bold mb-4 max-md:hidden">{t('profile3')}</h1>
 
       <Link
         href={"/profile/profile-mobile"}
         className="md:px-6 py-4 border-b flex items-center max-md:gap-5 md:hidden mb-5"
       >
         <IoIosArrowBack className="text-2xl md:hidden" />
-        <h2 className="text-xl font-bold md:mb-4">Xaridlar tarixi</h2>
+        <h2 className="text-xl font-bold md:mb-4">{t('profile3')}</h2>
       </Link>
 
       <div className="overflow-x-scroll">
@@ -86,19 +88,19 @@ export default function PurchasesBox() {
                 #
               </th>
               <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
-                Promokod
+                {t('profile32')}
               </th>
               <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
-                Miqdor
+                {t('profile33')}
               </th>
               <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
-                To&apos;lov
+                {t('profile34')}
               </th>
               <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
-                Sana
+                {t('profile35')}
               </th>
               <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
-                Ko&apos;rish
+                {t('profile36')}
               </th>
             </tr>
           </thead>
@@ -150,7 +152,7 @@ export default function PurchasesBox() {
                   colSpan={6}
                   className="py-3 border text-center text-sm text-gray-500"
                 >
-                  Ma&apos;lumotlar yo&apos;q.
+                  {t('profile37')}
                 </td>
               </tr>
             )}
