@@ -8,37 +8,38 @@ import {
   ArrowRightLeft,
   LogOut,
 } from "lucide-react";
-
-const sidebarItems = [
-  {
-    title: "Profil ma'lumotlari",
-    icon: UserCircle,
-    href: "/profile",
-  },
-  {
-    title: "Balans",
-    icon: Wallet,
-    href: "/profile/balance",
-  },
-  {
-    title: "Xaridlar tarixi",
-    icon: History,
-    href: "/profile/purchases",
-  },
-  {
-    title: "Tranzaksiyalar",
-    icon: ArrowRightLeft,
-    href: "/profile/transactions",
-  },
-  {
-    title: "Chiqish",
-    icon: LogOut,
-    href: "/profile/logout",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { t } = useTranslation();
+  const sidebarItems = [
+    {
+      title: t("profile1"),
+      icon: UserCircle,
+      href: "/profile",
+    },
+    {
+      title: t("profile2"),
+      icon: Wallet,
+      href: "/profile/balance",
+    },
+    {
+      title: t("profile3"),
+      icon: History,
+      href: "/profile/purchases",
+    },
+    {
+      title: t("profile4"),
+      icon: ArrowRightLeft,
+      href: "/profile/transactions",
+    },
+    {
+      title: t("profile5"),
+      icon: LogOut,
+      href: "/profile/logout",
+    },
+  ];
 
   return (
     <div className="absolute left-0 z-30 h-[610px] w-[380px] rounded-[8px] md:shadow-lg max-md:h-max">

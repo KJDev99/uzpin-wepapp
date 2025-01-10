@@ -112,7 +112,7 @@ export default function Login({ setLogin, loginCount }) {
             }`}
             onClick={() => setLogin(1)}
           >
-            Kirish
+            {t("login")}
           </button>
           <button
             className={`w-[190px] h-[50px] border-none outline-none text-lg rounded-[5px] max-sm:w-[164px] ${
@@ -122,7 +122,7 @@ export default function Login({ setLogin, loginCount }) {
             }`}
             onClick={() => setLogin(2)}
           >
-            Ro&apos;yxatdan o&apos;tish
+            {t("login-text1")}
           </button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -131,7 +131,7 @@ export default function Login({ setLogin, loginCount }) {
               className="block text-[#828282] text-sm px-5 pb-2"
               htmlFor="email"
             >
-              Elektron pochta yoki telefon raqam
+              {t("login-text2")}
             </label>
             <input
               type="text"
@@ -147,7 +147,7 @@ export default function Login({ setLogin, loginCount }) {
             />
             {errors.emailOrPhone && (
               <p className="text-red-500 text-sm mt-1 px-1">
-                Maydonni to&apos;ldirish shart
+                {t("login-text3")}
               </p>
             )}
           </div>
@@ -157,12 +157,12 @@ export default function Login({ setLogin, loginCount }) {
               className="block text-[#828282] text-sm px-5 pb-2"
               htmlFor="password"
             >
-              Parol
+              {t("login-text4")}
             </label>
             <input
               type={passwordVisible ? "text" : "password"}
               id="password"
-              placeholder="Parol"
+              placeholder={t("login-text4")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={`w-full px-4 py-2 border rounded-lg outline-none text-[#000000] ${
@@ -178,7 +178,7 @@ export default function Login({ setLogin, loginCount }) {
             </button>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1 px-1">
-                Parolni kiritish shart
+                {t('login-text3')}
               </p>
             )}
           </div>
@@ -187,12 +187,12 @@ export default function Login({ setLogin, loginCount }) {
             className="text-[#FFBA00] cursor-pointer ml-5 mb-4 text-sm"
             onClick={() => setLogin(3)}
           >
-            Parolni unutdingizmi?
+            {t("login-text5")}
           </p>
 
           <div className="flex gap-6 justify-center items-center">
             <div className="w-[130px] bg-[#828282] h-[1px]"></div>
-            <p className="text-[#828282]">yoki</p>
+            <p className="text-[#828282]">{t("login-text12")}</p>
             <div className="w-[130px] bg-[#828282] h-[1px]"></div>
           </div>
 
@@ -229,7 +229,7 @@ export default function Login({ setLogin, loginCount }) {
             type="submit"
             className="w-full bg-[#FFBA00] text-[#313131] py-2 px-4 font-medium  rounded-lg mt-2 mb-6 border-2 border-[transparent] border-b-[#313131]"
           >
-            Kirish
+            {t("login")}
           </button>
         </form>
       </div>

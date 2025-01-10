@@ -8,8 +8,10 @@ import Pagination from "../Pagination";
 import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
 import Loader from "../Loader";
+import { useTranslation } from "react-i18next";
 
 export default function TransactionBox() {
+  const { t } = useTranslation();
   const [transactions, setTransactions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCheck, setSelectedCheck] = useState("");
@@ -70,13 +72,13 @@ export default function TransactionBox() {
 
   return (
     <div className="w-full max-w-[1200px] mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 max-md:hidden">Tranzaksiyalar</h1>
+      <h1 className="text-2xl font-bold mb-4 max-md:hidden">{t('profile4')}</h1>
       <Link
         href={"/profile/profile-mobile"}
         className="md:px-6 py-4 border-b flex items-center max-md:gap-5 md:hidden mb-5"
       >
         <IoIosArrowBack className="text-2xl md:hidden" />
-        <h2 className="text-xl font-bold md:mb-4">Tranzaksiyalar</h2>
+        <h2 className="text-xl font-bold md:mb-4">{t('profile4')}</h2>
       </Link>
 
       <div className="max-md:overflow-x-scroll">
@@ -84,19 +86,19 @@ export default function TransactionBox() {
           <thead className="bg-[#F9F9F9] rounded-lg">
             <tr className="text-left border border-[#ACACAC] ">
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                Amaliyot
+                {t('profile41')}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                Summa
+                {t('profile42')}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                Valyuta
+                {t('profile43')}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                Chek
+                {t('profile44')}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                Sana
+                {t('profile35')}
               </th>
             </tr>
           </thead>

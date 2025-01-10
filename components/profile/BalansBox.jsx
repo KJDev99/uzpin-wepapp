@@ -11,8 +11,10 @@ import Image from "next/image";
 import { MdCheck, MdOutlineContentCopy } from "react-icons/md";
 import UploadComponent from "../UploadComponent";
 import { Alert } from "../Alert";
+import { useTranslation } from "react-i18next";
 
 export default function BalansBox() {
+  const { t } = useTranslation();
   const modalRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("UZS");
@@ -173,26 +175,26 @@ export default function BalansBox() {
       {error && (
         <Alert
           status={false}
-          title="Mablag’ yetarli emas!"
-          message="Iltimos hisobingizni to’ldiring"
+          title={t('profile14')}
+          message={t('profile15')}
         />
       )}
       {success && (
         <Alert
           status={true}
-          title="Muvaffaqiyatli bajarildi!"
-          message="Iltimos haridingiz tasdiqlanishini kuting"
+          title={t('profile16')}
+          message={t('profile17')}
         />
       )}
       <div className="px-6 py-4 max-md:border-b max-md:hidden">
-        <h2 className="text-xl font-bold md:mb-4">Profil ma&apos;lumotlari</h2>
+        <h2 className="text-xl font-bold md:mb-4">{t('profile1')}</h2>
       </div>
       <Link
         href={"/profile/profile-mobile"}
         className="md:px-6 py-4 max-md:border-b flex items-center max-md:gap-5 md:hidden"
       >
         <IoIosArrowBack className="text-2xl md:hidden" />
-        <h2 className="text-xl font-bold md:mb-4">Balans</h2>
+        <h2 className="text-xl font-bold md:mb-4">{t('profile2')}</h2>
       </Link>
       <div className="flex justify-between items-center mt-5 mb-8 max-sm:hidden">
         <h1 className="text-2xl font-semibold">Balans</h1>
@@ -233,13 +235,13 @@ export default function BalansBox() {
       <div className="grid md:grid-cols-2 gap-8 max-sm:mt-5 max-sm:gap-12">
         <div className="bg-[#FFFCF6] p-6 rounded-2xl shadow-custom max-sm:pt-0 max-sm:pb-[10px] max-sm:px-5">
           <div className="space-y-4 max-sm:space-y-[10px]">
-            <h2 className="text-gray-600 max-sm:hidden">Uzpin hamyon</h2>
+            <h2 className="text-gray-600 max-sm:hidden">Uzpin {t('profile18')}</h2>
             <h2 className="sm:hidden font-semibold text-[20px] text-[#313131] mb-[22px]">
               {fullname}
             </h2>
             <div className="flex items-baseline gap-2">
               <p className="sm:hidden font-normal text-[14px] text-[#313131]">
-                Joriy balans:
+                {t('profile19')}
               </p>
               <span className="text-4xl font-bold flex max-sm:font-semibold max-sm:text-[20px] max-sm:ml-[30px]">
                 {selectedCurrency == "UZS" && balance?.account_uzs}
@@ -255,10 +257,10 @@ export default function BalansBox() {
         </div>
 
         <div className="space-y-6">
-          <h2 className="text-xl font-semibold">Hisobni to&apos;ldirish</h2>
+          <h2 className="text-xl font-semibold">{t('profile20')}</h2>
 
           <div className="flex flex-col sm:hidden">
-            <h2>Kiritish valyutasini tanlang:</h2>
+            <h2>{t('profile21')}</h2>
             <div className="mt-2.5">
               <button
                 onClick={() => handleCurrencyChange("UZS")}
@@ -296,13 +298,13 @@ export default function BalansBox() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm text-gray-600 mb-2">
-                Summani kiriting: {selectedCurrency}
+                {t('profile22')} {selectedCurrency}
               </label>
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Summani kiriting..."
+                placeholder={t('profile22')}
                 className="w-full p-3 border rounded-lg border-[#E7E7E7] bg-[#F9F9F9] focus:ring-yellow-400"
               />
             </div>
@@ -315,16 +317,15 @@ export default function BalansBox() {
                   : "bg-[#9d9d9d] cursor-not-allowed"
               }`}
             >
-              To&apos;ldirish
+              {t('profile23')}
             </button>
           </div>
 
           <div className={`${visibleCard ? "block " : "hidden"}`}>
             <div>
-              <h3 className="font-semibold text-[16px] ">Kartani tanlang</h3>
+              <h3 className="font-semibold text-[16px] ">{t('profile24')}</h3>
               <p className="mt-2.5 font-medium text-[#313131] text-[14px]">
-                To’lovni amalga oshirish uchun quyidagi kartalardan birini
-                tanlang.
+                {t('profile25')}
               </p>
               <div className="flex flex-wrap gap-[11px] mt-6">
                 {cart.map((card) => (
@@ -377,8 +378,8 @@ export default function BalansBox() {
                     <MdOutlineContentCopy size={24} />
                   )}
                   {copied
-                    ? "Karta raqamidan nusxa olindi"
-                    : "Karta raqamidan nusxa olish"}
+                    ? t("profile49")
+                    : t('profile50')}
                 </button>
               </div>
             )}
@@ -397,9 +398,9 @@ export default function BalansBox() {
                   alt="img"
                 />
                 <p className="mt-2.5 text-[14px] text-[#313131]">
-                  Nusxa olingan chekni qo&apos;ying
+                  {t('profile26')}
                 </p>
-                <p className="mt-2.5 text-[12px] text-[#acacac]">yoki</p>
+                <p className="mt-2.5 text-[12px] text-[#acacac]">{t('login-text12')}</p>
                 <div className="hidden">
                   <UploadComponent
                     triggerRef={modalRef}
@@ -410,7 +411,7 @@ export default function BalansBox() {
                   onClick={() => modalRef.current.click()}
                   className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
                 >
-                  Faylni tanlang
+                  {t('profile27')}
                 </button>
               </div>
               {photo.length ? (
@@ -430,7 +431,7 @@ export default function BalansBox() {
                     onClick={fetchHandle}
                     className="mx-auto mt-5 font-medium leading-[18px] bg-[#ffba00] py-[10px] px-[60px] rounded-[10px]"
                   >
-                    Yuborish
+                    {t('profile28')}
                   </button>
                 </div>
               ) : null}
