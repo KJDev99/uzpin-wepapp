@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {useTranslation} from "react-i18next"
 
 export default function LogoutBox() {
+  const { t } = useTranslation();
   const router = useRouter();
   const LogOut = () => {
     localStorage.removeItem("profileData");
@@ -30,26 +32,26 @@ export default function LogoutBox() {
           </svg>
         </div>
 
-        <h2 className="text-xl font-semibold mb-8">Profildan chiqasizmi?</h2>
+        <h2 className="text-xl font-semibold mb-8">{t('profile45')}</h2>
 
         <div className="flex gap-4 w-full ">
           <Link
             href="/profile"
             className="flex-1 bg-[#ffba00] border-b-2 border-[#313131] text-black text-center py-3 px-4 rounded-lg font-medium max-md:hidden"
           >
-            Yo&apos;q
+            {t('profile46')}
           </Link>
           <Link
             href="/profile/profile-mobile"
             className="flex-1 bg-[#ffba00] border-b-2 border-[#313131] text-black text-center py-3 px-4 rounded-lg font-medium md:hidden"
           >
-            Yo&apos;q
+            {t('profile46')}
           </Link>
           <button
             onClick={LogOut}
             className="flex-1 w-full bg-gray-800 hover:bg-gray-900 text-white py-3 px-4 rounded-lg font-medium"
           >
-            Ha
+            {t('profile47')}
           </button>
         </div>
       </div>
