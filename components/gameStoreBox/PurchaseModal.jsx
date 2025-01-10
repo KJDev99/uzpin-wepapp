@@ -49,9 +49,12 @@ export function PurchaseModal({
       typeof window !== "undefined"
         ? localStorage.getItem("currency") || "uzs"
         : "uzs";
+    const botId =
+      typeof window !== "undefined" && sessionStorage.getItem("bot");
     const formattedData = {
       currency: savedCurrency,
       gamer_id: playerId == "" ? undefined : playerId,
+      sold_type: botId ? botId : undefined,
       items: cart.map((item) => ({
         promocode: item.id,
         count: item.quantity,
