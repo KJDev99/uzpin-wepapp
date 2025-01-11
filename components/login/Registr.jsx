@@ -71,7 +71,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
   const handleGoogleLogin = async () => {
     try {
       const response = await axiosInstance.get(
-        "/client/auth/google/login?redirect_url=https://wepapp.uzpin.games/google"
+        "/client/auth/google/login?redirect_url=https://webapp.uzpin.games/google"
       );
       const { auth_url } = response.data;
 

@@ -18,7 +18,7 @@ export default function Google() {
           {
             params: {
               code,
-              redirect_url: "https://wepapp.uzpin.games/google",
+              redirect_url: "https://webapp.uzpin.games/google",
             },
           }
         );

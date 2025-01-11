@@ -69,7 +69,7 @@ export default function Login({ setLogin, loginCount }) {
   const handleGoogleLogin = async () => {
     try {
       const response = await axiosInstance.get(
-        "/client/auth/google/login?redirect_url=https://wepapp.uzpin.games/google"
+        "/client/auth/google/login?redirect_url=https://webapp.uzpin.games/google"
       );
       const { auth_url } = response.data;
 
@@ -178,7 +178,7 @@ export default function Login({ setLogin, loginCount }) {
             </button>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1 px-1">
-                {t('login-text3')}
+                {t("login-text3")}
               </p>
             )}
           </div>
