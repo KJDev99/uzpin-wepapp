@@ -17,6 +17,7 @@ const TelegramApp = () => {
       const user = tg.initDataUnsafe?.user;
       setUserData(user);
       console.log(tg.initDataUnsafe?.user, "test");
+      console.log(JSON.stringify(tg.initDataUnsafe), "polni");
     }
   }, []);
 
