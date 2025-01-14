@@ -22,7 +22,7 @@ const HeaderSwiper = () => {
           `/client/webapp/banner/${sessionStorage.getItem("bot")}`
         );
         setData(response.data || null);
-        console.log(response.data);
+        console.log(response.data, searchParams, "test");
       } catch (error) {
         console.error("Ma'lumotlarni yuklashda xatolik:", error);
       }
