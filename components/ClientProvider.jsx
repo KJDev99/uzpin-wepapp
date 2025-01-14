@@ -9,11 +9,11 @@ const ClientProvider = ({ children }) => {
     const storedLanguage = localStorage.getItem("language") || "uz";
     i18n.changeLanguage(storedLanguage);
 
-    const tg = window.Telegram.WebApp;
+    // const tg = window.Telegram.WebApp;
 
     // Telegramni ishga tushirish
-    tg.ready();
-    console.log(tg.initDataUnsafe?.user);
+    // tg.ready();
+    // console.log(tg.initDataUnsafe?.user);
     // alert(telegram.initDataUnsafe, "test telegram");
     // alert(telegram.initData, "test telegram2");
   }, []);
