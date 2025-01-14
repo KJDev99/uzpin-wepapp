@@ -10,8 +10,8 @@ const ClientProvider = ({ children }) => {
     i18n.changeLanguage(storedLanguage);
 
     const telegram = window.Telegram.WebApp;
-    console.log(telegram.initDataUnsafe, "test telegram");
-    console.log(telegram.initData, "test telegram2");
+    alert(telegram.initDataUnsafe, "test telegram");
+    alert(telegram.initData, "test telegram2");
   }, []);
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
