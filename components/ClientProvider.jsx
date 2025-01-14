@@ -12,7 +12,7 @@ const ClientProvider = ({ children }) => {
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-web-app.js?56";
     script.async = true;
-    document.body.appendChild(script);
+    document.head.appendChild(script);
 
     const telegram = window.Telegram.WebApp;
     alert(telegram.initDataUnsafe, "test telegram");
