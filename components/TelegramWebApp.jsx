@@ -5,20 +5,19 @@ const TelegramApp = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.Telegram) {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
+    const tg = window.Telegram.WebApp;
+    tg.ready();
 
-      // Set theme params or perform additional initialization
-      tg.themeParams;
-      tg.expand();
+    // Set theme params or perform additional initialization
+    tg.themeParams;
+    tg.expand();
 
-      // Get user data
-      const user = tg.initDataUnsafe?.user;
-      setUserData(user);
-      console.log(tg.initDataUnsafe?.user, "test");
-      console.log(JSON.stringify(tg.initDataUnsafe), "polni");
-    }
+    // Get user data
+    const user = tg.initDataUnsafe?.user;
+    console.log(tg.initDataUnsafe?.user, "test");
+    console.log(JSON.stringify(tg.initDataUnsafe), "polni");
+    alert(JSON.stringify(tg.initDataUnsafe));
+    setUserData(user);
   }, []);
 
   return (
