@@ -13,6 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head>
+        <script
+          src="https://telegram.org/js/telegram-web-app.js?56"
+          async
+        ></script>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body className="bg-white">

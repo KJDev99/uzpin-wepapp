@@ -58,7 +58,6 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
           "client/auth/register",
           requestData
         );
-        console.log("Server javobi:", response.data);
         setLogin(5);
         setMainEmail(email);
       } catch (error) {

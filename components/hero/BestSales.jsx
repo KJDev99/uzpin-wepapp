@@ -27,7 +27,6 @@ export default function BestSales() {
           },
         });
         setData(response.data.results || []);
-        console.log(response.data.results);
       } catch (error) {
         console.error("Ma'lumotlarni yuklashda xatolik:", error);
       } finally {
