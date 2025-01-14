@@ -9,6 +9,11 @@ const ClientProvider = ({ children }) => {
     const storedLanguage = localStorage.getItem("language") || "uz";
     i18n.changeLanguage(storedLanguage);
 
+    const script = document.createElement("script");
+    script.src = "https://telegram.org/js/telegram-web-app.js?56";
+    script.async = true;
+    document.body.appendChild(script);
+
     const telegram = window.Telegram.WebApp;
     alert(telegram.initDataUnsafe, "test telegram");
     alert(telegram.initData, "test telegram2");
