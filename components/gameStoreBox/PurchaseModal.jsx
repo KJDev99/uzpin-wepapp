@@ -7,6 +7,7 @@ import axiosInstance from "@/libs/axios";
 import { Alert } from "../Alert";
 import { useTranslation } from "react-i18next";
 import PurchasesModal from "../profile/PurchasesModal";
+import { useRouter } from "next/navigation";
 
 export function PurchaseModal({
   isOpen,
@@ -23,10 +24,13 @@ export function PurchaseModal({
   const [token, setToken] = useState(null);
 
   const [error2, setError] = useState(false);
+  const [error401, setError401] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const [isOpenBuy, setIsOpenBuy] = useState(false);
   const [buyCode, setBuyCode] = useState();
+
+  const router = useRouter();
 
   const closeModal = () => {
     setBuyCode(null);
@@ -80,11 +84,20 @@ export function PurchaseModal({
         setSuccess(true);
       }
     } catch (error) {
-      setError(true);
-      setTimeout(() => {
-        setError(false);
-        onClose();
-      }, 2000);
+      if (error.status == 401) {
+        setError401(true);
+        setTimeout(() => {
+          // setError401(false);
+          // onClose();
+          router.push("/login");
+        }, 2000);
+      } else {
+        setError(true);
+        setTimeout(() => {
+          setError(false);
+          onClose();
+        }, 2000);
+      }
     } finally {
       clear();
       if (isOpen == 2) {
@@ -103,6 +116,13 @@ export function PurchaseModal({
     >
       {error2 && (
         <Alert status={false} title={t("profile14")} message={t("profile15")} />
+      )}
+      {error401 && (
+        <Alert
+          status={false}
+          title={t("profile4011")}
+          message={t("profile4012")}
+        />
       )}
       {success && (
         <Alert status={true} title={t("profile16")} message={t("profile17")} />

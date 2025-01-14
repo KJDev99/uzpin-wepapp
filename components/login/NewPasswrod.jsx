@@ -58,7 +58,7 @@ export default function NewPasswrod({ setLogin, access }) {
             },
           }
         );
-        setLogin(1);
+        setLogin(7);
       } catch (error) {
         setError(true);
         setTimeout(() => setError(false), [3000]);
