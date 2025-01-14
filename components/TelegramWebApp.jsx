@@ -1,19 +1,30 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const TelegramWebApp = () => {
+const TelegramApp = () => {
+  const [userData, setUserData] = useState(null);
+
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://telegram.org/js/telegram-web-app.js";
-    script.onload = () => {
+    if (typeof window !== "undefined" && window.Telegram) {
       const tg = window.Telegram.WebApp;
       tg.ready();
-      console.log("Telegram WebApp foydalanuvchi:", tg.initDataUnsafe?.user);
-    };
-    document.head.appendChild(script);
+
+      // Set theme params or perform additional initialization
+      tg.themeParams;
+      tg.expand();
+
+      // Get user data
+      const user = tg.initDataUnsafe?.user;
+      setUserData(user);
+    }
   }, []);
 
-  return <div style={{ textAlign: "center", marginTop: "50px" }}>aaa</div>;
+  return (
+    <div>
+      <h1>Welcome to Telegram WebApp</h1>
+      {userData ? <p>Hello, {userData.first_name}!</p> : <p>Loading...</p>}
+    </div>
+  );
 };
 
-export default TelegramWebApp;
+export default TelegramApp;
