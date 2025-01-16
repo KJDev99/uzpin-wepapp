@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const TelegramApp = () => {
+  const searchParams = useSearchParams();
   const chatId = searchParams?.get("chat_id") || null;
   useEffect(() => {
     if (chat_id) {
