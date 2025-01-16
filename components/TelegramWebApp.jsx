@@ -6,7 +6,7 @@ const TelegramApp = () => {
   const searchParams = useSearchParams();
   const chatId = searchParams?.get("chat_id") || null;
   useEffect(() => {
-    if (chatId) {
+    if (chatId || sessionStorage.getItem("chat_id")) {
       if (!chatId) return;
       sessionStorage.setItem("userId", chatId);
     } else if (typeof window !== "undefined" && window.Telegram) {
