@@ -37,6 +37,7 @@ export default function BottomNavbar() {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
+    setProfileData(JSON.parse(localStorage.getItem("profileData")));
     if (typeof window !== "undefined") {
       const storedProfileData = localStorage.getItem("profileData");
       if (storedProfileData) {
@@ -47,8 +48,6 @@ export default function BottomNavbar() {
   }, []);
 
   useEffect(() => {
-    setProfileData(JSON.parse(localStorage.getItem("profileData")));
-
     const PostTest = async () => {
       try {
         await axios.post(
@@ -68,7 +67,7 @@ export default function BottomNavbar() {
     if (token) {
       PostTest();
     }
-  }, []);
+  }, [token]);
 
   const active = isActive(pathname);
 
