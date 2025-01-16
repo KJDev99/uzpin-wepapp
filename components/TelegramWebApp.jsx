@@ -15,7 +15,8 @@ const TelegramApp = () => {
 
       // Get user data
       const user = tg.initDataUnsafe?.user;
-      console.log(tg.initDataUnsafe?.user, "testapp");
+      console.log(tg.initDataUnsafe?.user.id, "testapp");
+      localStorage.setItem("userId", tg.initDataUnsafe?.user.id);
       console.log(JSON.stringify(tg.initDataUnsafe), "polniapp");
       setUserData(user);
     }
