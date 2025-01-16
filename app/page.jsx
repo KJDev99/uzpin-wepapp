@@ -15,8 +15,8 @@ export default function Home() {
       <div>
         <Suspense>
           <HeaderSwiper />
+          <TelegramWebApp />
         </Suspense>
-        <TelegramWebApp />
         <TopGameCards />
         <BestSales />
       </div>
