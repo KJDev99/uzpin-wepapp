@@ -38,18 +38,19 @@ export default function BottomNavbar() {
   useEffect(() => {
     setProfileData(JSON.parse(localStorage.getItem("profileData")));
 
+    const PostTest = async () => {
+      try {
+        await axios.post(
+          `https://api.uzpin.games/api/v1/client/webapp/botuser/${sessionStorage.getItem(
+            "bot"
+          )}/${sessionStorage.getItem("userId")}`
+        );
+      } catch (e) {
+        console.log(e.message);
+      }
+    };
     if (localStorage.getItem("profileData")) {
-      const PostTest = async () => {
-        try {
-          await axios.post(
-            `https://api.uzpin.games/api/v1/client/webapp/botuser/${sessionStorage.getItem(
-              "bot"
-            )}/${sessionStorage.getItem("userId")}`
-          );
-        } catch (e) {
-          console.log(e.message);
-        }
-      };
+      PostTest();
     }
   }, []);
 
