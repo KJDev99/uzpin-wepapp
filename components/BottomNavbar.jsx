@@ -7,6 +7,7 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { IoWalletOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 export default function BottomNavbar() {
   const { t } = useTranslation();
@@ -33,8 +34,23 @@ export default function BottomNavbar() {
     }
   };
   const [profileData, setProfileData] = useState();
+
   useEffect(() => {
     setProfileData(JSON.parse(localStorage.getItem("profileData")));
+
+    if (localStorage.getItem("profileData")) {
+      const PostTest = async () => {
+        try {
+          await axios.post(
+            `https://api.uzpin.games/api/v1/client/webapp/botuser/${sessionStorage.getItem(
+              "bot"
+            )}/${sessionStorage.getItem("userId")}`
+          );
+        } catch (e) {
+          console.log(e.message);
+        }
+      };
+    }
   }, []);
 
   const active = isActive(pathname);
@@ -66,7 +82,7 @@ export default function BottomNavbar() {
               active === "home" ? "text-[#FFBA00]" : "text-[#828282]"
             }`}
           >
-            {t('home1')}
+            {t("home1")}
           </p>
         </div>
       </Link>
@@ -92,7 +108,7 @@ export default function BottomNavbar() {
               active === "allgames" ? "text-[#FFBA00]" : "text-[#828282]"
             }`}
           >
-            {t('all_games')}
+            {t("all_games")}
           </p>
         </div>
       </Link>
@@ -109,7 +125,7 @@ export default function BottomNavbar() {
                 active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
-              {t('profile20')}
+              {t("profile20")}
             </p>
           </div>
         </Link>
@@ -126,7 +142,7 @@ export default function BottomNavbar() {
                 active === "balance" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
-              {t('profile20')}
+              {t("profile20")}
             </p>
           </div>
         </Link>
@@ -181,7 +197,7 @@ export default function BottomNavbar() {
                 active === "login" ? "text-[#FFBA00]" : "text-[#828282]"
               }`}
             >
-              {t('login1')}
+              {t("login1")}
             </p>
           </div>
         </Link>
