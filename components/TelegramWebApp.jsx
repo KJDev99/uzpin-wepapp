@@ -9,8 +9,7 @@ const TelegramApp = () => {
     if (chatId) {
       if (!chatId) return;
       sessionStorage.setItem("userId", chatId);
-    }
-    if (typeof window !== "undefined" && window.Telegram) {
+    } else if (typeof window !== "undefined" && window.Telegram) {
       const tg = window.Telegram.WebApp;
       tg.ready();
 
