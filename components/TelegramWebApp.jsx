@@ -6,7 +6,7 @@ const TelegramApp = () => {
   const searchParams = useSearchParams();
   const chatId = searchParams?.get("chat_id") || null;
   useEffect(() => {
-    if (chat_id) {
+    if (chatId) {
       sessionStorage.setItem("userId", chatId);
     }
     if (typeof window !== "undefined" && window.Telegram) {
@@ -16,8 +16,8 @@ const TelegramApp = () => {
       tg.themeParams;
       tg.expand();
 
-      if (tg.initDataUnsafe?.user?.id) {
-        sessionStorage.setItem("userId", tg.initDataUnsafe?.user?.id);
+      if (tg.initDataUnsafe) {
+        sessionStorage.setItem("userId", tg.initDataUnsafe?.user.id);
       }
     }
   }, []);
