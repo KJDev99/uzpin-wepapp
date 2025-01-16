@@ -1,6 +1,7 @@
 import BestSales from "@/components/hero/BestSales";
 import HeaderSwiper from "@/components/hero/HeaderSwiper";
 import TopGameCards from "@/components/hero/TopGameCard";
+import TelegramWebApp from "@/components/TelegramWebApp";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -15,7 +16,7 @@ export default function Home() {
         <Suspense>
           <HeaderSwiper />
         </Suspense>
-
+        <TelegramWebApp />
         <TopGameCards />
         <BestSales />
       </div>

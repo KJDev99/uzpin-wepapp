@@ -1,9 +1,9 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
+import Head from "next/head";
 import BottomNavbar from "@/components/BottomNavbar";
 import ClientProvider from "@/components/ClientProvider";
 import Script from "next/script";
-import TelegramWebApp from "@/components/TelegramWebApp";
 
 export const metadata = {
   title: "UZpin",
@@ -22,7 +22,6 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <BottomNavbar />
-          <TelegramWebApp />
         </ClientProvider>
       </body>
     </html>
