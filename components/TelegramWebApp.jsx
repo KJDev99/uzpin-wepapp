@@ -2,7 +2,11 @@
 import { useEffect, useState } from "react";
 
 const TelegramApp = () => {
+  const chatId = searchParams?.get("chat_id") || null;
   useEffect(() => {
+    if (chat_id) {
+      sessionStorage.setItem("userId", chatId);
+    }
     if (typeof window !== "undefined" && window.Telegram) {
       const tg = window.Telegram.WebApp;
       tg.ready();
@@ -10,8 +14,9 @@ const TelegramApp = () => {
       tg.themeParams;
       tg.expand();
 
-      console.log(tg.initDataUnsafe?.user.id, "testapp");
-      sessionStorage.setItem("userId", tg.initDataUnsafe?.user.id);
+      if (tg.initDataUnsafe?.user?.id) {
+        sessionStorage.setItem("userId", tg.initDataUnsafe?.user?.id);
+      }
     }
   }, []);
 };
