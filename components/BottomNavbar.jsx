@@ -49,11 +49,13 @@ export default function BottomNavbar() {
 
   useEffect(() => {
     const PostTest = async () => {
+      const formattedData = {};
       try {
         await axios.post(
           `https://api.uzpin.games/api/v1/client/webapp/botuser/${sessionStorage.getItem(
             "bot"
           )}/${sessionStorage.getItem("userId")}`,
+          formattedData,
           {
             headers: {
               Authorization: `Bearer ${token}`,
