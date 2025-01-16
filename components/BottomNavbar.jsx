@@ -34,6 +34,17 @@ export default function BottomNavbar() {
     }
   };
   const [profileData, setProfileData] = useState();
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedProfileData = localStorage.getItem("profileData");
+      if (storedProfileData) {
+        const parsedProfileData = JSON.parse(storedProfileData);
+        setToken(parsedProfileData?.access || null);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setProfileData(JSON.parse(localStorage.getItem("profileData")));
@@ -43,13 +54,18 @@ export default function BottomNavbar() {
         await axios.post(
           `https://api.uzpin.games/api/v1/client/webapp/botuser/${sessionStorage.getItem(
             "bot"
-          )}/${sessionStorage.getItem("userId")}`
+          )}/${sessionStorage.getItem("userId")}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
       } catch (e) {
         console.log(e.message);
       }
     };
-    if (localStorage.getItem("profileData")) {
+    if (token) {
       PostTest();
     }
   }, []);
