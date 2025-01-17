@@ -8,6 +8,7 @@ import { Toast } from "../Toast";
 import Image from "next/image";
 import { FaChevronLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
   const [disabledBtn, setDisabledBtn] = useState(true);
   const [error, setError] = useState();
   const inputsRef = useRef([]);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (value, index) => {
     if (!/^\d?$/.test(value)) return;
@@ -44,6 +46,7 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
     e.preventDefault();
     if (code.every((num) => num !== "")) {
       const enteredCode = code.join("");
+      setLoading(true);
       try {
         const response = await axiosInstance.post("client/auth/reset/verify", {
           email: mainEmail,
@@ -54,6 +57,8 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
       } catch (error) {
         setError(true);
         setTimeout(() => setError(false), [3000]);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -119,7 +124,11 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
             disabled={disabledBtn}
             className="w-full bg-[#FFBA00] text-[#313131] py-2 px-4 rounded-lg mt-2 font-medium text-[20px] leading-[23px] border-2 border-[transparent] border-b-[#313131] disabled:bg-gray-300 disabled:border-none disabled:cursor-not-allowed"
           >
-            {t("login-text19")}
+            {loading ? (
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            ) : (
+              t("login-text19")
+            )}
           </button>
           <div className="text-center font-light text-sm text-[#909090] mt-3 mb-5">
             {t("login-text21")}{" "}

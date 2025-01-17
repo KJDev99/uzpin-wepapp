@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { PiEyeClosedBold } from "react-icons/pi";
-import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { RiTelegram2Fill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { IoLogoApple } from "react-icons/io5";
@@ -12,6 +12,7 @@ import { signIn } from "next-auth/react";
 import axiosInstance from "@/libs/axios";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
+import { Toast } from "../Toast";
 
 export default function Register({ setLogin, loginCount, setMainEmail }) {
   const { t } = useTranslation();
@@ -21,6 +22,8 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -52,7 +55,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
         password: password,
         confirm_password: confirmPassword,
       };
-
+      setLoading(true);
       try {
         const response = await axiosInstance.post(
           "client/auth/register",
@@ -62,7 +65,10 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
         setMainEmail(email);
       } catch (error) {
         console.error("Xatolik yuz berdi:", error);
-        alert(t("profile48"));
+        setError(true)
+        // alert(t("profile48"));
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -89,6 +95,9 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
 
   return (
     <div className="flex justify-center items-center">
+      {error && (
+        <Toast status='false' text={t("profile53")} />
+      )}
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md max-sm:shadow-none max-sm:p-4">
         <div className="flex relative flex-col items-center gap-4 mb-10">
           <Link href="/">
@@ -259,9 +268,10 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
 
           <button
             type="submit"
-            className="w-full bg-[#FFBA00] text-[#000000] text-[20xp] leading-[23px] py-2 px-4 font-medium  rounded-lg mt-10 mb-6 border-2 border-[transparent] border-b-[#313131]"
+            className="w-full flex justify-center bg-[#FFBA00] text-[#000000] text-[20xp] leading-[23px] py-2 px-4 font-medium  rounded-lg mt-10 mb-6 border-2 border-[transparent] border-b-[#313131]"
           >
-            {t("login-text1")}
+            {loading ? <AiOutlineLoading3Quarters /> : t("login-text1")}
+            {/* {t("login-text1")} */}
           </button>
         </form>
       </div>
