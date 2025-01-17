@@ -9,11 +9,13 @@ import { useRouter } from "next/navigation";
 import { FaChevronLeft } from "react-icons/fa6";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ForgetPassword({ setLogin, loginCount, setMainEmail }) {
   const { t } = useTranslation();
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const rounter = useRouter();
   const handleSubmit = async (e) => {
@@ -23,6 +25,7 @@ export default function ForgetPassword({ setLogin, loginCount, setMainEmail }) {
       setError(true);
       setTimeout(() => setError(false), [3000]);
     } else {
+      setLoading(true);
       try {
         await axiosInstance.post("client/auth/reset", {
           email: inputValue,
@@ -34,9 +37,11 @@ export default function ForgetPassword({ setLogin, loginCount, setMainEmail }) {
         console.error("Xatolik yuz berdi:", error);
         setError(true);
         setTimeout(() => setError(false), [3000]);
+      } finally {
+        setError(false);
+        setLogin(4);
+        setLoading(false);
       }
-      setError(false);
-      setLogin(4);
     }
   };
 
@@ -98,9 +103,13 @@ export default function ForgetPassword({ setLogin, loginCount, setMainEmail }) {
 
           <button
             type="submit"
-            className="w-full bg-[#FFBA00] text-[#000000] text-[20xp] leading-[23px] py-2 px-4 font-medium  rounded-lg mt-2 mb-6 border-2 border-[transparent] border-b-[#313131]"
+            className="w-full flex justify-center bg-[#FFBA00] text-[#000000] text-[20xp] leading-[23px] py-2 px-4 font-medium  rounded-lg mt-2 mb-6 border-2 border-[transparent] border-b-[#313131]"
           >
-            {t("login-text18")}
+            {loading ? (
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            ) : (
+              t("login-text18")
+            )}
           </button>
         </form>
       </div>

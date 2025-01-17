@@ -6,12 +6,14 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { Toast } from "../Toast";
 import { useTranslation } from "react-i18next";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function PasswordVerify({ setLogin, mainEmail }) {
   const { t } = useTranslation();
   const [code, setCode] = useState(["", "", "", ""]);
   const [disabledBtn, setDisabledBtn] = useState(true);
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
   const inputsRef = useRef([]);
 
   const handleChange = (value, index) => {
@@ -42,6 +44,7 @@ export default function PasswordVerify({ setLogin, mainEmail }) {
     e.preventDefault();
     if (code.every((num) => num !== "")) {
       const enteredCode = code.join("");
+      setLoading(true);
       try {
         await axiosInstance.post("client/auth/verify", {
           code: enteredCode,
@@ -51,15 +54,15 @@ export default function PasswordVerify({ setLogin, mainEmail }) {
       } catch (error) {
         setError(true);
         setTimeout(() => setError(false), [3000]);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   return (
     <div className="flex justify-center items-center">
-      {error && (
-        <Toast status="false" text={t("login-text16")} />
-      )}
+      {error && <Toast status="false" text={t("login-text16")} />}
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
         <div className="flex justify-end mb-[20px]">
           <Link href="/">
@@ -96,9 +99,13 @@ export default function PasswordVerify({ setLogin, mainEmail }) {
             id="submit-button"
             onClick={() => setLogin(5)}
             disabled={disabledBtn}
-            className="w-full bg-[#FFBA00] text-[#313131] py-2 px-4 rounded-lg mt-2 font-medium border-2 border-[transparent] border-b-[#313131] disabled:bg-gray-300 disabled:border-none disabled:cursor-not-allowed"
+            className="w-full flex justify-center bg-[#FFBA00] text-[#313131] py-2 px-4 rounded-lg mt-2 font-medium border-2 border-[transparent] border-b-[#313131] disabled:bg-gray-300 disabled:border-none disabled:cursor-not-allowed"
           >
-            {t("login-text19")}
+            {loading ? (
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            ) : (
+              t("login-text19")
+            )}
           </button>
           <div className="text-center text-sm text-[black] mt-3 mb-5">
             {t("login-text21")}{" "}

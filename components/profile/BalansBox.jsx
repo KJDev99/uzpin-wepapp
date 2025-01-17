@@ -299,7 +299,12 @@ export default function BalansBox() {
               <input
                 type="text"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setInputValue(value);
+                  }
+                }}
                 placeholder={t("profile22")}
                 className="w-full p-3 border rounded-lg border-[#E7E7E7] bg-[#F9F9F9] focus:ring-yellow-400"
               />
@@ -350,88 +355,88 @@ export default function BalansBox() {
             </div>
 
             {selectedCard && (
-              <div className="mt-[30px] bg-[#f9f9f9] rounded-[5px] p-[10px]">
-                <p className="font-semibold text-[16px]">
-                  {selectedCard.card_name}
-                </p>
-                <p className="mt-[6px] font-semibold text-[16px]">
-                  {selectedCard.card_holder}
-                </p>
-                <Image
-                  src={selectedCard.photo}
-                  className="w-[210px] h-[132px] rounded-[10px] mt-5 mx-auto"
-                  width={210}
-                  height={132}
-                  alt="card"
-                />
-                <button
-                  className="flex items-center gap-[5px] mt-5 mx-auto p-3 font-medium text-[14px] bg-[#ffba00] rounded-[5px]"
-                  onClick={copyCardNumber}
-                >
-                  {copied ? (
-                    <MdCheck size={24} />
-                  ) : (
-                    <MdOutlineContentCopy size={24} />
-                  )}
-                  {copied ? t("profile49") : t("profile50")}
-                </button>
-              </div>
-            )}
-
-            <div>
-              <div
-                className={`max-w-[482px] mb-[100px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
-                  photo ? "hidden" : ""
-                }`}
-              >
-                <Image
-                  src="/file-upload.svg"
-                  className="mx-auto"
-                  width={26}
-                  height={26}
-                  alt="img"
-                />
-                <p className="mt-2.5 text-[14px] text-[#313131]">
-                  {t("profile26")}
-                </p>
-                <p className="mt-2.5 text-[12px] text-[#acacac]">
-                  {t("login-text12")}
-                </p>
-                <div className="hidden">
-                  <UploadComponent
-                    triggerRef={modalRef}
-                    onUploadSuccess={(url) => handleUploadSuccess("cover", url)}
+              <>
+                <div className="mt-[30px] bg-[#f9f9f9] rounded-[5px] p-[10px]">
+                  <p className="font-semibold text-[16px]">
+                    {selectedCard.card_name}
+                  </p>
+                  <p className="mt-[6px] font-semibold text-[16px]">
+                    {selectedCard.card_holder}
+                  </p>
+                  <Image
+                    src={selectedCard.photo}
+                    className="w-[210px] h-[132px] rounded-[10px] mt-5 mx-auto"
+                    width={210}
+                    height={132}
+                    alt="card"
                   />
-                </div>
-                <button
-                  onClick={() => modalRef.current.click()}
-                  className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
-                >
-                  {t("profile27")}
-                </button>
-              </div>
-              {photo.length ? (
-                <div className="flex flex-col mb-[120px]">
-                  <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
-                    <div>
-                      <p>{photo.split("/").pop()}</p>
-                    </div>
-                    <button
-                      onClick={clearFile}
-                      className="text-black underline"
-                    >
-                      <X className="h-6 w-6" />
-                    </button>
-                  </div>
                   <button
-                    onClick={fetchHandle}
-                    className="mx-auto mt-5 font-medium leading-[18px] bg-[#ffba00] py-[10px] px-[60px] rounded-[10px]"
+                    className="flex items-center gap-[5px] mt-5 mx-auto p-3 font-medium text-[14px] bg-[#ffba00] rounded-[5px]"
+                    onClick={copyCardNumber}
                   >
-                    {t("profile28")}
+                    {copied ? (
+                      <MdCheck size={24} />
+                    ) : (
+                      <MdOutlineContentCopy size={24} />
+                    )}
+                    {selectedCard.card_number}
                   </button>
                 </div>
-              ) : null}
-            </div>
+                <div>
+                  <div
+                    className={`max-w-[482px] mb-[100px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
+                      photo ? "hidden" : ""
+                    }`}
+                  >
+                    <Image
+                      src="/file-upload.svg"
+                      className="mx-auto"
+                      width={26}
+                      height={26}
+                      alt="img"
+                    />
+                    <p className="mt-2.5 text-[14px] text-[#313131]">
+                      {t("profile54")}
+                    </p>
+                    <div className="hidden">
+                      <UploadComponent
+                        triggerRef={modalRef}
+                        onUploadSuccess={(url) =>
+                          handleUploadSuccess("cover", url)
+                        }
+                      />
+                    </div>
+                    <button
+                      onClick={() => modalRef.current.click()}
+                      className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
+                    >
+                      {t("profile27")}
+                    </button>
+                  </div>
+                  {photo.length ? (
+                    <div className="flex flex-col mb-[120px]">
+                      <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
+                        <div>
+                          <p>{photo.split("/").pop()}</p>
+                        </div>
+                        <button
+                          onClick={clearFile}
+                          className="text-black underline"
+                        >
+                          <X className="h-6 w-6" />
+                        </button>
+                      </div>
+                      <button
+                        onClick={fetchHandle}
+                        className="mx-auto mt-5 font-medium leading-[18px] bg-[#ffba00] py-[10px] px-[60px] rounded-[10px]"
+                      >
+                        {t("profile28")}
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

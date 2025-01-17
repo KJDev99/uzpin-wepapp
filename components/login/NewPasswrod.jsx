@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { PiEyeClosedBold } from "react-icons/pi";
-import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Toast } from "../Toast";
 import Image from "next/image";
 import { FaChevronLeft } from "react-icons/fa6";
@@ -21,6 +21,7 @@ export default function NewPasswrod({ setLogin, access }) {
     confirmPassword: false,
   });
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -46,6 +47,7 @@ export default function NewPasswrod({ setLogin, access }) {
 
     if (formIsValid) {
       try {
+        setLoading(true);
         await axiosInstance.post(
           "client/auth/reset/password",
           {
@@ -62,6 +64,8 @@ export default function NewPasswrod({ setLogin, access }) {
       } catch (error) {
         setError(true);
         setTimeout(() => setError(false), [3000]);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -156,9 +160,13 @@ export default function NewPasswrod({ setLogin, access }) {
 
           <button
             type="submit"
-            className="w-full bg-[#FFBA00] text-[#000000] text-[20xp] leading-[23px] py-2 px-4 font-medium  rounded-lg mt-11 mb-6 border-2 border-[transparent] border-b-[#313131]"
+            className="w-full flex justify-center bg-[#FFBA00] text-[#000000] text-[20xp] leading-[23px] py-2 px-4 font-medium  rounded-lg mt-11 mb-6 border-2 border-[transparent] border-b-[#313131]"
           >
-            {t("login-text19")}
+            {loading ? (
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            ) : (
+              t("login-text19")
+            )}
           </button>
         </form>
       </div>
