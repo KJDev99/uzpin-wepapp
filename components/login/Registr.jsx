@@ -65,7 +65,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
         setMainEmail(email);
       } catch (error) {
         console.error("Xatolik yuz berdi:", error);
-        setError(true)
+        setError(true);
         // alert(t("profile48"));
       } finally {
         setLoading(false);
@@ -95,9 +95,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
 
   return (
     <div className="flex justify-center items-center">
-      {error && (
-        <Toast status='false' text={t("profile53")} />
-      )}
+      {error && <Toast status="false" text={t("profile53")} />}
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md max-sm:shadow-none max-sm:p-4">
         <div className="flex relative flex-col items-center gap-4 mb-10">
           <Link href="/">
@@ -230,7 +228,10 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
           </div>
 
           <div className="flex flex-col justify-between items-center my-5">
-            <Link href="/telegram-login.html" className="w-full">
+            <Link
+              href="/telegram-login.html"
+              className="w-full hidden-on-iphone"
+            >
               <button
                 type="button"
                 className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
@@ -243,7 +244,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
+              className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131] hidden-on-iphone"
             >
               <FcGoogle className="p-0 text-[28px] rounded-full" />
               {t("login-text7")}
@@ -251,7 +252,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
             <button
               type="button"
               onClick={handleAppleLogin}
-              className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
+              className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131] hidden-on-iphone"
             >
               <IoLogoApple className=" text-[28px] rounded-full" />
               {t("login-text8")}

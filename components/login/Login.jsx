@@ -204,7 +204,10 @@ export default function Login({ setLogin, loginCount }) {
             </div>
 
             <div className="flex flex-col justify-between items-center my-5">
-              <Link href="/telegram-login.html" className="w-full">
+              <Link
+                href="/telegram-login.html"
+                className="w-full hidden-on-iphone"
+              >
                 <button
                   type="button"
                   className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
@@ -217,7 +220,7 @@ export default function Login({ setLogin, loginCount }) {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
+                className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131] hidden-on-iphone"
               >
                 <FcGoogle className="p-0 text-[28px] rounded-full" />
                 {t("login-text7")}
@@ -225,7 +228,7 @@ export default function Login({ setLogin, loginCount }) {
               <button
                 type="button"
                 onClick={handleAppleLogin}
-                className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
+                className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131] hidden-on-iphone"
               >
                 <IoLogoApple className=" text-[28px] rounded-full" />
                 {t("login-text8")}
