@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
       <body className="bg-white">
         <ClientProvider>
           <Navbar />
-          {children}
+          <div className="mt-20">{children}</div>
           <BottomNavbar />
         </ClientProvider>
       </body>
