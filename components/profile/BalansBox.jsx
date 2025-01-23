@@ -32,6 +32,7 @@ export default function BalansBox() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState(false);
+  const [error1, setError1] = useState(false);
   const [success, setSuccess] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -153,8 +154,15 @@ export default function BalansBox() {
       );
       setSuccess(true);
     } catch (error) {
-      setError(true);
-      console.log(error);
+      if (
+        error.response.data.detail ===
+        "Sizda hali kutilayotgan taranzaksiya mavjud!"
+      ) {
+        setError1(true);
+      } else {
+        setError(true);
+      }
+      console.log(error.response.data.detail);
     } finally {
       setLoading(false);
       setTimeout(() => {
@@ -177,6 +185,7 @@ export default function BalansBox() {
       {error && (
         <Alert status={false} title={t("profile14")} message={t("profile15")} />
       )}
+      {error1 && <Alert status={false} title={t("profile54")} />}
       {success && (
         <Alert status={true} title={t("profile16")} message={t("profile17")} />
       )}
