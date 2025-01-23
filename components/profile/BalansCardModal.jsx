@@ -97,7 +97,7 @@ export default function BalansCardModal({
   const fetchHandle = async () => {
     const formattedData = {
       currency: selectedCurrency,
-      amount: inputValue,
+      amount: +inputValue,
       chek: photo,
       from_bot: true,
       card: selectedCard.id,

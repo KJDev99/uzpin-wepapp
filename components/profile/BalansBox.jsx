@@ -301,7 +301,8 @@ export default function BalansBox() {
                 value={inputValue}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (/^\d*$/.test(value)) {
+                  // Faqat raqamlar va '.' ni qabul qilish uchun tekshirish
+                  if (/^[0-9.]*$/.test(value)) {
                     setInputValue(value);
                   }
                 }}
