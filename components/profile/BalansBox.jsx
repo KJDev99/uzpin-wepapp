@@ -372,7 +372,7 @@ export default function BalansBox() {
                   />
                   <button
                     className={`flex items-center gap-[5px] mt-5 mx-auto p-3 font-medium ${
-                      selectedCard.card_number.length > 19 ? "text-[9px]" : ""
+                      selectedCard.card_number.length > 19 ? "text-[10px]" : ""
                     } text-[14px] bg-[#ffba00] rounded-[5px]`}
                     onClick={copyCardNumber}
                   >
