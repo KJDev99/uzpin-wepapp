@@ -301,7 +301,6 @@ export default function BalansBox() {
                 value={inputValue}
                 onChange={(e) => {
                   const value = e.target.value;
-                  // Faqat raqamlar va '.' ni qabul qilish uchun tekshirish
                   if (/^[0-9.]*$/.test(value)) {
                     setInputValue(value);
                   }
@@ -357,7 +356,7 @@ export default function BalansBox() {
 
             {selectedCard && (
               <>
-                <div className="mt-[30px] bg-[#f9f9f9] rounded-[5px] p-[10px]">
+                <div className="mt-[30px] bg-[#f9f9f9] rounded-[5px] py-[10px]">
                   <p className="font-semibold text-[16px]">
                     {selectedCard.card_name}
                   </p>
@@ -372,13 +371,15 @@ export default function BalansBox() {
                     alt="card"
                   />
                   <button
-                    className="flex items-center gap-[5px] mt-5 mx-auto p-3 font-medium text-[14px] bg-[#ffba00] rounded-[5px]"
+                    className={`flex items-center gap-[5px] mt-5 mx-auto p-3 font-medium ${
+                      selectedCard.card_number.length > 19 ? "text-[9px]" : ""
+                    } text-[14px] bg-[#ffba00] rounded-[5px]`}
                     onClick={copyCardNumber}
                   >
                     {copied ? (
-                      <MdCheck size={24} />
+                      <MdCheck size={16} />
                     ) : (
-                      <MdOutlineContentCopy size={24} />
+                      <MdOutlineContentCopy size={16} />
                     )}
                     {selectedCard.card_number}
                   </button>
