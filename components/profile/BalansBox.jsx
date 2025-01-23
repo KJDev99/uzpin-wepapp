@@ -183,11 +183,11 @@ export default function BalansBox() {
   return (
     <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-4 mb-20">
       {error && (
-        <Alert status={false} title={t("profile14")} message={t("profile15")} />
+        <Alert status={400} title={t("profile14")} message={t("profile15")} />
       )}
-      {error1 && <Alert status={false} title={t("profile54")} />}
+      {error1 && <Alert status={300} title={t("profile54")} />}
       {success && (
-        <Alert status={true} title={t("profile16")} message={t("profile17")} />
+        <Alert status={200} title={t("profile16")} message={t("profile17")} />
       )}
       <div className="px-6 py-4 max-md:border-b max-md:hidden">
         <h2 className="text-xl font-bold md:mb-4">{t("profile1")}</h2>

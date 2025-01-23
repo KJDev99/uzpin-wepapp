@@ -133,10 +133,10 @@ export default function BalansCardModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
       {error && (
-        <Alert status={false} title={t("profile14")} message={t("profile15")} />
+        <Alert status={400} title={t("profile14")} message={t("profile15")} />
       )}
       {success && (
-        <Alert status={true} title={t("profile16")} message={t("profile17")} />
+        <Alert status={200} title={t("profile16")} message={t("profile17")} />
       )}
       <div className="bg-white rounded-[10px] shadow-lg">
         <div className="flex relative justify-between">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Check, X } from "lucide-react";
+import { GoAlertFill } from "react-icons/go";
 
 export function Alert({ isOpen, onClose, status, title, message }) {
   return (
@@ -18,15 +19,19 @@ export function Alert({ isOpen, onClose, status, title, message }) {
           <X className="h-6 w-6" />
         </button>
         <div className="flex flex-col mt-5  items-center space-x-2 justify-center ">
-          {status ? (
+          {status === 200 ? (
             <div className="border border-[#009951] rounded-full h-11 w-11 flex justify-center items-center mb-7">
               <Check className="h-6 w-6 text-[#009951] " />
             </div>
-          ) : (
+          ) : status === 400 ? (
             <div className="border border-[#FF0000] rounded-full h-11 w-11 flex justify-center items-center mb-7">
               <X className="h-6 w-6 text-[#FF0000] " />
             </div>
-          )}
+          ) : status === 300 ? (
+            <div className="border border-[#FFba00] rounded-full h-16 w-16 flex justify-center items-center mb-7">
+              <GoAlertFill className="h-11 w-11 text-[#FFba00]" />
+            </div>
+          ) : null}
           <h2 className="mb-4 text-2xl font-bold">{title}</h2>
           <p className="mb-10">{message}</p>
         </div>
