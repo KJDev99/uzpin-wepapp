@@ -121,14 +121,14 @@ export default function GameStore({ data }) {
                     />
                   ) : (
                     <Image
-                      src="/uc.png"
+                      src="/mobile.webp"
                       alt={`${pkg.name} UC`}
                       width={120}
                       height={120}
                       className="mb-4  w-[110px] h-[110px] mx-auto"
                     />
                   )}
-                  <h3 className="text-[#313131] mb-2 font-medium text-sm">
+                  <h3 className="text-[#313131] mb-2 line-clamp-1 font-medium text-sm">
                     {pkg.name}
                   </h3>
                   <div className="flex justify-between items-center">

@@ -176,6 +176,10 @@ export default function BalansBox() {
     }
   };
 
+  const formatNumber = (num) => {
+    return num % 1 === 0 ? num?.toFixed(0) : num?.toFixed(2);
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -249,9 +253,21 @@ export default function BalansBox() {
                 {t("profile19")}
               </p>
               <span className="text-4xl font-bold flex max-sm:font-semibold max-sm:text-[20px] max-sm:ml-[30px]">
-                {selectedCurrency == "UZS" && balance?.account_uzs}
-                {selectedCurrency == "USD" && balance?.account_usd}
-                {selectedCurrency == "RUB" && balance?.account_rub}
+                {selectedCurrency == "UZS" && balance?.account_uzs
+                  ? formatNumber(balance?.account_uzs)
+                  : ""}
+                {console.log(formatNumber(balance?.account_uzs))}
+                {selectedCurrency == "USD" && balance?.account_usd
+                  ? formatNumber(balance?.account_usd)
+                  : ""}
+                {selectedCurrency == "RUB" && balance?.account_rub
+                  ? formatNumber(balance?.account_rub)
+                  : ""}
+                {balance?.account_uzs ||
+                balance?.account_usd ||
+                balance?.account_rub
+                  ? ""
+                  : 0}
               </span>
               <span className="text-gray-600 max-sm:font-medium max-sm:text-sm max-sm:text-[#000000]">
                 {selectedCurrency}

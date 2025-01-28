@@ -65,14 +65,18 @@ export default function BestSales() {
                           height={228}
                         />
                       ) : (
-                        <div className="bg-gray-200 h-[120px] w-full max-w-[120px] max-h-[120px] flex items-center justify-center text-xs text-gray-500">
-                          No Image
-                        </div>
+                        <Image
+                          src='/mobile.webp'
+                          alt={promo.name}
+                          className="object-cover rounded h-[228px] w-full max-w-[120px] max-h-[120px]"
+                          width={228}
+                          height={228}
+                        />
                       )}
                     </div>
                     <div className="p-4 space-y-3 px-0 pb-0">
                       <div>
-                        <h3 className="text-[#313131] font-medium text-sm mb-1">
+                        <h3 className="text-[#313131] line-clamp-1 font-medium text-sm mb-1">
                           {promo.name}
                         </h3>
                         <p className="text-[#313131] text-xs font-medium">

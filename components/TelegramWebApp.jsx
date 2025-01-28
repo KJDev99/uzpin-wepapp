@@ -6,13 +6,12 @@ const TelegramApp = () => {
   const searchParams = useSearchParams();
   const chatId = searchParams?.get("chat_id") || null;
   useEffect(() => {
-    if (chatId || sessionStorage.getItem("userId")) {
+    if (chatId || sessionStorage.getItem("userId")||true) {
       if (!chatId) return;
       sessionStorage.setItem("userId", chatId);
     } else if (typeof window !== "undefined" && window.Telegram) {
       const tg = window.Telegram.WebApp;
       tg.ready();
-
       tg.themeParams;
       tg.expand();
 
