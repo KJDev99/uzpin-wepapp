@@ -250,7 +250,7 @@ export default function GameStore({ data, gameId }) {
           </div>
 
           <div
-            className={`sticky top-10 col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:fixed max-sm:top-auto max-sm:bottom-[110px] left-0 right-0 w-[90%] mx-auto max-sm:col-span-5 max-sm:${
+            className={`sticky top-10 col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:py-0 max-sm:fixed max-sm:top-auto max-sm:bottom-[80px] left-0 right-0 w-[90%] mx-auto max-sm:col-span-5 max-sm:${
               cart.length > 0 ? "block" : "hidden"
             }`}
           >
