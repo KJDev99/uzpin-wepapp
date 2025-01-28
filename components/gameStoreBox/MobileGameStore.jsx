@@ -111,7 +111,7 @@ const MobileGameStore = ({ cart }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-sm:space-y-2">
       {error2 && (
         <Alert
           status={400}
@@ -138,7 +138,7 @@ const MobileGameStore = ({ cart }) => {
       {/* {success && (
         <Toast type="success" text={t("profile52")} onClose={handleClose} />
       )} */}
-      <div className="space-y-2 flex justify-between items-center">
+      <div className="space-y-2 flex justify-between items-center max-sm:space-y-0">
         <label
           htmlFor="userId"
           className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
@@ -153,7 +153,7 @@ const MobileGameStore = ({ cart }) => {
           className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
         />
       </div>
-      <div className="space-y-2 flex justify-between items-center">
+      <div className="space-y-2 flex justify-between items-center max-sm:space-y-0">
         <label
           htmlFor="serverId"
           className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
