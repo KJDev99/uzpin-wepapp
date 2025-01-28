@@ -148,7 +148,7 @@ export default function GameStore({ data, gameId }) {
             {t("all-games-text4")}
           </p>
         </div>
-        <div className="grid grid-cols-5 gap-[50px] mb-[40px]">
+        <div className="grid grid-cols-5 gap-[50px] mb-20">
           <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-sm:grid-cols-2 max-sm:col-span-5 max-sm:gap-2">
             {code.map((pkg) => (
               <div

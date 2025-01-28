@@ -153,5 +153,8 @@
   "profile55": "Sizda hali kutilayotgan tranzaksiya mavjud!",
 
   "not1": "Ushbu so’rov bo’yicha sahifa topilmadi",
-  "not2": "Bosh sahifaga qaytish"
+  "not2": "Bosh sahifaga qaytish",
+
+  "mobile1": "Foydalanuvchi:",
+  "mobile2": "User id yoki server id noto'g'ri"
 }

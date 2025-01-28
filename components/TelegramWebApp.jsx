@@ -12,7 +12,6 @@ const TelegramApp = () => {
     } else if (typeof window !== "undefined" && window.Telegram) {
       const tg = window.Telegram.WebApp;
       tg.ready();
-
       tg.themeParams;
       tg.expand();
 
