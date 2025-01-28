@@ -32,7 +32,7 @@ export default function GameDetails() {
 
   return (
     <div>
-      <GameStore data={data} />
+      <GameStore data={data} gameId={pathname.game} />
     </div>
   );
 }

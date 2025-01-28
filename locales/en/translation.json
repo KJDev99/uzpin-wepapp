@@ -151,5 +151,8 @@
   "profile55": "You have a pending transaction!",
 
   "not1": "Page not found for this request",
-  "not2": "Return to the home page"
+  "not2": "Return to the home page",
+
+  "mobile1": "User:",
+  "mobile2": "Invalid user id or server id"
 }
