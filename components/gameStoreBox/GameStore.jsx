@@ -156,7 +156,7 @@ export default function GameStore({ data, gameId }) {
                 className="rounded-lg p-4 border hover:border-[#FFBA00] transition-all ease-linear bg-white max-sm:p-0 h-max"
               >
                 <div className="flex flex-col max-sm:px-[0px] max-sm:pb-[10px]">
-                  <div className="flex items-center justify-center max-w-[190px] w-full h-[190px] rounded-[10px] bg-gradient-to-b from-[#FFE69B] to-[#FEFDF8]">
+                  <div className="flex items-center justify-center w-full h-[190px] rounded-[10px] bg-gradient-to-b from-[#FFE69B] to-[#FEFDF8]">
                     {pkg.photo ? (
                       <Image
                         src={pkg.photo}
