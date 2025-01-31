@@ -98,7 +98,7 @@ export default function PurchasesModal({ selectedPurchase, isOpen, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 max-sm:px-2">
       {allStates && <Toast type="success" text={t("profile52")} />}
-      <div className="max-w-[547px] w-full bg-white rounded-[10px] shadow-lg">
+      <div className="max-w-[547px] h-[calc(100vh-80px)] w-full bg-white rounded-[10px] shadow-lg max-sm:h-[calc(100vh-220px)]">
         <div className="flex flex-col relative justify-between min-w-10 min-h-10">
           <div className="flex justify-between px-10 pt-[60px] max-sm:pt-5">
             <p className="font-semibold text-[24px] leading-[28px] max-sm:mx-auto">
@@ -120,7 +120,7 @@ export default function PurchasesModal({ selectedPurchase, isOpen, onClose }) {
               </button>
             </div>
           </div>
-          <ul className="px-10 py-[35px]">
+          <ul className="px-10 py-[35px] h-[calc(100vh-190px)] overflow-y-scroll max-sm:h-[calc(100vh-310px)]">
             {data &&
               data.values.map((item, index) => (
                 <li
