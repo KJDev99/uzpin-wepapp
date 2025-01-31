@@ -263,10 +263,10 @@ export default function BalansBox() {
                 {selectedCurrency == "RUB" && balance?.account_rub
                   ? formatNumber(balance?.account_rub)
                   : ""}
-                {balance?.account_uzs ||
-                balance?.account_usd ||
-                balance?.account_rub
-                  ? 0
+                {(selectedCurrency == "UZS" && balance?.account_uzs) ||
+                (selectedCurrency == "USD" && balance?.account_usd) ||
+                (selectedCurrency == "RUB" && balance?.account_rub)
+                  ? ""
                   : 0}
               </span>
               <span className="text-gray-600 max-sm:font-medium max-sm:text-sm max-sm:text-[#000000]">
