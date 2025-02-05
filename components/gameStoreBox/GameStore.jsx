@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { GoTrash } from "react-icons/go";
 import { PurchaseModal } from "./PurchaseModal";
+import { MobileModal } from "./MobileModal";
 import axiosInstance from "@/libs/axios";
 import { useTranslation } from "react-i18next";
 import MobileGameStore from "./MobileGameStore";
@@ -12,6 +13,7 @@ export default function GameStore({ data, gameId }) {
   const { t } = useTranslation();
   const [cart, setCart] = useState([]);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [showMobileModal, setShowMobileModal] = useState(false);
   // const [showModalMessage, setShowModalMessage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState([]);
@@ -41,7 +43,6 @@ export default function GameStore({ data, gameId }) {
         Authorization: `Bearer ${token}`,
         Currency: savedCurrency,
       };
-      console.log(token, "tpkec");
     }
     if (data.id) {
       try {
@@ -72,7 +73,7 @@ export default function GameStore({ data, gameId }) {
 
   useEffect(() => {
     fetchStats();
-  }, [data.id, token]);
+  }, [data.id, token, showMobileModal]);
 
   const updateQuantity = (packageId, quantity) => {
     setCart((prevCart) => {
@@ -149,7 +150,13 @@ export default function GameStore({ data, gameId }) {
           </p>
         </div>
         <div className="grid grid-cols-5 gap-[50px] mb-20">
-          <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-sm:grid-cols-2 max-sm:col-span-5 max-sm:gap-2">
+          <div
+            className={`${
+              gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc"
+                ? "col-span-5 lg:grid-cols-5"
+                : "col-span-3 lg:grid-cols-3"
+            } grid grid-cols-1 md:grid-cols-2 gap-5 max-sm:grid-cols-2 max-sm:col-span-5 max-sm:gap-2`}
+          >
             {code.map((pkg) => (
               <div
                 key={pkg.id}
@@ -198,51 +205,66 @@ export default function GameStore({ data, gameId }) {
                         </>
                       )}
                     </div>
-                    <div className="flex justify-between items-center gap-2">
-                      <button
-                        className={`px-2 py-1 text-[28px] max-sm:p-0 ${
-                          getQuantity(pkg.id) === 0
-                            ? "opacity-40 cursor-not-allowed"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          updateQuantity(pkg.id, getQuantity(pkg.id) - 1)
-                        }
-                        disabled={getQuantity(pkg.id) === 0}
-                      >
-                        -
-                      </button>
+                    {gameId != "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
+                      <div className="flex justify-between items-center gap-2">
+                        <button
+                          className={`px-2 py-1 text-[28px] max-sm:p-0 ${
+                            getQuantity(pkg.id) === 0
+                              ? "opacity-40 cursor-not-allowed"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            updateQuantity(pkg.id, getQuantity(pkg.id) - 1)
+                          }
+                          disabled={getQuantity(pkg.id) === 0}
+                        >
+                          -
+                        </button>
 
-                      <input
-                        type="text"
-                        value={getQuantity(pkg.id)}
-                        className="text-center w-[100px] py-2 border rounded-[10px] bg-[#F4F4F4] border-t-[#ACACAC] outline-none text-lg max-sm:py-[7px] max-sm:px-[35px]"
-                        onInput={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, "");
-                          const quantity = Math.min(
-                            Math.max(parseInt(value) || 0, 0),
-                            pkg.count
-                          );
-                          if (value !== e.target.value)
-                            e.target.value = quantity;
-                          updateQuantity(pkg.id, quantity);
-                        }}
-                      />
+                        <input
+                          type="text"
+                          value={getQuantity(pkg.id)}
+                          className="text-center w-[100px] py-2 border rounded-[10px] bg-[#F4F4F4] border-t-[#ACACAC] outline-none text-lg max-sm:py-[7px] max-sm:px-[35px]"
+                          onInput={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, "");
+                            const quantity = Math.min(
+                              Math.max(parseInt(value) || 0, 0),
+                              pkg.count
+                            );
+                            if (value !== e.target.value)
+                              e.target.value = quantity;
+                            updateQuantity(pkg.id, quantity);
+                          }}
+                        />
 
-                      <button
-                        className={`px-2 py-1 text-[28px] max-sm:p-0 ${
-                          getQuantity(pkg.id) >= pkg.count
-                            ? "opacity-40 cursor-not-allowed"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          updateQuantity(pkg.id, getQuantity(pkg.id) + 1)
-                        }
-                        disabled={getQuantity(pkg.id) >= pkg.count}
-                      >
-                        +
-                      </button>
-                    </div>
+                        <button
+                          className={`px-2 py-1 text-[28px] max-sm:p-0 ${
+                            getQuantity(pkg.id) >= pkg.count
+                              ? "opacity-40 cursor-not-allowed"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            updateQuantity(pkg.id, getQuantity(pkg.id) + 1)
+                          }
+                          disabled={getQuantity(pkg.id) >= pkg.count}
+                        >
+                          +
+                        </button>
+                      </div>
+                    )}
+                    {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
+                      <div>
+                        <button
+                          onClick={() => {
+                            updateQuantity(pkg.id, getQuantity(pkg.id) + 1);
+                            setShowMobileModal(true);
+                          }}
+                          className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium mb-[10px] border-b-2 border-[black] max-sm:m-0"
+                        >
+                          {t("all-games-text10")}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -250,7 +272,11 @@ export default function GameStore({ data, gameId }) {
           </div>
 
           <div
-            className={`sticky top-10 col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:py-0 max-sm:fixed max-sm:top-auto max-sm:bottom-[80px] left-0 right-0 w-[90%] mx-auto max-sm:col-span-5 max-sm:${
+            className={`${
+              gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc"
+                ? "hidden"
+                : "block"
+            } sticky top-10 col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:py-0 max-sm:fixed max-sm:top-auto max-sm:bottom-[80px] left-0 right-0 w-[90%] mx-auto max-sm:col-span-5 max-sm:${
               cart.length > 0 ? "block" : "hidden"
             }`}
           >
@@ -276,7 +302,9 @@ export default function GameStore({ data, gameId }) {
                         <div className="w-full flex justify-between items-center">
                           <p>
                             {totalUC.toLocaleString()}{" "}
-                            {code[0].name.match(/[a-zA-Z]+/)?.[0]}
+                            {gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc"
+                              ? code[0].name.match(/[a-zA-Z]+/)?.[0]
+                              : "diamonds"}
                           </p>
                           <p>
                             {totalPrice.toLocaleString()} {savedCurrency}
@@ -313,7 +341,11 @@ export default function GameStore({ data, gameId }) {
                 </div>
                 {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
                   <>
-                    <MobileGameStore cart={cart} />
+                    <MobileGameStore
+                      cart={cart}
+                      clear={() => ClearTash()}
+                      onClose={() => setShowPurchaseModal(false)}
+                    />
                   </>
                 )}
                 <div className="mt-6 space-y-2 max-sm:flex max-sm:items-center max-sm:gap-5 max-sm:mt-[11px] max-sm:space-y-0">
@@ -357,6 +389,13 @@ export default function GameStore({ data, gameId }) {
             clear={() => ClearTash()}
             savedCurrency={savedCurrency}
             gameId={gameId}
+          />
+        )}
+        {showMobileModal && (
+          <MobileModal
+            cart={cart}
+            clear={() => ClearTash()}
+            onClose={() => setShowMobileModal(false)}
           />
         )}
       </div>
