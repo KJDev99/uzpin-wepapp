@@ -17,6 +17,7 @@ export function PurchaseModal({
   totalPrice,
   clear,
   savedCurrency,
+  gameId,
 }) {
   const { t } = useTranslation();
   const [playerId, setPlayerId] = useState("");
@@ -168,12 +169,25 @@ export function PurchaseModal({
                     className="flex justify-between items-center bg-[#F4F4F4] py-3 px-5 rounded-[10px] shadow-lg mt-4"
                   >
                     <div className="flex items-center gap-4">
-                      <Image
-                        src={item.photo}
-                        alt={`${item.amount} UC`}
-                        width={35}
-                        height={35}
-                      />
+                      {item.photo ? (
+                        <Image
+                          src={item.photo}
+                          alt={`${item.name} UC`}
+                          width={35}
+                          height={35}
+                        />
+                      ) : (
+                        <Image
+                          src={
+                            gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc"
+                              ? "/mobile.webp"
+                              : "/uccard_converted.webp"
+                          }
+                          alt={`${item.name} UC`}
+                          width={35}
+                          height={35}
+                        />
+                      )}
                       <span>{item.name}</span>
                     </div>
                     <span>

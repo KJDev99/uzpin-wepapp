@@ -5,7 +5,7 @@ import { Alert } from "../Alert";
 import { Toast } from "../Toast";
 import { useTranslation } from "react-i18next";
 
-const MobileGameStore = ({ cart }) => {
+const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
   const [userId, setUserId] = useState("");
   const [serverId, setServerId] = useState("");
   const [userName, setUserName] = useState(null); // Backenddan kelgan `name`ni saqlash
@@ -95,10 +95,16 @@ const MobileGameStore = ({ cart }) => {
         }, 2000);
       }
     } finally {
-      clear();
       if (isOpen == 2) {
         setTimeout(() => {
           setSuccess(false);
+          clear();
+          onClose();
+        }, 2000);
+      }else {
+        setTimeout(() => {
+          setSuccess(false);
+          clear();
           onClose();
         }, 2000);
       }
@@ -135,9 +141,6 @@ const MobileGameStore = ({ cart }) => {
           onClose={handleClose}
         />
       )}
-      {/* {success && (
-        <Toast type="success" text={t("profile52")} onClose={handleClose} />
-      )} */}
       <div className="space-y-2 flex justify-between items-center max-sm:space-y-0">
         <label
           htmlFor="userId"

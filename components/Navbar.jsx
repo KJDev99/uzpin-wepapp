@@ -27,11 +27,12 @@ export default function Navbar() {
   }, [i18n]);
   const [selectedLang, setSelectedLang] = useState("uz");
   const [isHovered, setIsHovered] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
-    { code: "uz", flag: "/flaguz_converted.webp", alt: "Uzbekistan flag" },
-    { code: "ru", flag: "/flagru_converted.webp", alt: "Russia flag" },
-    { code: "en", flag: "/flagen_converted.webp", alt: "English flag" },
+    { code: "uz", flag: "/flaguz.svg", alt: "Uzbekistan flag" },
+    { code: "ru", flag: "/flagru.svg", alt: "Russia flag" },
+    { code: "en", flag: "/flagen.svg", alt: "English flag" },
   ];
 
   const handleLanguageChange = (code) => {
@@ -40,6 +41,7 @@ export default function Navbar() {
     setIsHovered(false);
     localStorage.setItem("language", code);
     window.location.reload();
+    setIsOpen(false);
   };
 
   return (
@@ -57,7 +59,7 @@ export default function Navbar() {
           </Link>
 
           <div className="flex gap-0 items-center">
-            <div className="flex w-[200px] max-md:w-max items-center space-x-10 max-sm:space-x-0">
+            <div className="flex max-md:w-max items-center space-x-10 max-sm:space-x-0">
               {profileData ? (
                 <>
                   <Link href={"/profile"}>
@@ -79,8 +81,52 @@ export default function Navbar() {
                   </button>
                 </Link>
               )}
+              <div className="relative">
+                <div className="text-left">
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center gap-2 px-4 py-2 text-[#ffba00] font-medium uppercase rounded-md shadow-md"
+                  >
+                    <Image
+                      src={
+                        languages.find((lang) => lang.code === selectedLang)
+                          .flag
+                      }
+                      alt={
+                        languages.find((lang) => lang.code === selectedLang)
+                          .code
+                      }
+                      width={28}
+                      height={28}
+                      className="rounded-full"
+                    />
+                    {languages.find((lang) => lang.code === selectedLang).code}
+                  </button>
 
-              <div
+                  {isOpen && (
+                    <ul className="absolute z-10 left-0 mt-2 w-22 bg-white border rounded-md shadow-lg">
+                      {languages.map((lang) => (
+                        <li
+                          key={lang.code}
+                          className="uppercase flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200"
+                          onClick={() => handleLanguageChange(lang.code)}
+                        >
+                          <Image
+                            src={lang.flag}
+                            alt={lang.code}
+                            width={28}
+                            height={28}
+                            className="rounded-full"
+                          />
+                          {lang.code}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+
+              {/* <div
                 className={`relative flex  justify-end  transition-all ${
                   isHovered ? "w-[150px] max-md:w-max" : "w-max"
                 }`}
@@ -122,7 +168,7 @@ export default function Navbar() {
                       />
                     ))}
                 </div>
-              </div>
+              </div> */}
             </div>
             <CurrencySelector />
           </div>
