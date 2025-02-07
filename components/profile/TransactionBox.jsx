@@ -130,7 +130,13 @@ export default function TransactionBox() {
                   </span>
                 </td>
                 <td className="py-2 w-max text-nowrap text-sm text-left px-4 border border-[#ACACAC]">
-                  {item.amount.toLocaleString()}
+                  {item.amount
+                    ?.toLocaleString("fr-FR", {
+                      useGrouping: true,
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })
+                    .replace(",", ".")}
                 </td>
                 <td className="py-2 w-max text-nowrap text-sm text-left px-4 border border-[#ACACAC]">
                   {item.currency}
