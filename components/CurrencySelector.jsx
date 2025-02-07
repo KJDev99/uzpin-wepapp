@@ -71,7 +71,7 @@ export default function CurrencySelector() {
       {balance?.account_uzs || balance?.account_rub || balance?.account_usd ? (
         <div className="mr-2 text-[12px] text-end text-[#ffba00]">
           {currency === "uzs" ? (
-            `${balance?.account_uzs ? formatNumber(balance?.account_uzs) : 0} S`
+            `${balance?.account_uzs ? formatNumber(balance?.account_uzs) : 0} s`
           ) : currency === "usd" ? (
             <div className="flex items-center gap-1">
               {balance?.account_usd ? formatNumber(balance?.account_usd) : 0}{" "}
