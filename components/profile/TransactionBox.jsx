@@ -72,13 +72,13 @@ export default function TransactionBox() {
 
   return (
     <div className="w-full max-w-[1200px] mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 max-md:hidden">{t('profile4')}</h1>
+      <h1 className="text-2xl font-bold mb-4 max-md:hidden">{t("profile4")}</h1>
       <Link
         href={"/profile/profile-mobile"}
         className="md:px-6 py-4 border-b flex items-center max-md:gap-5 md:hidden mb-5"
       >
         <IoIosArrowBack className="text-2xl md:hidden" />
-        <h2 className="text-xl font-bold md:mb-4">{t('profile4')}</h2>
+        <h2 className="text-xl font-bold md:mb-4">{t("profile4")}</h2>
       </Link>
 
       <div className="max-md:overflow-x-scroll">
@@ -86,19 +86,19 @@ export default function TransactionBox() {
           <thead className="bg-[#F9F9F9] rounded-lg">
             <tr className="text-left border border-[#ACACAC] ">
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                {t('profile41')}
+                {t("profile41")}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                {t('profile42')}
+                {t("profile42")}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                {t('profile43')}
+                {t("profile43")}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                {t('profile44')}
+                {t("profile44")}
               </th>
               <th className="py-2 w-max text-nowrap text-sm text-center font-medium border border-[#ACACAC]">
-                {t('profile35')}
+                {t("profile35")}
               </th>
             </tr>
           </thead>
@@ -108,23 +108,25 @@ export default function TransactionBox() {
                 key={item.id}
                 className={`border border-[#ACACAC] hover:bg-gray-50 ${
                   item.status === "ACCEPTED" && "text-[#45C06C]"
-                } ${item.status === "BUY" && "text-[#D29D11]"} ${
-                  item.status === "REJECTED" && "text-[#C46161]"
-                }`}
+                } ${item.status === "BUY" && "text-[#C46161]"} ${
+                  item.status === "REJECTED" && "text-[#000000]"
+                } ${item.status === "WAITING" && "text-[#D29D11]"}`}
               >
                 <td className="py-2 w-max text-nowrap text-sm text-left px-4 border border-[#ACACAC]">
                   <span
                     className={`${
                       item.status === "ACCEPTED" && "text-[#45C06C]"
-                    } ${item.status === "BUY" && "text-[#D29D11]"} ${
-                      item.status === "REJECTED" && "text-[#C46161]"
-                    }`}
+                    } ${item.status === "BUY" && "text-[#C46161]"} ${
+                      item.status === "REJECTED" && "text-[#000000]"
+                    } ${item.status === "WAITING" && "text-[#D29D11]"}`}
                   >
                     {item.status === "ACCEPTED"
                       ? "Qabul qilindi"
                       : item.status === "BUY"
                       ? "Sotib olindi"
-                      : "Bekor qilindi"}
+                      : item.status === "REJECTED"
+                      ? "Bekor qilindi"
+                      : "Jarayonda"}
                   </span>
                 </td>
                 <td className="py-2 w-max text-nowrap text-sm text-left px-4 border border-[#ACACAC]">
@@ -139,9 +141,9 @@ export default function TransactionBox() {
                       onClick={() => openModal(item.chek)}
                       className={`text-xl cursor-pointer ${
                         item.status === "ACCEPTED" && "text-[#45C06C]"
-                      } ${item.status === "BUY" && "text-[#D29D11]"} ${
-                        item.status === "REJECTED" && "text-[#C46161]"
-                      }`}
+                      } ${item.status === "BUY" && "text-[#C46161]"} ${
+                        item.status === "REJECTED" && "text-[#000000]"
+                      } ${item.status === "WAITING" && "text-[#D29D11]"}`}
                     />
                   ) : (
                     " "
