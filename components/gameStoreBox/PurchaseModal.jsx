@@ -153,10 +153,23 @@ export function PurchaseModal({
                 <div className="flex justify-between font-bold">
                   <div className="flex gap-[10px]">
                     <span className="font-normal">{t("all-games-text8")}</span>
-                    {totalUC.toLocaleString()}
+                    {totalUC
+                      .toLocaleString("fr-FR", {
+                        useGrouping: true,
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 3,
+                      })
+                      .replace(",", ".")}
                   </div>
                   <div>
-                    {totalPrice.toLocaleString()} {savedCurrency}
+                    {totalPrice
+                      .toLocaleString("fr-FR", {
+                        useGrouping: true,
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 3,
+                      })
+                      .replace(",", ".")}{" "}
+                    {savedCurrency}
                   </div>
                 </div>
               </div>
@@ -191,7 +204,13 @@ export function PurchaseModal({
                       <span>{item.name}</span>
                     </div>
                     <span>
-                      {(item.price * item.quantity).toLocaleString()}{" "}
+                      {(item.price * item.quantity)
+                        .toLocaleString("fr-FR", {
+                          useGrouping: true,
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 3,
+                        })
+                        .replace(",", ".")}{" "}
                       {savedCurrency}
                     </span>
                   </div>

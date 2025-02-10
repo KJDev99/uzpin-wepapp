@@ -36,6 +36,15 @@ export default function BestSales() {
     fetchGames();
   }, []);
 
+  const formatNumber = (num) => {
+    const str = num.toString();
+    if (str.includes(".")) {
+      const [integerPart, decimalPart] = str.split(".");
+      return `${integerPart}.${decimalPart.slice(0, 3)}`;
+    }
+    return str;
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -66,7 +75,7 @@ export default function BestSales() {
                         />
                       ) : (
                         <Image
-                          src='/mobile.webp'
+                          src="/mobile.webp"
                           alt={promo.name}
                           className="object-cover rounded h-[228px] w-full max-w-[120px] max-h-[120px]"
                           width={228}
@@ -80,7 +89,8 @@ export default function BestSales() {
                           {promo.name}
                         </h3>
                         <p className="text-[#313131] text-xs font-medium">
-                          {promo.price} {currency}
+                          {promo.price ? formatNumber(promo.price) : "0"}{" "}
+                          {currency}
                         </p>
                       </div>
                       <Link href={`/all-games/${promo.game.id}`}>
