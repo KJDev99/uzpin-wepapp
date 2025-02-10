@@ -53,7 +53,12 @@ export default function CurrencySelector() {
   }, [token]);
 
   const formatNumber = (num) => {
-    return num % 1 === 0 ? num?.toFixed(0) : num?.toFixed(2);
+    const str = num.toString();
+    if (str.includes(".")) {
+      const [integerPart, decimalPart] = str.split(".");
+      return `${integerPart}.${decimalPart.slice(0, 3)}`;
+    }
+    return str;
   };
 
   return (
