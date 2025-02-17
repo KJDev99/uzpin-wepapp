@@ -108,8 +108,6 @@
   "profile12": "Parolni tasdiqlash",
   "profile13": "Saqlash",
   "profile14": "Mablag’ yetarli emas!",
-  "profile4011": "Siz ro'yxatdan o'tmagansiz!",
-  "profile4012": "Iltimos ro'yxatdan o'ting",
   "profile15": "Iltimos hisobingizni to’ldiring",
   "profile16": "Muvaffaqiyatli bajarildi!",
   "profile17": "Hisobingiz tasdiqlanishini kuting",
@@ -151,6 +149,8 @@
   "profile53": "Bu email oldin ro'yxatdan o'tgan",
   "profile54": "PNG, JPEG formatdagi rasmlar yuklang",
   "profile55": "Sizda hali kutilayotgan tranzaksiya mavjud!",
+  "profile4011": "Siz ro'yxatdan o'tmagansiz!",
+  "profile4012": "Iltimos ro'yxatdan o'ting",
 
   "not1": "Ushbu so’rov bo’yicha sahifa topilmadi",
   "not2": "Bosh sahifaga qaytish",
