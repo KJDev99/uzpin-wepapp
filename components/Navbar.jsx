@@ -74,29 +74,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-5 md:overflow-hidden">
         <div className="flex items-center justify-between h-[100px] max-md:h-20">
           <Link href="/" className="flex items-center">
-            {/* {data?.logo ? (
-              <Image
-                src={data.logo}
-                alt="target icon"
-                width={150}
-                height={24}
-                className="ml-1 mr-20 max-sm:mr-5 max-sm:max-w-[108px] max-sm:max-h-[20px]"
-              />
-            ) : (
-              <Image
-                src="/logo.svg"
-                alt="target icon"
-                width={150}
-                height={24}
-                className="ml-1 mr-20 max-sm:mr-5 max-sm:max-w-[108px] max-sm:max-h-[20px]"
-              />
-            )} */}
             <Image
-              src={data?.logo || "/logo.svg"}
+              src={data?.logo ? data.logo : "/logo.svg"}
               alt="target icon"
               width={150}
               height={24}
-              className="ml-1 mr-20 max-sm:mr-5 max-sm:max-w-[108px] max-sm:max-h-[20px]"
+              className={`ml-1 mr-20 ${
+                data?.logo ? "block" : "hidden"
+              } max-sm:mr-5 max-sm:max-w-[108px] max-sm:max-h-[20px]`}
             />
           </Link>
 
