@@ -27,7 +27,7 @@ export default function Navbar() {
     };
 
     fetchBanner();
-  }, []);
+  }, [!data]);
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language");
