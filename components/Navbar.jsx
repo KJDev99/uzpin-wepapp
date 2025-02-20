@@ -7,22 +7,27 @@ import { PiUser } from "react-icons/pi";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "@/libs/axios";
 import CurrencySelector from "./CurrencySelector";
+import Loader from "@/components/Loader";
 
 export default function Navbar() {
   const { i18n } = useTranslation();
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState();
   const { t } = useTranslation();
 
   useEffect(() => {
     const fetchBanner = async () => {
       try {
+        setLoading(true);
         const response = await axiosInstance.get(
           `/client/webapp/banner/${sessionStorage.getItem("bot")}`
         );
-        setData(response.data || null);
+        setData(response?.data);
       } catch (error) {
         console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBanner();
@@ -68,6 +73,10 @@ export default function Navbar() {
     window.location.reload();
     setIsOpen(false);
   };
+
+  if (loading || !data) {
+    return <Loader />;
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white overflow-x-clip">
