@@ -157,125 +157,136 @@ export default function GameStore({ data, gameId }) {
                 : "col-span-3 lg:grid-cols-3"
             } grid grid-cols-1 md:grid-cols-2 gap-5 max-sm:grid-cols-2 max-sm:col-span-5 max-sm:gap-2`}
           >
-            {code.map((pkg) => (
-              <div
-                key={pkg.id}
-                className="rounded-lg p-4 border hover:border-[#FFBA00] transition-all ease-linear bg-white max-sm:p-0 h-max"
-              >
-                <div className="flex flex-col max-sm:px-[0px] max-sm:pb-[10px]">
-                  <div className="flex items-center justify-center w-full h-[190px] rounded-[10px] bg-gradient-to-b from-[#FFE69B] to-[#FEFDF8]">
-                    {pkg.photo ? (
-                      <Image
-                        src={pkg.photo}
-                        alt={`${pkg.name} UC`}
-                        width={130}
-                        height={130}
-                        className="w-[130px] max-sm:w-[126px] h-[130px] max-sm:h-[126px] max-sm:mx-auto"
-                      />
-                    ) : (
-                      <Image
-                        src={
-                          gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc"
-                            ? "/mobile.webp"
-                            : "/uccard_converted.webp"
-                        }
-                        alt={`${pkg.name} UC`}
-                        width={130}
-                        height={130}
-                        className="w-[130px] max-sm:w-[126px] max-sm:h-[126px] max-sm:mx-auto"
-                      />
-                    )}
-                  </div>
-                  <div className="max-sm:px-[10px]">
-                    <h3 className="text-xl font-bold mb-2 max-sm:font-medium max-sm:text-sm line-clamp-1">
-                      {pkg.name}
-                    </h3>
-                    <div className="flex justify-between items-center">
-                      <p className="font-medium text-[#313131] text-sm mb-4 max-sm:text-xs max-sm:leading-[14px] uppercase">
-                        {pkg.price
-                          .toLocaleString("fr-FR", {
-                            useGrouping: true,
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 3,
-                          })
-                          .replace(",", ".")}{" "}
-                        {savedCurrency}
-                      </p>
-                      {gameId != "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
-                        <>
-                          <p className="text-[#828282] text-xs mb-4 max-sm:hidden">
-                            {t("all-games-text5")} {pkg.count}
+            {code.map(
+              (pkg) =>
+                ![
+                  "38ade9a5-98f9-4c61-afb2-198434af8612",
+                  "bf94ab2e-addc-4998-9ff1-5a73b3e8f7c0",
+                  "ed0637d4-e2ec-49b1-b497-b8ae45939299",
+                  "49a8481b-ead0-477e-aff5-a1b748301106",
+                ].includes(pkg.id) && (
+                  <div
+                    key={pkg.id}
+                    className="rounded-lg p-4 border hover:border-[#FFBA00] transition-all ease-linear bg-white max-sm:p-0 h-max"
+                  >
+                    <div className="flex flex-col max-sm:px-[0px] max-sm:pb-[10px]">
+                      <div className="flex items-center justify-center w-full h-[190px] rounded-[10px] bg-gradient-to-b from-[#FFE69B] to-[#FEFDF8]">
+                        {pkg.photo ? (
+                          <Image
+                            src={pkg.photo}
+                            alt={`${pkg.name} UC`}
+                            width={130}
+                            height={130}
+                            className="w-[130px] max-sm:w-[126px] h-[130px] max-sm:h-[126px] max-sm:mx-auto"
+                          />
+                        ) : (
+                          <Image
+                            src={
+                              gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc"
+                                ? "/mobile.webp"
+                                : "/uccard_converted.webp"
+                            }
+                            alt={`${pkg.name} UC`}
+                            width={130}
+                            height={130}
+                            className="w-[130px] max-sm:w-[126px] max-sm:h-[126px] max-sm:mx-auto"
+                          />
+                        )}
+                      </div>
+                      <div className="max-sm:px-[10px]">
+                        <h3 className="text-xl font-bold mb-2 max-sm:font-medium max-sm:text-sm line-clamp-1">
+                          {pkg.name}
+                        </h3>
+                        <div className="flex justify-between items-center">
+                          <p className="font-medium text-[#313131] text-sm mb-4 max-sm:text-xs max-sm:leading-[14px] uppercase">
+                            {pkg.price
+                              .toLocaleString("fr-FR", {
+                                useGrouping: true,
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 3,
+                              })
+                              .replace(",", ".")}{" "}
+                            {savedCurrency}
                           </p>
-                          <p className="text-[#828282] text-xs mb-4 sm:hidden max-sm:text-[10px] max-sm:leading-[11px]">
-                            {t("all-games-text17")} {pkg.count}
-                          </p>
-                        </>
-                      )}
+                          {gameId != "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
+                            <>
+                              <p className="text-[#828282] text-xs mb-4 max-sm:hidden">
+                                {t("all-games-text5")} {pkg.count}
+                              </p>
+                              <p className="text-[#828282] text-xs mb-4 sm:hidden max-sm:text-[10px] max-sm:leading-[11px]">
+                                {t("all-games-text17")} {pkg.count}
+                              </p>
+                            </>
+                          )}
+                        </div>
+                        {gameId != "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
+                          <div className="flex justify-between items-center gap-2">
+                            <button
+                              className={`px-2 py-1 text-[28px] max-sm:p-0 ${
+                                getQuantity(pkg.id) === 0
+                                  ? "opacity-40 cursor-not-allowed"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                updateQuantity(pkg.id, getQuantity(pkg.id) - 1)
+                              }
+                              disabled={getQuantity(pkg.id) === 0}
+                            >
+                              -
+                            </button>
+
+                            <input
+                              type="text"
+                              value={getQuantity(pkg.id)}
+                              className="text-center w-[100px] py-2 border rounded-[10px] bg-[#F4F4F4] border-t-[#ACACAC] outline-none text-lg max-sm:py-[7px] max-sm:px-[35px]"
+                              onInput={(e) => {
+                                const value = e.target.value.replace(
+                                  /[^0-9]/g,
+                                  ""
+                                );
+                                const quantity = Math.min(
+                                  Math.max(parseInt(value) || 0, 0),
+                                  pkg.count
+                                );
+                                if (value !== e.target.value)
+                                  e.target.value = quantity;
+                                updateQuantity(pkg.id, quantity);
+                              }}
+                            />
+
+                            <button
+                              className={`px-2 py-1 text-[28px] max-sm:p-0 ${
+                                getQuantity(pkg.id) >= pkg.count
+                                  ? "opacity-40 cursor-not-allowed"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                updateQuantity(pkg.id, getQuantity(pkg.id) + 1)
+                              }
+                              disabled={getQuantity(pkg.id) >= pkg.count}
+                            >
+                              +
+                            </button>
+                          </div>
+                        )}
+                        {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
+                          <div>
+                            <button
+                              onClick={() => {
+                                updateQuantity(pkg.id, getQuantity(pkg.id) + 1);
+                                setShowMobileModal(true);
+                              }}
+                              className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium mb-[10px] border-b-2 border-[black] max-sm:m-0"
+                            >
+                              {t("all-games-text10")}
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    {gameId != "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
-                      <div className="flex justify-between items-center gap-2">
-                        <button
-                          className={`px-2 py-1 text-[28px] max-sm:p-0 ${
-                            getQuantity(pkg.id) === 0
-                              ? "opacity-40 cursor-not-allowed"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            updateQuantity(pkg.id, getQuantity(pkg.id) - 1)
-                          }
-                          disabled={getQuantity(pkg.id) === 0}
-                        >
-                          -
-                        </button>
-
-                        <input
-                          type="text"
-                          value={getQuantity(pkg.id)}
-                          className="text-center w-[100px] py-2 border rounded-[10px] bg-[#F4F4F4] border-t-[#ACACAC] outline-none text-lg max-sm:py-[7px] max-sm:px-[35px]"
-                          onInput={(e) => {
-                            const value = e.target.value.replace(/[^0-9]/g, "");
-                            const quantity = Math.min(
-                              Math.max(parseInt(value) || 0, 0),
-                              pkg.count
-                            );
-                            if (value !== e.target.value)
-                              e.target.value = quantity;
-                            updateQuantity(pkg.id, quantity);
-                          }}
-                        />
-
-                        <button
-                          className={`px-2 py-1 text-[28px] max-sm:p-0 ${
-                            getQuantity(pkg.id) >= pkg.count
-                              ? "opacity-40 cursor-not-allowed"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            updateQuantity(pkg.id, getQuantity(pkg.id) + 1)
-                          }
-                          disabled={getQuantity(pkg.id) >= pkg.count}
-                        >
-                          +
-                        </button>
-                      </div>
-                    )}
-                    {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
-                      <div>
-                        <button
-                          onClick={() => {
-                            updateQuantity(pkg.id, getQuantity(pkg.id) + 1);
-                            setShowMobileModal(true);
-                          }}
-                          className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium mb-[10px] border-b-2 border-[black] max-sm:m-0"
-                        >
-                          {t("all-games-text10")}
-                        </button>
-                      </div>
-                    )}
                   </div>
-                </div>
-              </div>
-            ))}
+                )
+            )}
           </div>
 
           <div
