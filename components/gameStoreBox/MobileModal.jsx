@@ -24,6 +24,7 @@ export function MobileModal({
   const [token, setToken] = useState(null);
 
   const [error2, setError] = useState(false);
+  const [error3, setError3] = useState(false);
   const [error1, setError1] = useState(false);
   const [error401, setError401] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -121,6 +122,12 @@ export function MobileModal({
         setTimeout(() => {
           router.push("/login");
         }, 1000);
+      } else if (error.response.data.code == -32014) {
+        setError3(true);
+        setTimeout(() => {
+          setError3(false);
+          onClose();
+        }, 2000);
       } else {
         setError(true);
         setTimeout(() => {
@@ -157,6 +164,14 @@ export function MobileModal({
 
   return (
     <>
+      {error3 && (
+        <Alert
+          status={400}
+          title={t("profile56")}
+          message={t("profile57")}
+          onClose={handleClose}
+        />
+      )}
       {error2 && (
         <Alert
           status={400}
