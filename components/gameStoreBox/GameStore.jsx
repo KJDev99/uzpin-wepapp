@@ -164,6 +164,7 @@ export default function GameStore({ data, gameId }) {
                   "bf94ab2e-addc-4998-9ff1-5a73b3e8f7c0",
                   "ed0637d4-e2ec-49b1-b497-b8ae45939299",
                   "49a8481b-ead0-477e-aff5-a1b748301106",
+                  "cfac1c9c-ddbe-4e7a-9d0b-d043e23f2aeb",
                 ].includes(pkg.id) && (
                   <div
                     key={pkg.id}
