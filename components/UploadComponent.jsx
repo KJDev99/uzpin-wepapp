@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import axiosInstance from "@/libs/axios";
 
-const UploadComponent = ({ onUploadSuccess, triggerRef }) => {
+const UploadComponent = ({ onUploadSuccess, triggerRef, onUploadingChange }) => {
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = async () => {
@@ -12,6 +12,7 @@ const UploadComponent = ({ onUploadSuccess, triggerRef }) => {
 
       try {
         setUploading(true);
+        onUploadingChange(true);
         const response = await axiosInstance.post("/globals/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -24,6 +25,7 @@ const UploadComponent = ({ onUploadSuccess, triggerRef }) => {
         console.error("Faylni yuklashda xatolik yuz berdi:", error);
       } finally {
         setUploading(false);
+        onUploadingChange(false);
       }
     }
   };

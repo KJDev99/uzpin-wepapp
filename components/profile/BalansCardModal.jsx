@@ -9,6 +9,7 @@ import axiosInstance from "@/libs/axios";
 import { Alert } from "../Alert";
 import Loader from "../Loader";
 import { t } from "i18next";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function BalansCardModal({
   isOpen,
@@ -24,6 +25,7 @@ export default function BalansCardModal({
   const [token, setToken] = useState(null);
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -185,6 +187,7 @@ export default function BalansCardModal({
               </p>
               <div className="hidden">
                 <UploadComponent
+                  onUploadingChange={setLoading1}
                   triggerRef={modalRef}
                   onUploadSuccess={(url) => handleUploadSuccess("cover", url)}
                 />
@@ -193,7 +196,11 @@ export default function BalansCardModal({
                 onClick={() => modalRef.current.click()}
                 className="mt-2.5 font-medium text-xl border border-black py-2 px-8 rounded-[10px]"
               >
-                {t("profile27")}
+                {loading1 ? (
+                  <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                ) : (
+                  t("profile27")
+                )}
               </button>
             </div>
             {photo.length && (
