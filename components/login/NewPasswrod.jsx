@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PiEyeClosedBold } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Toast } from "../Toast";
@@ -10,6 +10,7 @@ import Image from "next/image";
 import { FaChevronLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "@/libs/axios";
+import Loader from "@/components/Loader";
 
 export default function NewPasswrod({ setLogin, access }) {
   const { t } = useTranslation();
@@ -22,10 +23,28 @@ export default function NewPasswrod({ setLogin, access }) {
   });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
+
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(
+          `/client/webapp/banner/${sessionStorage.getItem("bot")}`
+        );
+        setData(response?.data);
+      } catch (error) {
+        console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBanner();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,6 +89,10 @@ export default function NewPasswrod({ setLogin, access }) {
     }
   };
 
+  if (loading || !data) {
+    return <Loader />;
+  }
+
   return (
     <div className="flex justify-center items-center">
       {error && <Toast status="false" text={t("login-text16")} />}
@@ -83,7 +106,7 @@ export default function NewPasswrod({ setLogin, access }) {
         </div>
         <div className="flex relative flex-col items-center gap-4">
           <Image
-            src="/logo.svg"
+            src={data?.logo ? data.logo : "/logo.svg"}
             className="sm:hidden"
             width={162}
             height={31}

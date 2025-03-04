@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PiEyeClosedBold } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { RiTelegram2Fill } from "react-icons/ri";
@@ -13,6 +13,7 @@ import axiosInstance from "@/libs/axios";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { Toast } from "../Toast";
+import Loader from "@/components/Loader";
 
 export default function Register({ setLogin, loginCount, setMainEmail }) {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
   const [errors, setErrors] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -45,6 +47,23 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(
+          `/client/webapp/banner/${sessionStorage.getItem("bot")}`
+        );
+        setData(response?.data);
+      } catch (error) {
+        console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBanner();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,6 +112,10 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
     await signIn("apple", { callbackUrl: "/" });
   };
 
+  if (loading || !data) {
+    return <Loader />;
+  }
+
   return (
     <div className="flex justify-center items-center">
       {error && <Toast status="false" text={t("profile53")} />}
@@ -100,7 +123,7 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
         <div className="flex relative flex-col items-center gap-4 mb-10">
           <Link href="/">
             <Image
-              src="/logo.svg"
+              src={data?.logo ? data.logo : "/logo.svg"}
               className="sm:hidden"
               width={162}
               height={31}

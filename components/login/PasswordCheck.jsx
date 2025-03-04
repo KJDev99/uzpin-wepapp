@@ -3,12 +3,13 @@
 import axiosInstance from "@/libs/axios";
 import { X } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Toast } from "../Toast";
 import Image from "next/image";
 import { FaChevronLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Loader from "@/components/Loader";
 
 export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
   const [error, setError] = useState();
   const inputsRef = useRef([]);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
   const handleChange = (value, index) => {
     if (!/^\d?$/.test(value)) return;
@@ -41,6 +43,23 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
       inputsRef.current[index - 1].focus();
     }
   };
+
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(
+          `/client/webapp/banner/${sessionStorage.getItem("bot")}`
+        );
+        setData(response?.data);
+      } catch (error) {
+        console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBanner();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,6 +92,10 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
     }
   };
 
+  if (loading || !data) {
+    return <Loader />;
+  }
+
   return (
     <div className="flex justify-center items-center">
       {error && <Toast status="false" text={t("login-text16")} />}
@@ -86,7 +109,7 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
         </div>
         <div className="flex relative flex-col items-center gap-4">
           <Image
-            src="/logo.svg"
+            src={data?.logo ? data.logo : "/logo.svg"}
             className="sm:hidden"
             width={162}
             height={31}
@@ -130,7 +153,7 @@ export default function PasswordCheck({ setLogin, mainEmail, setAccess }) {
               t("login-text19")
             )}
           </button>
-          <div className="text-center font-light text-sm text-[#909090] mt-3 mb-5">
+          <div className="flex justify-center text-center font-light text-sm text-[#909090] mt-3 mb-5">
             {t("login-text21")}{" "}
             <button
               onClick={() => TryPassWord()}
