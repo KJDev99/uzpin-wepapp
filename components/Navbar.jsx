@@ -33,15 +33,15 @@ export default function Navbar() {
     fetchBanner();
   }, []);
 
-  // useEffect(() => {
-  //   const hasReloaded = sessionStorage.getItem("hasReloaded");
-  //   if (!hasReloaded) {
-  //     setTimeout(() => {
-  //       sessionStorage.setItem("hasReloaded", "true");
-  //       window.location.reload();
-  //     }, 500);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const hasReloaded = sessionStorage.getItem("hasReloaded");
+    if (!hasReloaded) {
+      setTimeout(() => {
+        sessionStorage.setItem("hasReloaded", "true");
+        window.location.reload();
+      }, 500);
+    }
+  }, []);
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language");
