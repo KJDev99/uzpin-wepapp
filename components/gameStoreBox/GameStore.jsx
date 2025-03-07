@@ -87,8 +87,14 @@ export default function GameStore({ data, gameId }) {
         return [...prevCart, newItem];
       }
 
-      if (quantity > existingItem.quantity) {
-        quantity = Math.min(quantity, existingItem.count);
+      if (data.no_promocode == false) {
+        if (quantity > existingItem.quantity) {
+          quantity = Math.min(quantity, existingItem.count);
+        }
+      } else {
+        if (quantity > existingItem.quantity) {
+          quantity = Math.min(quantity, 1000);
+        }
       }
       if (quantity === 0) {
         return prevCart.filter((item) => item.id !== packageId);
@@ -211,10 +217,16 @@ export default function GameStore({ data, gameId }) {
                           {gameId != "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
                             <>
                               <p className="text-[#828282] text-xs mb-4 max-sm:hidden">
-                                {t("all-games-text5")} {pkg.count}
+                                {data.no_promocode == false
+                                  ? t("all-games-text5")
+                                  : ""}{" "}
+                                {data.no_promocode == false && pkg.count}
                               </p>
                               <p className="text-[#828282] text-xs mb-4 sm:hidden max-sm:text-[10px] max-sm:leading-[11px]">
-                                {t("all-games-text17")} {pkg.count}
+                                {data.no_promocode == false
+                                  ? t("all-games-text17")
+                                  : ""}
+                                {data.no_promocode == false && pkg.count}
                               </p>
                             </>
                           )}
@@ -254,19 +266,36 @@ export default function GameStore({ data, gameId }) {
                               }}
                             />
 
-                            <button
-                              className={`px-2 py-1 text-[28px] max-sm:p-0 ${
-                                getQuantity(pkg.id) >= pkg.count
-                                  ? "opacity-40 cursor-not-allowed"
-                                  : ""
-                              }`}
-                              onClick={() =>
-                                updateQuantity(pkg.id, getQuantity(pkg.id) + 1)
-                              }
-                              disabled={getQuantity(pkg.id) >= pkg.count}
-                            >
-                              +
-                            </button>
+                            {data.no_promocode == false ? (
+                              <button
+                                className={`px-2 py-1 text-[28px] max-sm:p-0 ${
+                                  getQuantity(pkg.id) >= pkg.count
+                                    ? "opacity-40 cursor-not-allowed"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  updateQuantity(
+                                    pkg.id,
+                                    getQuantity(pkg.id) + 1
+                                  )
+                                }
+                                disabled={getQuantity(pkg.id) >= pkg.count}
+                              >
+                                +
+                              </button>
+                            ) : (
+                              <button
+                                className={`px-2 py-1 text-[28px] max-sm:p-0`}
+                                onClick={() =>
+                                  updateQuantity(
+                                    pkg.id,
+                                    getQuantity(pkg.id) + 1
+                                  )
+                                }
+                              >
+                                +
+                              </button>
+                            )}
                           </div>
                         )}
                         {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
@@ -388,12 +417,14 @@ export default function GameStore({ data, gameId }) {
                 <div className="mt-6 space-y-2 max-sm:flex max-sm:items-center max-sm:gap-5 max-sm:mt-[11px] max-sm:space-y-0">
                   {gameId != "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
                     <>
-                      <button
-                        onClick={() => setShowPurchaseModal(1)}
-                        className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium mb-[10px] border-b-2 border-[black] max-sm:m-0"
-                      >
-                        {t("all-games-text10")}
-                      </button>
+                      {data.no_promocode == false && (
+                        <button
+                          onClick={() => setShowPurchaseModal(1)}
+                          className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium mb-[10px] border-b-2 border-[black] max-sm:m-0"
+                        >
+                          {t("all-games-text10")}
+                        </button>
+                      )}
                       <button
                         onClick={() => setShowPurchaseModal(2)}
                         className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black]"
