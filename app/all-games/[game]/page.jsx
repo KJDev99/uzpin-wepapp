@@ -1,4 +1,5 @@
 "use client";
+import GameInfo from "@/components/gameStoreBox/GameInfo";
 import GameStore from "@/components/gameStoreBox/GameStore";
 import Loader from "@/components/Loader";
 import axiosInstance from "@/libs/axios";
@@ -33,6 +34,7 @@ export default function GameDetails() {
   return (
     <div>
       <GameStore data={data} gameId={pathname.game} />
+      <GameInfo data={data} />
     </div>
   );
 }
