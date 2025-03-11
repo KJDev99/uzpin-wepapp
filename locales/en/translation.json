@@ -154,6 +154,11 @@
   "profile4011": "You are not registered!",
   "profile4012": "Please register!",
 
+  "transaction1": "Accepted",
+  "transaction2": "Purchased",
+  "transaction3": "Canceled",
+  "transaction4": "In progress",
+
   "not1": "Page not found for this request",
   "not2": "Return to the home page",
 

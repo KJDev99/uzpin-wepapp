@@ -154,6 +154,11 @@
   "profile4011": "Siz ro'yxatdan o'tmagansiz!",
   "profile4012": "Iltimos ro'yxatdan o'ting",
 
+  "transaction1": "Qabul qilindi",
+  "transaction2": "Sotib olindi",
+  "transaction3": "Bekor qilindi",
+  "transaction4": "Jarayonda",
+
   "not1": "Ushbu so’rov bo’yicha sahifa topilmadi",
   "not2": "Bosh sahifaga qaytish",
 

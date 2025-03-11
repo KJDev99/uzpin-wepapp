@@ -121,12 +121,12 @@ export default function TransactionBox() {
                     } ${item.status === "WAITING" && "text-[#D29D11]"}`}
                   >
                     {item.status === "ACCEPTED"
-                      ? "Qabul qilindi"
+                      ? t("transaction1")
                       : item.status === "BUY"
-                      ? "Sotib olindi"
+                      ? t("transaction2")
                       : item.status === "REJECTED"
-                      ? "Bekor qilindi"
-                      : "Jarayonda"}
+                      ? t("transaction3")
+                      : t("transaction4")}
                   </span>
                 </td>
                 <td className="py-2 w-max text-nowrap text-sm text-left px-4 border border-[#ACACAC]">
