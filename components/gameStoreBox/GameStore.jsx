@@ -144,7 +144,7 @@ export default function GameStore({ data, gameId }) {
           <p className="col-span-3 text-lg text-[#313131] mb-[10px] max-sm:text-sm max-sm:col-span-5">
             {t("all-games-text2")} {data.name} {t("all-games-text3")}
           </p>
-          <p className="col-span-3 text text-[#313131] mb-10 flex justify-center items-start gap-[10px] max-sm:col-span-5 max-sm:text-sm max-sm:leading-[14px]">
+          <p className="col-span-3 text text-[#313131] mb-10 flex items-start gap-[10px] max-sm:col-span-5 max-sm:text-sm max-sm:leading-[14px]">
             <Image
               src="/Info.svg"
               alt="info"
@@ -152,7 +152,7 @@ export default function GameStore({ data, gameId }) {
               height={16}
               className="mt-1"
             />
-            {data.note ? "" : t("all-games-text4")}
+            {data.note ? data.note : t("all-games-text4")}
           </p>
         </div>
         <div className="grid grid-cols-5 gap-[50px] mb-20">
