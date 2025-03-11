@@ -52,7 +52,7 @@ export default function GameInfo({ data }) {
             activeTab === "promo" ? "block" : "hidden"
           } lg:block`}
         >
-          {data.video && (
+          {data?.video?.slice(0, 23) === "https://api.uzpin.games" ? (
             <>
               <h2 className="text-xl font-bold mb-4 max-sm:hidden">
                 {data.name} {t("all-games-text16")}
@@ -70,6 +70,14 @@ export default function GameInfo({ data }) {
                 ></video>
               </div>
             </>
+          ) : (
+            <iframe
+              src={data.video}
+              width="100%"
+              height="335px"
+              allow="autoplay; fullscreen"
+              allowFullScreen
+            ></iframe>
           )}
         </div>
       </div>
