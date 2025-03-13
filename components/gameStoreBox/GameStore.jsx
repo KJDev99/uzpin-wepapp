@@ -179,7 +179,9 @@ export default function GameStore({ data, gameId }) {
                       <div className="flex items-center justify-center w-full h-[190px] rounded-[10px] bg-gradient-to-b from-[#FFE69B] to-[#FEFDF8]">
                         {pkg.photo ? (
                           <Image
-                            src={pkg.photo}
+                            src={
+                              pkg.photo ? pkg.photo : "/uccard_converted.webp"
+                            }
                             alt={`${pkg.name} UC`}
                             width={130}
                             height={130}
@@ -382,10 +384,10 @@ export default function GameStore({ data, gameId }) {
                         <Image
                           src={
                             gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc"
-                              ? "/mobile.webp"
-                              : item.photo
+                              ? item.photo || "/mobile.webp" // item.photo bo‘sh bo‘lsa, "/mobile.webp" qo‘yamiz
+                              : "/uccard_converted.webp"
                           }
-                          alt={`${item.name} UC`}
+                          alt={`${item.name||"UCCard"} UC`}
                           width={56}
                           height={56}
                           className="w-[56px] h-[56px]"

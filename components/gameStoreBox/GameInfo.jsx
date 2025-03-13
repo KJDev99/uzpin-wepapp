@@ -72,7 +72,7 @@ export default function GameInfo({ data }) {
             </>
           ) : (
             <iframe
-              src={data.video}
+              src={data.video||null}
               width="100%"
               height="335px"
               allow="autoplay; fullscreen"
