@@ -14,11 +14,10 @@ import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { Toast } from "../Toast";
 import Loader from "@/components/Loader";
-import { useSearchParams, useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function Register({ setLogin, loginCount, setMainEmail }) {
   const searchParams = useSearchParams();
-  const pathname = useParams();
   const [referral, setReferral] = useState(null);
   useEffect(() => {
     setReferral(searchParams.get("referral"));

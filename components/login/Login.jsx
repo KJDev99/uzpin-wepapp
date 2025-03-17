@@ -9,7 +9,7 @@ import { IoLogoApple } from "react-icons/io5";
 import { signIn } from "next-auth/react";
 import axiosInstance from "@/libs/axios";
 import { Toast } from "../Toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import Loader from "@/components/Loader";
@@ -25,6 +25,11 @@ export default function Login({ setLogin, loginCount }) {
   });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [referral, setReferral] = useState(null);
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    setReferral(searchParams.get("referral"));
+  }, [searchParams]);
   const [data, setData] = useState();
 
   const togglePasswordVisibility = () => {
@@ -108,6 +113,11 @@ export default function Login({ setLogin, loginCount }) {
   };
   const handleAppleLogin = async () => {
     await signIn("apple", { callbackUrl: "/" });
+  };
+  const HandleTg = () => {
+    localStorage.setItem("referral", referral);
+    console.log(referral);
+    window.location.href = `https://uzpin.games/telegram-login.html`;
   };
 
   if (loading || !data) {
@@ -228,18 +238,19 @@ export default function Login({ setLogin, loginCount }) {
             </div>
 
             <div className="flex flex-col justify-between items-center my-5">
-              <Link
+              {/* <Link
                 href="/telegram-login.html"
                 className="w-full hidden-on-iphone"
-              >
+              > */}
                 <button
+                  onClick={HandleTg}
                   type="button"
                   className="flex items-center justify-center text-[black] font-medium text-[20px] leading-[23px] py-2 px-4 rounded-[5px] gap-5 w-full mb-[10px] border-2 border-[#313131]"
                 >
                   <RiTelegram2Fill className="bg-[#2AABEE] text-[white] p-1 text-[28px] rounded-full" />
                   {t("login-text6")}
                 </button>
-              </Link>
+              {/* </Link> */}
 
               <button
                 type="button"
