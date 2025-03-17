@@ -163,5 +163,9 @@
   "not2": "Bosh sahifaga qaytish",
 
   "mobile1": "Foydalanuvchi:",
-  "mobile2": "User id yoki server id noto'g'ri"
+  "mobile2": "User id yoki server id noto'g'ri",
+
+  "error3": "Bunday promokod topilmadi.",
+  "error4": "Bu promokoddan avval foydalangansiz.",
+  "error5": "Bunday promokod topilmadi."
 }

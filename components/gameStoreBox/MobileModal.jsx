@@ -7,6 +7,7 @@ import axiosInstance from "@/libs/axios";
 import { Alert } from "../Alert";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export function MobileModal({
   //   data,
@@ -25,13 +26,18 @@ export function MobileModal({
 
   const [error2, setError] = useState(false);
   const [error3, setError3] = useState(false);
+  const [error4, setError4] = useState(false);
+  const [error5, setError5] = useState(false);
   const [error1, setError1] = useState(false);
   const [error401, setError401] = useState(false);
   const [success, setSuccess] = useState(false);
   const [userId, setUserId] = useState("");
   const [serverId, setServerId] = useState("");
+  const [promo_code, setPromo_Code] = useState("");
   const [userName, setUserName] = useState(null);
+  const [discount, setDiscount] = useState(null);
   const [buttonLabel, setButtonLabel] = useState("Tekshirish");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedProfileData = localStorage.getItem("profileData");
@@ -46,6 +52,7 @@ export function MobileModal({
       user_id: userId,
       server_id: serverId,
     };
+    setLoading(true);
     try {
       const response = await axiosInstance.post(
         "/client/mobile-legands/check/user",
@@ -71,7 +78,52 @@ export function MobileModal({
       }
       setError1(true);
       console.error("Xatolik yuz berdi:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleCheckPromoCode = async () => {
+    const formattedData = {
+      discount_promo_code: promo_code,
+    };
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(
+        "/client/check-discount/",
+        formattedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setError4(false);
+      setError5(false);
+      setDiscount(response.data.discount);
+    } catch (error) {
+      if (
+        error.response.data.error_en ==
+        "You have already used this promo code before."
+      ) {
+        setError4(true);
+      } else if (
+        error.response.data.error_en == "Such a promo code was not found."
+      ) {
+        setError5(true);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckUserAndPromo = async () => {
+    setLoading(true);
+    await handleCheckUser();
+    if (promo_code.trim() !== "") {
+      await handleCheckPromoCode();
+    }
+    setLoading(false);
   };
 
   const savedCurrency =
@@ -103,7 +155,10 @@ export function MobileModal({
         count: item.quantity,
       })),
     };
-    //  setLoading(true);
+    if (promo_code.trim() !== "") {
+      formattedData.promo_code = promo_code;
+    }
+    setLoading(true);
     try {
       const response = await axiosInstance.post(
         "/client/mobile-legands/buy/promocode",
@@ -128,6 +183,23 @@ export function MobileModal({
           setError3(false);
           onClose();
         }, 2000);
+      } else if (
+        error.response.data.error_en ==
+        "You have already used this promo code before."
+      ) {
+        setError4(true);
+        setTimeout(() => {
+          setError4(false);
+          onClose();
+        }, 2000);
+      } else if (
+        error.response.data.error_en == "Such a promo code was not found."
+      ) {
+        setError5(true);
+        setTimeout(() => {
+          setError5(false);
+          onClose();
+        }, 2000);
       } else {
         setError(true);
         setTimeout(() => {
@@ -136,6 +208,9 @@ export function MobileModal({
         }, 2000);
       }
     } finally {
+      if (promo_code.trim() === "") {
+        setError5(false);
+      }
       if (isOpen == 2) {
         setTimeout(() => {
           setSuccess(false);
@@ -149,12 +224,15 @@ export function MobileModal({
           onClose();
         }, 2000);
       }
-      // setLoading(false);
+      setLoading(false);
     }
   };
   const handleClose = () => {
     setSuccess(false);
     setError(false);
+    setError3(false);
+    setError4(false);
+    setError5(false);
   };
 
   const ClearTash = () => {
@@ -167,10 +245,16 @@ export function MobileModal({
       {error3 && (
         <Alert
           status={400}
-          title={t("profile56")}
-          message={t("profile57")}
+          title={t("profile55")}
+          message={t("profile56")}
           onClose={handleClose}
         />
+      )}
+      {error4 && (
+        <Alert status={400} title={t("error4")} onClose={handleClose} />
+      )}
+      {error5 && (
+        <Alert status={400} title={t("error5")} onClose={handleClose} />
       )}
       {error2 && (
         <Alert
@@ -200,7 +284,7 @@ export function MobileModal({
         open={isOpen}
       >
         <div
-          className={`sticky top-[25%] col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:fixed max-sm:top-auto max-sm:bottom-[110px] left-0 right-0 max-w-[400px] mx-auto max-sm:col-span-5 max-sm:${
+          className={`sticky top-[25%] col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:fixed max-sm:top-auto max-sm:bottom-[110px] left-0 right-0 max-w-[500px] mx-auto max-sm:col-span-5 max-sm:${
             cart.length > 0 ? "block" : "hidden"
           }`}
         >
@@ -219,111 +303,159 @@ export function MobileModal({
             <>
               <div className="mt-2 mb-8">
                 {cart.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between items-center bg-[#F4F4F4] py-3 px-5 rounded-[10px] shadow-lg mt-4"
-                  >
-                    <div className="flex items-center gap-4">
-                      {item.photo ? (
-                        <Image
-                          src={item.photo}
-                          alt={`${item.name} UC`}
-                          width={35}
-                          height={35}
-                        />
-                      ) : (
-                        <Image
-                          src={
-                            gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc"
-                              ? "/mobile.webp"
-                              : "/uccard_converted.webp"
-                          }
-                          alt={`${item.name} UC`}
-                          width={35}
-                          height={35}
-                        />
-                      )}
-                      <span>{item.name}</span>
+                  <div key={item.id}>
+                    <div
+                      key={item.id}
+                      className="flex justify-between items-center bg-[#F4F4F4] py-3 px-5 rounded-[10px] shadow-lg my-4"
+                    >
+                      <div className="flex items-center gap-4">
+                        {item.photo ? (
+                          <Image
+                            src={item.photo}
+                            alt={`${item.name} UC`}
+                            width={35}
+                            height={35}
+                          />
+                        ) : (
+                          <Image
+                            src={
+                              gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc"
+                                ? "/mobile.webp"
+                                : "/uccard_converted.webp"
+                            }
+                            alt={`${item.name} UC`}
+                            width={35}
+                            height={35}
+                          />
+                        )}
+                        <span>{item.name}</span>
+                      </div>
+                      <span>
+                        {item.price
+                          .toLocaleString("fr-FR", {
+                            useGrouping: true,
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 3,
+                          })
+                          .replace(",", ".")}{" "}
+                        {savedCurrency}
+                      </span>
                     </div>
-                    <span>
-                      {(item.price * item.quantity)
-                        .toLocaleString("fr-FR", {
-                          useGrouping: true,
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 3,
-                        })
-                        .replace(",", ".")}{" "}
-                      {savedCurrency}
-                    </span>
+                    <div className="space-y-4">
+                      <div className="space-y-2 flex justify-between items-center">
+                        <label
+                          htmlFor="userId"
+                          className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
+                        >
+                          User ID
+                        </label>
+                        <input
+                          id="userId"
+                          value={userId}
+                          onChange={(e) => setUserId(e.target.value)}
+                          placeholder="User ID"
+                          className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                        />
+                      </div>
+                      <div className="space-y-2 flex justify-between items-center">
+                        <label
+                          htmlFor="serverId"
+                          className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
+                        >
+                          Server ID
+                        </label>
+                        <input
+                          id="serverId"
+                          value={serverId}
+                          onChange={(e) => setServerId(e.target.value)}
+                          placeholder="Server ID"
+                          className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                        />
+                      </div>
+                      <div className="flex flex-col items-center space-y-4">
+                        {userName && (
+                          <p className="text-green-600 font-medium">
+                            {t("mobile1")} {userName}
+                          </p>
+                        )}
+                        {error1 && (
+                          <p className="text-red-600 font-medium">
+                            {t("mobile2")}
+                          </p>
+                        )}
+                        <div className="w-full space-y-2 flex justify-between items-center">
+                          <div className="w-full flex flex-col items-center">
+                            <div className="w-full flex items-center justify-between mb-3">
+                              <label
+                                htmlFor="serverId"
+                                className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
+                              >
+                                Promokod kiriting
+                              </label>
+                              <input
+                                id="serverId"
+                                // value={promo_code}
+                                onChange={(e) => setPromo_Code(e.target.value)}
+                                placeholder="Promokod kiriting"
+                                className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                              />
+                            </div>
+                            {discount && (
+                              <p className="text-green-600 font-medium">
+                                Chegirma narxi{" "}
+                                {(item.price * (1 - discount / 100))
+                                  .toLocaleString("fr-FR", {
+                                    useGrouping: true,
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 3,
+                                  })
+                                  .replace(",", ".")}
+                              </p>
+                            )}
+                            {error4 && (
+                              <p className="text-red-600 font-medium">
+                                {t("error4")}
+                              </p>
+                            )}
+                            {error5 && (
+                              <p className="text-red-600 font-medium">
+                                {t("error5")}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <button
+                          disabled={
+                            userId.length === 0 ||
+                            serverId.length === 0 ||
+                            loading
+                          }
+                          onClick={
+                            buttonLabel === "Tekshirish"
+                              ? handleCheckUserAndPromo
+                              : fetchBuyHandle
+                          }
+                          className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
+                            buttonLabel === "Tekshirish"
+                              ? "bg-[#FFBA00] border-[black]"
+                              : "bg-[#FFBA00] border-[black]"
+                          } ${
+                            loading
+                              ? "bg-gray-400 border-gray-600 cursor-not-allowed"
+                              : "bg-[#FFBA00] border-black"
+                          } `}
+                        >
+                          {loading ? (
+                            <AiOutlineLoading3Quarters className="animate-spin" />
+                          ) : (
+                            buttonLabel
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="space-y-4">
-                <div className="space-y-2 flex justify-between items-center">
-                  <label
-                    htmlFor="userId"
-                    className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
-                  >
-                    User ID
-                  </label>
-                  <input
-                    id="userId"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    placeholder="User ID"
-                    className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                  />
-                </div>
-                <div className="space-y-2 flex justify-between items-center">
-                  <label
-                    htmlFor="serverId"
-                    className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
-                  >
-                    Server ID
-                  </label>
-                  <input
-                    id="serverId"
-                    value={serverId}
-                    onChange={(e) => setServerId(e.target.value)}
-                    placeholder="Server ID"
-                    className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                  />
-                </div>
-                <div className="flex flex-col items-center space-y-4">
-                  {userName && (
-                    <p className="text-green-600 font-medium">
-                      {t("mobile1")} {userName}
-                    </p>
-                  )}
-                  {error1 && (
-                    <p className="text-red-600 font-medium">{t("mobile2")}</p>
-                  )}
-                  <button
-                    disabled={userId.length === 0 || serverId.length === 0}
-                    onClick={
-                      buttonLabel === "Tekshirish"
-                        ? handleCheckUser
-                        : fetchBuyHandle
-                    }
-                    className={`w-full py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
-                      buttonLabel === "Tekshirish"
-                        ? "bg-[#FFBA00] border-[black]"
-                        : "bg-[#FFBA00] border-[black]"
-                    }`}
-                  >
-                    {buttonLabel}
-                  </button>
-                </div>
-              </div>
-              {/* {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
-              <>
-                <MobileGameStore
-                  cart={cart}
-                  clear={() => ClearTash()}
-                  onClose={() => setShowPurchaseModal(false)}
-                />
-              </>
-            )} */}
             </>
           ) : (
             <div

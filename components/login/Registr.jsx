@@ -14,8 +14,15 @@ import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { Toast } from "../Toast";
 import Loader from "@/components/Loader";
+import { useSearchParams, useParams } from "next/navigation";
 
 export default function Register({ setLogin, loginCount, setMainEmail }) {
+  const searchParams = useSearchParams();
+  const pathname = useParams();
+  const [referral, setReferral] = useState(null);
+  useEffect(() => {
+    setReferral(searchParams.get("referral"));
+  }, [searchParams]);
   const { t } = useTranslation();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
@@ -73,11 +80,12 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
         email: email,
         password: password,
         confirm_password: confirmPassword,
+        referral: referral,
       };
       setLoading(true);
       try {
         const response = await axiosInstance.post(
-          "client/auth/register",
+          `client/auth/register?${referral ? `referral=${referral}` : ""}`,
           requestData
         );
         setLogin(5);
@@ -94,9 +102,10 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
 
   const handleGoogleLogin = async () => {
     try {
-      const response = await axiosInstance.get(
-        "/client/auth/google/login?redirect_url=https://webapp.uzpin.games/google"
-      );
+      const url = `/client/auth/google/login?redirect_url=${encodeURIComponent(
+        "https://uzpin.games/google"
+      )}${referral ? `&refferral=${encodeURIComponent(referral)}` : ""}`;
+      const response = await axiosInstance.get(url);
       const { auth_url } = response.data;
 
       if (auth_url) {

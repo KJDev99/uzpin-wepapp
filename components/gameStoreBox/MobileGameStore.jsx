@@ -4,6 +4,7 @@ import axiosInstance from "@/libs/axios";
 import { Alert } from "../Alert";
 import { Toast } from "../Toast";
 import { useTranslation } from "react-i18next";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
   const [userId, setUserId] = useState("");
@@ -32,6 +33,7 @@ const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
       user_id: userId,
       server_id: serverId,
     };
+    setLoading(true);
     try {
       const response = await axiosInstance.post(
         "/client/mobile-legands/check/user",
@@ -51,6 +53,8 @@ const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
     } catch (error) {
       setError1(true);
       console.error("Xatolik yuz berdi:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,7 +105,7 @@ const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
           clear();
           onClose();
         }, 2000);
-      }else {
+      } else {
         setTimeout(() => {
           setSuccess(false);
           clear();
@@ -117,7 +121,7 @@ const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
   };
 
   return (
-    <div className="space-y-4 max-sm:space-y-2">
+    <div className="space-y-4">
       {error2 && (
         <Alert
           status={400}
@@ -141,7 +145,7 @@ const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
           onClose={handleClose}
         />
       )}
-      <div className="space-y-2 flex justify-between items-center max-sm:space-y-0">
+      <div className="space-y-2 flex justify-between items-center">
         <label
           htmlFor="userId"
           className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
@@ -156,7 +160,7 @@ const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
           className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
         />
       </div>
-      <div className="space-y-2 flex justify-between items-center max-sm:space-y-0">
+      <div className="space-y-2 flex justify-between items-center">
         <label
           htmlFor="serverId"
           className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
@@ -178,18 +182,41 @@ const MobileGameStore = ({ cart, clear, isOpen, onClose, router }) => {
           </p>
         )}
         {error1 && <p className="text-red-600 font-medium">{t("mobile2")}</p>}
+        <div className="space-y-2 flex justify-between items-center">
+          <label
+            htmlFor="serverId"
+            className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
+          >
+            Server ID
+          </label>
+          <input
+            id="serverId"
+            value={serverId}
+            onChange={(e) => setServerId(e.target.value)}
+            placeholder="Server ID"
+            className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+          />
+        </div>  
         <button
-          disabled={userId.length === 0 || serverId.length === 0}
+          disabled={userId.length === 0 || serverId.length === 0 || loading}
           onClick={
             buttonLabel === "Tekshirish" ? handleCheckUser : fetchBuyHandle
           }
-          className={`w-full py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
+          className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
             buttonLabel === "Tekshirish"
               ? "bg-[#FFBA00] border-[black]"
               : "bg-[#FFBA00] border-[black]"
-          }`}
+          } ${
+            loading
+              ? "bg-gray-400 border-gray-600 cursor-not-allowed"
+              : "bg-[#FFBA00] border-black"
+          } `}
         >
-          {buttonLabel}
+          {!loading ? (
+            <AiOutlineLoading3Quarters className="animate-spin" />
+          ) : (
+            buttonLabel
+          )}
         </button>
       </div>
     </div>
