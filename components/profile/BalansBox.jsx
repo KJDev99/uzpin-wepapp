@@ -198,7 +198,7 @@ export default function BalansBox() {
       {error && (
         <Alert status={400} title={t("profile14")} message={t("profile15")} />
       )}
-      {error404 && <Alert status={400} title='404' />}
+      {error404 && <Alert status={400} title={'404'} message={selectedCurrency} />}
       {error1 && <Alert status={300} title={t("profile55")} />}
       {success && (
         <Alert status={200} title={t("profile16")} message={t("profile17")} />
