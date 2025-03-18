@@ -106,8 +106,8 @@ export default function BalansBox() {
     const fetchCard = async () => {
       try {
         const response = await axiosInstance.get(
-          // `/client/card/${selectedCurrency}`,
-          `/client/card/`,
+          `/client/card/${selectedCurrency}`,
+          // `/client/card/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
