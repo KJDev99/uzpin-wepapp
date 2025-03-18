@@ -37,8 +37,7 @@ export default function BalansBox() {
   const [error1, setError1] = useState(false);
   const [success, setSuccess] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [errorvalue, setErrorvalue] = useState("");
-  const [errormessage, setErrormessage] = useState("");
+  const [error404, setError404] = useState(false);
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);
@@ -107,7 +106,8 @@ export default function BalansBox() {
     const fetchCard = async () => {
       try {
         const response = await axiosInstance.get(
-          `/client/card/${selectedCurrency}`,
+          // `/client/card/${selectedCurrency}`,
+          `/client/card/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -117,9 +117,7 @@ export default function BalansBox() {
         setCart(response.data);
         console.log(response.data);
       } catch (error) {
-        setErrorvalue(true);
-        setErrormessage(error.response.data);
-        console.log(error);
+        setError404(true);
       } finally {
         setLoading(false);
       }
@@ -200,7 +198,7 @@ export default function BalansBox() {
       {error && (
         <Alert status={400} title={t("profile14")} message={t("profile15")} />
       )}
-      {errorvalue && <Alert status={300} title={errormessage} />}
+      {error404 && <Alert status={400} title='404' />}
       {error1 && <Alert status={300} title={t("profile55")} />}
       {success && (
         <Alert status={200} title={t("profile16")} message={t("profile17")} />
