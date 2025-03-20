@@ -384,7 +384,7 @@ export function MobileModal({
                           </p>
                         )}
                         <div className="w-full space-y-2 flex justify-between items-center">
-                          <div className="w-full flex flex-col items-center">
+                          {/* <div className="w-full flex flex-col items-center">
                             <div className="w-full flex items-center justify-between mb-3">
                               <label
                                 htmlFor="serverId"
@@ -422,7 +422,7 @@ export function MobileModal({
                                 {t("error5")}
                               </p>
                             )}
-                          </div>
+                          </div> */}
                         </div>
                         <button
                           disabled={
