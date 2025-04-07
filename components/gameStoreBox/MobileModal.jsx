@@ -6,7 +6,7 @@ import Image from "next/image";
 import axiosInstance from "@/libs/axios";
 import { Alert } from "../Alert";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export function MobileModal({
@@ -20,6 +20,8 @@ export function MobileModal({
   //   savedCurrency,
   gameId,
 }) {
+  const pathname = usePathname();
+  const id = pathname.replace("/all-games/", "");
   const router = useRouter();
   const { t } = useTranslation();
   const [token, setToken] = useState(null);
@@ -47,11 +49,20 @@ export function MobileModal({
       }
     }
   }, []);
+  const ru = "ru";
+  const ph = "ph";
+  const cleanedGameId = id ? id.trim() : "";
   const handleCheckUser = async () => {
     const formattedData = {
       user_id: userId,
       server_id: serverId,
     };
+    if (cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc") {
+      formattedData.server = ph;
+    }
+    if (cleanedGameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
+      formattedData.server = ru;
+    }
     setLoading(true);
     try {
       const response = await axiosInstance.post(
@@ -157,6 +168,12 @@ export function MobileModal({
     };
     if (promo_code.trim() !== "") {
       formattedData.promo_code = promo_code;
+    }
+    if (cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc") {
+      formattedData.server = ph;
+    }
+    if (cleanedGameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
+      formattedData.server = ru;
     }
     setLoading(true);
     try {
