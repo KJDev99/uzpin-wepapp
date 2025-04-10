@@ -13,6 +13,7 @@ import UploadComponent from "../UploadComponent";
 import { Alert } from "../Alert";
 import { useTranslation } from "react-i18next";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { TfiReload } from "react-icons/tfi";
 
 export default function BalansBox() {
   const { t } = useTranslation();
@@ -115,28 +116,24 @@ export default function BalansBox() {
     }
   }, [token]);
 
-  useEffect(() => {
-    const checkBalance = async () => {
-      if (token) {
-        try {
-          const headers = {
-            Authorization: `Bearer ${token}`,
-          };
+  const checkBalance = async () => {
+    if (token) {
+      try {
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
 
-          const response = await axiosInstance.get(
-            "client/auth/check-binance/",
-            { headers }
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        console.log("Token mavjud emas!");
+        const response = await axiosInstance.get("client/auth/check-binance/", {
+          headers,
+        });
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
       }
-    };
-
-    checkBalance();
-  }, [token]); // token o'zgarganda useEffect qayta ishlaydi
+    } else {
+      console.log("Token mavjud emas!");
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -315,12 +312,22 @@ export default function BalansBox() {
       <div className="grid md:grid-cols-2 gap-8 max-sm:mt-5 max-sm:gap-12">
         <div className="bg-[#FFFCF6] p-6 rounded-2xl shadow-custom max-sm:pt-0 max-sm:pb-[10px] max-sm:px-5">
           <div className="space-y-4 max-sm:space-y-[10px]">
-            <h2 className="text-gray-600 max-sm:hidden">
-              Uzpin {t("profile18")}
-            </h2>
-            <h2 className="sm:hidden font-semibold text-[20px] text-[#313131] mb-[22px]">
-              {fullname}
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-gray-600 max-sm:hidden">
+                Uzpin {t("profile18")}
+              </h2>
+              <div className="w-full flex items-center justify-between">
+                <h2 className="sm:hidden font-semibold text-[20px] text-[#313131]">
+                  {fullname}
+                </h2>
+                <button
+                  onClick={checkBalance}
+                  className={`flex items-center gap-2 py-3 px-3 font-medium text-[16px] text-white leading-[18px] bg-green-600 rounded-[10px]`}
+                >
+                  {t("update")} <TfiReload size={20} />
+                </button>
+              </div>
+            </div>
             <div className="flex items-baseline gap-2">
               <p className="sm:hidden font-normal text-[14px] text-[#313131]">
                 {t("profile19")}
@@ -515,10 +522,7 @@ export default function BalansBox() {
                         <div className="flex items-start space-x-3 max-w-[450px]">
                           <span className="text-yellow-500 text-2xl">⚠️</span>
                           <p className="text-red-600 text-base">
-                            <strong>Diqqat!</strong> To‘lovni amalga oshirishdan
-                            oldin izoh (comment) yozilishi majburiy. Izohsiz
-                            yuborilgan to‘lovlar qabul qilinmaydi va avtomatik
-                            ravishda rad etiladi.
+                            {t("comment")}
                           </p>
                         </div>
                         <button
@@ -535,6 +539,12 @@ export default function BalansBox() {
                             <MdOutlineContentCopy size={24} />
                           )}
                           {comment}
+                        </button>
+                        <button
+                          onClick={checkBalance}
+                          className={`flex items-center gap-[5px] mt-5 py-[10px] px-[15px] font-medium text-[16px] text-white leading-[18px] bg-green-600 rounded-[10px]`}
+                        >
+                          {t("pay")}
                         </button>
                       </div>
                     </>

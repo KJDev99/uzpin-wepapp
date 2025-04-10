@@ -166,6 +166,10 @@
   "mobile2": "Invalid user id or server id",
 
   "error3": "Such a promo code was not found.",
-   "error4": "You have already used this promo code before.",
-   "error5": "Such a promo code was not found."
+  "error4": "You have already used this promo code before.",
+  "error5": "Such a promo code was not found.",
+
+  "comment": "Attention! A comment is required before making the payment. Payments sent without a comment will not be accepted and will be automatically rejected.",
+  "pay": "I have paid",
+  "update": "Update "
 }
