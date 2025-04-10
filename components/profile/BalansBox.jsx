@@ -486,9 +486,9 @@ export default function BalansBox() {
                     )}
                     {selectedCard.card_number}
                   </button>
-                  {selectedCard?.id ===
-                  "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
-                    <>
+                  {selectedCurrency === "USD" &&
+                    selectedCard?.id !==
+                      "8f31f905-d153-4cb9-8514-5c3c5b53dac5" && (
                       <div className="flex flex-col items-center mt-10">
                         <label className="block font-normal text-[20px] leading-[22px] mb-2">
                           {t("profile22")} {selectedCurrency}
@@ -507,6 +507,10 @@ export default function BalansBox() {
                           className="max-w-[482px] w-full p-3 border rounded-lg border-[#E7E7E7] bg-[#F9F9F9] focus:ring-yellow-400"
                         />
                       </div>
+                    )}
+                  {selectedCard?.id ===
+                  "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
+                    <>
                       <div className="p-5 mt-10 flex flex-col items-center">
                         <div className="flex items-start space-x-3 max-w-[450px]">
                           <span className="text-yellow-500 text-2xl">⚠️</span>
