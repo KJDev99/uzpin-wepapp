@@ -365,7 +365,7 @@ export default function BalansBox() {
             <div className="mt-2.5">
               <button
                 onClick={() => handleCurrencyChange("USD")}
-                className={`px-4 py-2 rounded-tl-[5px] max-sm:px-5 ${
+                className={`px-4 py-2 rounded-l-[5px] max-sm:px-5 ${
                   selectedCurrency === "USD"
                     ? "bg-zinc-800 text-white"
                     : "bg-gray-100 text-[#828282]"
