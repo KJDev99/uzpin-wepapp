@@ -19,7 +19,7 @@ export default function BalansBox() {
   const { t } = useTranslation();
   const modalRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [selectedCurrency, setSelectedCurrency] = useState("UZS");
   const [visibleCard, setVisibleCard] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -364,24 +364,24 @@ export default function BalansBox() {
             <h2>{t("profile21")}</h2>
             <div className="mt-2.5">
               <button
-                onClick={() => handleCurrencyChange("USD")}
-                className={`px-4 py-2 rounded-l-[5px] max-sm:px-5 ${
-                  selectedCurrency === "USD"
-                    ? "bg-zinc-800 text-white"
-                    : "bg-gray-100 text-[#828282]"
-                }`}
-              >
-                USD
-              </button>
-              <button
                 onClick={() => handleCurrencyChange("UZS")}
-                className={`px-4 py-2 rounded-bl-[5px] max-sm:px-5 ${
+                className={`px-4 py-2 rounded-l-[5px] max-sm:px-5 ${
                   selectedCurrency === "UZS"
                     ? "bg-zinc-800 text-white"
                     : "bg-gray-100 text-[#828282]"
                 }`}
               >
                 UZS
+              </button>
+              <button
+                onClick={() => handleCurrencyChange("USD")}
+                className={`px-4 py-2 max-sm:px-5 ${
+                  selectedCurrency === "USD"
+                    ? "bg-zinc-800 text-white"
+                    : "bg-gray-100 text-[#828282]"
+                }`}
+              >
+                USD
               </button>
               <button
                 onClick={() => handleCurrencyChange("RUB")}
