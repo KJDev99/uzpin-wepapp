@@ -7,8 +7,11 @@ import { useEffect, useState } from "react";
 import { IoWalletOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import Loader from "./Loader";
+import { useRouter } from "next/navigation";
 
 export default function BottomNavbar() {
+  const router = useRouter();
   const { t } = useTranslation();
   const pathname = usePathname();
   const isActive = (path) => {
@@ -72,7 +75,13 @@ export default function BottomNavbar() {
 
   const active = isActive(pathname);
 
-  if (pathname === "/login") return false;
+  if (pathname === "/login") {
+    router.push("/");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  }
+
 
   return (
     <div className="md:hidden w-full px-5 flex justify-between gap-[22px] bg-[#F4F4F4]  fixed bottom-0 left-0 right-0 mx-auto z-50 pt-[10px] pb-[26px]  border">

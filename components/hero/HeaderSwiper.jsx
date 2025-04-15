@@ -9,7 +9,6 @@ const HeaderSwiper = () => {
   const searchParams = useSearchParams();
   const [data, setData] = useState(null);
   const [devMode, setDevMode] = useState(null);
-  const [login, setLogin] = useState(false);
   const bot = searchParams?.get("bot");
 
   useEffect(() => {
@@ -30,7 +29,6 @@ const HeaderSwiper = () => {
   }, [bot]);
 
   useEffect(() => {
-    setLogin(true);
     const loginUser = async () => {
       if (!devMode) return; // devMode mavjud bo‘lmasa so‘rov yuborma
 
@@ -42,7 +40,6 @@ const HeaderSwiper = () => {
           }
         );
         localStorage.setItem("profileData", JSON.stringify(response.data));
-        setLogin(false);
       } catch (error) {
         console.error("Xatolik yuz berdi:", error);
       }
@@ -70,8 +67,6 @@ const HeaderSwiper = () => {
 
     fetchBanner();
   }, []);
-
-  if (login) return <Loader />;
 
   return (
     <div className="mx-auto w-full">
