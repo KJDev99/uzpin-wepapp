@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { IoIosHelpCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { IoWalletOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";

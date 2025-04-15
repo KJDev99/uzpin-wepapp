@@ -183,7 +183,7 @@ export default function ProfilInfo() {
           />
         </div>
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <label
             htmlFor="old_password"
             className="block text-sm font-medium text-gray-700"
@@ -232,7 +232,7 @@ export default function ProfilInfo() {
             onChange={handleChange}
             className="w-full px-3 py-2 border border-[#E7E7E7] bg-[#F9F9F9] rounded-md shadow-sm outline-none"
           />
-        </div>
+        </div> */}
 
         <button
           type="submit"

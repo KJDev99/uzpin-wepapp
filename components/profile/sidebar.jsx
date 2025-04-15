@@ -34,11 +34,11 @@ export function Sidebar() {
       icon: ArrowRightLeft,
       href: "/profile/transactions",
     },
-    {
+    /* {
       title: t("profile5"),
       icon: LogOut,
       href: "/profile/logout",
-    },
+    }, */
   ];
 
   return (
