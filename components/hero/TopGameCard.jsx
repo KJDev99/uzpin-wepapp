@@ -38,7 +38,7 @@ export default function TopGameCards() {
   }
 
   return (
-    <div className="w-full px-0 py-6">
+    <div className="w-full px-0 pt-6 pb-0">
       <h2 className=" font-medium text-lg mb-4 text-black ml-[10px]  ">
         {t("all_games")}
       </h2>

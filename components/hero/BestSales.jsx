@@ -52,7 +52,7 @@ export default function BestSales() {
   return (
     <div className="w-full px-0 mb-[120px]">
       {data.map((game) => (
-        <div key={game.id} className="mb-8">
+        <div key={game.id} className="mb-2">
           <h2 className="font-medium text-lg text-black ml-[10px] mb-4">
             {game.name}
           </h2>

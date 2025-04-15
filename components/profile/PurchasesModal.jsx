@@ -121,6 +121,24 @@ export default function PurchasesModal({ selectedPurchase, isOpen, onClose }) {
             </div>
           </div>
           <ul className="px-10 py-[35px] h-[calc(100vh-190px)] overflow-y-scroll max-sm:h-[calc(100vh-310px)]">
+            {/* {data &&
+              data.values.map((item, index) => (
+                <li
+                  key={index}
+                  className="flex w-full items-center justify-between mb-3 font-light text-[16px]"
+                >
+                  {index + 1}. {item}
+                  {activeStates[index] ? (
+                    <IoMdCheckmark size={16} className="text-green-500" />
+                  ) : (
+                    <MdOutlineContentCopy
+                      size={16}
+                      onClick={() => copySingleValue(item, index)}
+                      className="cursor-pointer"
+                    />
+                  )}
+                </li>
+              ))} */}
             {data &&
               data.values.map((item, index) => (
                 <li
@@ -139,6 +157,19 @@ export default function PurchasesModal({ selectedPurchase, isOpen, onClose }) {
                   )}
                 </li>
               ))}
+            {data && data.gamer_id && (
+              <li className="w-full mb-3 font-light text-[16px]">
+                <span className="font-semibold">Gamer id:</span> {data.gamer_id}
+              </li>
+            )}
+            {data && data._user_id && (
+              <li className="w-full mb-3 font-light text-[16px]">
+                {data.promocode} |{" "}
+                <span className="font-semibold">User id:</span> {data._user_id}{" "}
+                | <span className="font-semibold">Server id:</span>{" "}
+                {data.server_id}
+              </li>
+            )}
             <div className="flex mt-[30px] gap-5 items-center sm:hidden">
               <button
                 onClick={copyAllValues}
