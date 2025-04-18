@@ -524,7 +524,7 @@ export default function BalansBox() {
                 <iframe
                   width="100%"
                   height="200"
-                  src="https://www.youtube.com/embed/pGQIF5HfV24"
+                  src="https://www.youtube.com/embed/1SLF36y9qMk?si=r9tWQMx06YW7_C3L"
                   frameBorder="0"
                   className="mb-5"
                   allowFullScreen
@@ -776,7 +776,7 @@ export default function BalansBox() {
                                     : "bg-[#b7b7b7] cursor-not-allowed"
                                 } relative group`}
                               >
-                                {t('next')}
+                                {t("next")}
                               </button>
                             ) : (
                               <button
