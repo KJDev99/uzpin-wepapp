@@ -88,6 +88,9 @@ export default function PurchasesBox() {
                 #
               </th>
               <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
+                {t("profile41")}
+              </th>
+              <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
                 {t("profile32")}
               </th>
               <th className="py-2 text-nowrap px-5 w-max border text-center font-medium">
@@ -107,9 +110,35 @@ export default function PurchasesBox() {
           <tbody>
             {purchases.length > 0 ? (
               purchases.map((item, index) => (
-                <tr key={item.id} className="border-b hover:bg-gray-50">
+                <tr
+                  key={item.id}
+                  className={`border border-[#ACACAC] hover:bg-gray-50 ${
+                    item.status === "DONE" && "text-[#45C06C]"
+                  } ${item.status === "NEW" && "text-[#C46161]"} ${
+                    item.status === "REJECTED" && "text-[#000000]"
+                  } ${item.status === "ACCEPTED" && "text-[#D29D11]"}`}
+                >
                   <td className="py-2 text-nowrap px-5 w-max  border text-center text-sm">
                     {(currentPage - 1) * 10 + index + 1}
+                  </td>
+                  <td className="py-2 text-nowrap px-5 w-max border text-center text-sm">
+                    <span
+                      className={`${
+                        item.status === "DONE" && "text-[#45C06C]"
+                      } ${item.status === "NEW" && "text-[#C46161]"} ${
+                        item.status === "REJECTED" && "text-[#000000]"
+                      } ${item.status === "ACCEPTED" && "text-[#D29D11]"}`}
+                    >
+                      {item.status === "ACCEPTED"
+                        ? t("transaction1")
+                        : item.status === "NEW"
+                        ? t("transaction2")
+                        : item.status === "REJECTED"
+                        ? t("transaction3")
+                        : item.status === "DONE"
+                        ? t("transaction5")
+                        : t("transaction4")}
+                    </span>
                   </td>
                   <td className="py-2 text-nowrap px-5 w-max border text-center text-sm">
                     {item.promocode}

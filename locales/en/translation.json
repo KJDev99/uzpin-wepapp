@@ -155,9 +155,10 @@
   "profile4012": "Please register!",
 
   "transaction1": "Accepted",
-  "transaction2": "Purchased",
-  "transaction3": "Canceled",
+  "transaction2": "New",
+  "transaction3": "Cancelled",
   "transaction4": "In progress",
+  "transaction5": "Completed",
 
   "not1": "Page not found for this request",
   "not2": "Return to the home page",

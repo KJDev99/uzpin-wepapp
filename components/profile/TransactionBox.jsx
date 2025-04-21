@@ -126,7 +126,9 @@ export default function TransactionBox() {
                       ? t("transaction2")
                       : item.status === "REJECTED"
                       ? t("transaction3")
-                      : t("transaction4")}
+                      : item.status === "WAITING"
+                      ? t("transaction4")
+                      : ""}
                   </span>
                 </td>
                 <td className="py-2 w-max text-nowrap text-sm text-left px-4 border border-[#ACACAC]">

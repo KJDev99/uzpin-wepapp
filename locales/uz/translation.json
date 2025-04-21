@@ -155,9 +155,10 @@
   "profile4012": "Iltimos ro'yxatdan o'ting",
 
   "transaction1": "Qabul qilindi",
-  "transaction2": "Sotib olindi",
+  "transaction2": "Yangi",
   "transaction3": "Bekor qilindi",
   "transaction4": "Jarayonda",
+  "transaction5": "Bajarildi",
 
   "not1": "Ushbu so’rov bo’yicha sahifa topilmadi",
   "not2": "Bosh sahifaga qaytish",
