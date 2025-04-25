@@ -235,7 +235,13 @@ export default function BalansBox() {
             router.push("/login");
           }, 300);
         }
-        console.log(error.status);
+        if (error.status === 401) {
+          localStorage.removeItem("profileData");
+          setTimeout(() => {
+            window.location.reload();
+            router.push("/login");
+          }, 300);
+        }
       } finally {
         setLoading(false);
       }
