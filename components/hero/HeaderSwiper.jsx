@@ -66,7 +66,9 @@ const HeaderSwiper = () => {
         );
         localStorage.setItem("profileData", JSON.stringify(response.data));
       } catch (error) {
-        console.error("Xatolik yuz berdi:", error);
+        setDevError(true);
+        setMessage(error.response.data.error);
+        if (!devMode) return;
       }
     };
 
@@ -76,7 +78,7 @@ const HeaderSwiper = () => {
   useEffect(() => {
     if (!bot) return;
     sessionStorage.setItem("bot", bot);
-  }, []);
+  }, [bot]);
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -94,15 +96,27 @@ const HeaderSwiper = () => {
   }, []);
 
   return (
-    <div className="mx-auto w-full">
-      <div
-        className="bg_hero"
-        style={{
-          background:
-            data?.banner && `url(${data.banner}) center/cover no-repeat`,
-        }}
-      ></div>
-    </div>
+    <>
+      {devError && (
+        <Alert
+          onClose={() => {
+            setDevError(false);
+          }}
+          status={400}
+          title="Error"
+          message={message}
+        />
+      )}
+      <div className="mx-auto w-full">
+        <div
+          className="bg_hero"
+          style={{
+            background:
+              data?.banner && `url(${data.banner}) center/cover no-repeat`,
+          }}
+        ></div>
+      </div>
+    </>
   );
 };
 
