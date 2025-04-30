@@ -97,7 +97,7 @@ const HeaderSwiper = () => {
 
   return (
     <>
-      {devError && (
+      {/* {devError && (
         <Alert
           onClose={() => {
             setDevError(false);
@@ -106,7 +106,7 @@ const HeaderSwiper = () => {
           title="Error"
           message={message}
         />
-      )}
+      )} */}
       <div className="mx-auto w-full">
         <div
           className="bg_hero"
