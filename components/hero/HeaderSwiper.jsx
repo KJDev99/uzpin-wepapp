@@ -30,7 +30,7 @@ const HeaderSwiper = () => {
 
   useEffect(() => {
     const loginUser = async () => {
-      if (!devMode) return; // devMode mavjud bo‘lmasa so‘rov yuborma
+      // if (!devMode) return;
 
       try {
         const response = await axiosInstance.post(
@@ -41,7 +41,8 @@ const HeaderSwiper = () => {
         );
         localStorage.setItem("profileData", JSON.stringify(response.data));
       } catch (error) {
-        console.error("Xatolik yuz berdi:", error);
+        alert(error.response.data.error);
+        if(!devMode) return;
       }
     };
 
@@ -51,7 +52,7 @@ const HeaderSwiper = () => {
   useEffect(() => {
     if (!bot) return;
     sessionStorage.setItem("bot", bot);
-  }, []);
+  }, [bot]);
 
   useEffect(() => {
     const fetchBanner = async () => {
