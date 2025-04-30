@@ -2,7 +2,7 @@
 
 import axiosInstance from "@/libs/axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Loader from "../Loader";
 
 const HeaderSwiper = () => {
@@ -10,33 +10,58 @@ const HeaderSwiper = () => {
   const [data, setData] = useState(null);
   const [devMode, setDevMode] = useState(null);
   const bot = searchParams?.get("bot");
+  const dev_mode = searchParams?.get("dev_mode");
 
-  useEffect(() => {
-    if (bot) {
-      const decoded = decodeURIComponent(bot);
-      console.log("Decoded bot:", decoded);
+  const devMode1 = useMemo(() => {
+    if (!bot) return null;
 
-      const queryString = decoded.split("?")[1];
-      if (queryString) {
-        const nestedParams = new URLSearchParams(queryString);
-        const dev_mode = nestedParams.get("dev_mode");
-        console.log("dev_mode:", dev_mode);
-        setDevMode(dev_mode);
-      } else {
-        console.warn("No query string found after '?' in decoded bot");
-      }
-    }
+    const match = bot.match(/dev_mode=(.*)/);
+    return match ? match[1] : null;
   }, [bot]);
+  console.log(devMode1);
+  // useEffect(() => {
+  //   if (bot) {
+  //     const decoded = decodeURIComponent(bot);
+
+  //     const queryString = decoded.split("?")[1];
+  //     console.log(queryString);
+  //     if (queryString) {
+  //       const nestedParams = new URLSearchParams(queryString);
+  //       const dev_mode = nestedParams.get("dev_mode");
+  //       setDevMode(dev_mode);
+  //     } else {
+  //       console.warn("No query string found after '?' in decoded bot");
+  //     }
+  //   }
+  // }, [bot]);
+
+  // useEffect(() => {
+  //   const loginUser = async () => {
+  //     if (!devMode) return; // devMode mavjud bo‘lmasa so‘rov yuborma
+  //     try {
+  //       const response = await axiosInstance.post(
+  //         `client/auth/telegram/login-new/`,
+  //         {
+  //           dev_mode: devMode,
+  //         }
+  //       );
+  //       localStorage.setItem("profileData", JSON.stringify(response.data));
+  //     } catch (error) {
+  //       console.error("Xatolik yuz berdi:", error);
+  //     }
+  //   };
+
+  //   loginUser();
+  // }, [devMode]);
 
   useEffect(() => {
     const loginUser = async () => {
-      if (!devMode) return; // devMode mavjud bo‘lmasa so‘rov yuborma
-
+      if (!devMode1) return; // devMode mavjud bo‘lmasa so‘rov yuborma
       try {
         const response = await axiosInstance.post(
           `client/auth/telegram/login-new/`,
           {
-            dev_mode: devMode,
+            dev_mode: devMode1,
           }
         );
         localStorage.setItem("profileData", JSON.stringify(response.data));
@@ -46,7 +71,7 @@ const HeaderSwiper = () => {
     };
 
     loginUser();
-  }, [devMode]);
+  }, [devMode1]);
 
   useEffect(() => {
     if (!bot) return;
