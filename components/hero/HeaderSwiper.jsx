@@ -3,13 +3,15 @@
 import axiosInstance from "@/libs/axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loader from "../Loader";
+import { Alert } from "../Alert";
 
 const HeaderSwiper = () => {
   const searchParams = useSearchParams();
   const [data, setData] = useState(null);
   const [devMode, setDevMode] = useState(null);
   const bot = searchParams?.get("bot");
+  const [devError, setDevError] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (bot) {
@@ -30,8 +32,6 @@ const HeaderSwiper = () => {
 
   useEffect(() => {
     const loginUser = async () => {
-      // if (!devMode) return;
-
       try {
         const response = await axiosInstance.post(
           `client/auth/telegram/login-new/`,
@@ -41,8 +41,9 @@ const HeaderSwiper = () => {
         );
         localStorage.setItem("profileData", JSON.stringify(response.data));
       } catch (error) {
-        alert(error.response.data.error);
-        if(!devMode) return;
+        setDevError(true);
+        setMessage(error.response.data.error);
+        if (!devMode) return;
       }
     };
 
@@ -70,15 +71,27 @@ const HeaderSwiper = () => {
   }, []);
 
   return (
-    <div className="mx-auto w-full">
-      <div
-        className="bg_hero"
-        style={{
-          background:
-            data?.banner && `url(${data.banner}) center/cover no-repeat`,
-        }}
-      ></div>
-    </div>
+    <>
+      {devError && (
+        <Alert
+          onClose={() => {
+            setDevError(false);
+          }}
+          status={400}
+          title="Error"
+          message={message}
+        />
+      )}
+      <div className="mx-auto w-full">
+        <div
+          className="bg_hero"
+          style={{
+            background:
+              data?.banner && `url(${data.banner}) center/cover no-repeat`,
+          }}
+        ></div>
+      </div>
+    </>
   );
 };
 
