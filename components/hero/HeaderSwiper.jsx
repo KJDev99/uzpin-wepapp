@@ -21,7 +21,7 @@ const HeaderSwiper = () => {
       const fullName = `${user.first_name}${
         user.last_name ? " " + user.last_name : ""
       }`;
-      const secretKey = "secret_key"; // Bu sizning server tomoningizdan berilishi kerak
+      const secretKey = "django-insecure-m+8j64=s_8l8ykb36((5e@d^p(eh81h^k(pren3^_(y)r_33f8"; // Bu sizning server tomoningizdan berilishi kerak
 
       function encodeTelegramId(telegramId, fullName, secretKey) {
         const combined = `${telegramId}:${fullName}:${secretKey}`;
