@@ -8,6 +8,8 @@ const TelegramPage1 = () => {
   const router = useRouter();
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const urlParams = new URLSearchParams(window.location.search);
 
     const id = urlParams.get("id");
@@ -24,9 +26,8 @@ const TelegramPage1 = () => {
     }
 
     const fetchBanners = async () => {
-      let referral = localStorage.getItem("referral");
+      const referral = typeof window !== "undefined" ? window.localStorage.getItem("referral") : null;
       try {
-        // Parametrlarni qo'shish
         const params = new URLSearchParams({
           id,
           first_name: firstName || "",
@@ -42,25 +43,30 @@ const TelegramPage1 = () => {
           url = `client/auth/telegram/login?referral=${referral}&${params.toString()}`;
         }
 
-        // URL'ni localStorage'ga saqlash
-        localStorage.setItem("lastRequestURL", url);
-        console.log("Saved Request URL:", url);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("lastRequestURL", url);
+        }
 
-        // So‘rovni to‘g‘ridan-to‘g‘ri URL bilan yuborish
         const response = await axiosInstance.get(url);
 
-        localStorage.setItem("profileData", JSON.stringify(response.data));
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("profileData", JSON.stringify(response.data));
+        }
+
         router.push("/");
-        setTimeout(() => {
-          location.reload();
-        }, 300);
+
+        if (typeof window !== "undefined") {
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
+        }
       } catch (error) {
         console.error("Error during Telegram login:", error);
       }
     };
 
     fetchBanners();
-  }, []);
+  }, [router]);
 
   return (
     <div>

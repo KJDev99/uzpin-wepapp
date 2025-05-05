@@ -11,7 +11,8 @@ const HeaderSwiper = () => {
   const bot = searchParams?.get("bot");
 
   useEffect(() => {
-    // Telegram WebApp mavjudligini tekshirish
+    if (typeof window === "undefined") return; // Server side renderingdan himoya
+
     const telegramWebApp = window?.Telegram?.WebApp;
 
     if (telegramWebApp && telegramWebApp.initDataUnsafe?.user) {
@@ -21,16 +22,17 @@ const HeaderSwiper = () => {
       const fullName = `${user.first_name}${
         user.last_name ? " " + user.last_name : ""
       }`;
-      const secretKey = "django-insecure-m+8j64=s_8l8ykb36((5e@d^p(eh81h^k(pren3^_(y)r_33f8"; // Bu sizning server tomoningizdan berilishi kerak
+      const secretKey =
+        "django-insecure-m+8j64=s_8l8ykb36((5e@d^p(eh81h^k(pren3^_(y)r_33f8"; // Bu sizning server tomoningizdan berilishi kerak
 
       function encodeTelegramId(telegramId, fullName, secretKey) {
         const combined = `${telegramId}:${fullName}:${secretKey}`;
-        // Browser muhitida Buffer ishlamaydi, biz btoa() funksiyasidan foydalanamiz
-        const encryptedData = btoa(combined);
+        const encryptedData = btoa(combined); // browser uchun
         return encryptedData;
       }
 
       const encodedData = encodeTelegramId(telegramId, fullName, secretKey);
+
       const loginUser1 = async () => {
         try {
           const response = await axiosInstance.post(
@@ -39,9 +41,13 @@ const HeaderSwiper = () => {
               dev_mode: encodedData,
             }
           );
-          localStorage.setItem("profileData", JSON.stringify(response.data));
+          try {
+            localStorage.setItem("profileData", JSON.stringify(response.data));
+          } catch (e) {
+            console.error("LocalStorage xatosi:", e);
+          }
         } catch (error) {
-          console.log(error);
+          console.log("Login xatosi:", error);
         }
       };
 
@@ -51,7 +57,7 @@ const HeaderSwiper = () => {
         "Telegram ma'lumotlari mavjud emas, test ma'lumotlaridan foydalanilmoqda"
       );
     }
-  }, []);
+  }, []); 
 
   const devMode1 = useMemo(() => {
     if (!bot) return null;
