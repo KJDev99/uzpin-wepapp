@@ -40,9 +40,8 @@ const HeaderSwiper = () => {
             }
           );
           localStorage.setItem("profileData", JSON.stringify(response.data));
-          alert("Muvaffaqiyatli ro'yxatdan o'tdingiz");
         } catch (error) {
-          alert(error);
+          console.log(error);
         }
       };
 
