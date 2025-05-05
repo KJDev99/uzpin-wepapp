@@ -9,7 +9,6 @@ const HeaderSwiper = () => {
   const searchParams = useSearchParams();
   const [data, setData] = useState(null);
   const bot = searchParams?.get("bot");
-  const [init, setInit] = useState("");
 
   useEffect(() => {
     // Telegram WebApp mavjudligini tekshirish
@@ -41,8 +40,9 @@ const HeaderSwiper = () => {
             }
           );
           localStorage.setItem("profileData", JSON.stringify(response.data));
+          alert("Muvaffaqiyatli ro'yxatdan o'tdingiz");
         } catch (error) {
-          console.log(error);
+          alert(error);
         }
       };
 
