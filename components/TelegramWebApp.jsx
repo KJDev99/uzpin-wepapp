@@ -8,8 +8,8 @@ const TelegramApp = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-       if (chatId || sessionStorage.getItem("userId") || true) {
-      // if (chatId || sessionStorage.getItem("userId")) {
+      //  if (chatId || sessionStorage.getItem("userId") || true) {
+      if (chatId || sessionStorage.getItem("userId")) {
         if (!chatId) return;
         sessionStorage.setItem("userId", chatId);
       } else if (window.Telegram) {
