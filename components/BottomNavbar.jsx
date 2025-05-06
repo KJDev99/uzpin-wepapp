@@ -78,10 +78,11 @@ export default function BottomNavbar() {
   if (pathname === "/login") {
     router.push("/");
     setTimeout(() => {
-      window.location.reload();
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
     }, 500);
   }
-
 
   return (
     <div className="md:hidden w-full px-5 flex justify-between gap-[22px] bg-[#F4F4F4]  fixed bottom-0 left-0 right-0 mx-auto z-50 pt-[10px] pb-[26px]  border">

@@ -83,7 +83,9 @@ export default function Login({ setLogin, loginCount }) {
         localStorage.setItem("profileData", JSON.stringify(response.data));
         router.push("/");
         setTimeout(() => {
-          location.reload();
+          if (typeof window !== "undefined") {
+            window.location.reload();
+          }
         }, 300);
       } catch (error) {
         console.error("Xatolik yuz berdi:", error);
@@ -103,7 +105,9 @@ export default function Login({ setLogin, loginCount }) {
       const { auth_url } = response.data;
 
       if (auth_url) {
-        window.location.href = auth_url;
+        if (typeof window !== "undefined") {
+          window.location.href = auth_url;
+        }
       } else {
         console.error("Auth URL not received from server");
       }
@@ -117,7 +121,9 @@ export default function Login({ setLogin, loginCount }) {
   const HandleTg = () => {
     // localStorage.setItem("referral", referral);
     // console.log(referral);
-    window.location.href = `https://uzpin.games/telegram-login.html`;
+    if (typeof window !== "undefined") {
+      window.location.href = `https://uzpin.games/telegram-login.html`;
+    }
   };
 
   if (loading || !data) {

@@ -11,12 +11,16 @@ export default function GameDetails() {
   const [loading, setLoading] = useState(false);
 
   const pathname = useParams();
+  const gameName = pathname.game; // pathname.game ни ўзгарувчига олиш
+
   useEffect(() => {
+    if (typeof window === "undefined") return; // Сервер томонида ишламаслик учун
+
     setLoading(true);
     const fetchStats = async () => {
       try {
         const response = await axiosInstance.get(
-          `/client/games/${pathname.game}/detail`
+          `/client/games/${gameName}/detail`
         );
         setData(response.data || []);
       } catch (error) {
@@ -25,15 +29,17 @@ export default function GameDetails() {
         setLoading(false);
       }
     };
+
     fetchStats();
-  }, []);
+  }, [gameName]); // pathname.game ўрнига gameName қўшилди
+
   if (loading) {
     return <Loader />;
   }
 
   return (
     <div>
-      <GameStore data={data} gameId={pathname.game} />
+      <GameStore data={data} gameId={gameName} />
       <GameInfo data={data} />
     </div>
   );

@@ -8,25 +8,28 @@ const TelegramPage1 = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
 
-    const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+      const firstName = urlParams.get("first_name");
+      const lastName = urlParams.get("last_name");
+      const username = urlParams.get("username");
+      const photo_url = urlParams.get("photo_url");
+      const auth_date = urlParams.get("auth_date");
+      const hash = urlParams.get("hash");
 
-    const id = urlParams.get("id");
-    const firstName = urlParams.get("first_name");
-    const lastName = urlParams.get("last_name");
-    const username = urlParams.get("username");
-    const photo_url = urlParams.get("photo_url");
-    const auth_date = urlParams.get("auth_date");
-    const hash = urlParams.get("hash");
-
-    if (!id || !auth_date || !hash) {
-      console.error("Required query parameters are missing!");
-      return;
+      if (!id || !auth_date || !hash) {
+        console.error("Required query parameters are missing!");
+        return;
+      }
     }
 
     const fetchBanners = async () => {
-      const referral = typeof window !== "undefined" ? window.localStorage.getItem("referral") : null;
+      const referral =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem("referral")
+          : null;
       try {
         const params = new URLSearchParams({
           id,
@@ -50,16 +53,19 @@ const TelegramPage1 = () => {
         const response = await axiosInstance.get(url);
 
         if (typeof window !== "undefined") {
-          window.localStorage.setItem("profileData", JSON.stringify(response.data));
+          window.localStorage.setItem(
+            "profileData",
+            JSON.stringify(response.data)
+          );
         }
 
         router.push("/");
 
-        if (typeof window !== "undefined") {
-          setTimeout(() => {
+        setTimeout(() => {
+          if (typeof window !== "undefined") {
             window.location.reload();
-          }, 300);
-        }
+          }
+        }, 300);
       } catch (error) {
         console.error("Error during Telegram login:", error);
       }

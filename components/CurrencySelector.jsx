@@ -21,7 +21,9 @@ export default function CurrencySelector() {
     const selectedCurrency = event.target.value;
     setCurrency(selectedCurrency);
     localStorage.setItem("currency", selectedCurrency);
-    window.location.reload();
+    if (typeof window !== "undefined") {
+      window.location.reload();
+    }
   };
 
   useEffect(() => {

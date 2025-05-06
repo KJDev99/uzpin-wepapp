@@ -38,7 +38,9 @@ export default function Navbar() {
     if (!hasReloaded) {
       setTimeout(() => {
         sessionStorage.setItem("hasReloaded", "true");
-        window.location.reload();
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
       }, 500);
     }
   }, []);
@@ -70,7 +72,9 @@ export default function Navbar() {
     i18n.changeLanguage(code);
     setIsHovered(false);
     localStorage.setItem("language", code);
-    window.location.reload();
+    if (typeof window !== "undefined") {
+      window.location.reload();
+    }
     setIsOpen(false);
   };
 

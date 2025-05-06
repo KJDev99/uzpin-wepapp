@@ -108,7 +108,9 @@ export default function Register({ setLogin, loginCount, setMainEmail }) {
       const { auth_url } = response.data;
 
       if (auth_url) {
-        window.location.href = auth_url;
+        if (typeof window !== "undefined") {
+          window.location.href = auth_url;
+        }
       } else {
         console.error("Auth URL not received from server");
       }
