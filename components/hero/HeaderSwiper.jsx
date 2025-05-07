@@ -3,65 +3,51 @@
 import axiosInstance from "@/libs/axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
-import Loader from "../Loader";
 
 const HeaderSwiper = () => {
   const searchParams = useSearchParams();
   const [data, setData] = useState(null);
   const bot = searchParams?.get("bot");
 
+  function encodeToBase64(str) {
+    const utf8Bytes = new TextEncoder().encode(str);
+    const base64String = btoa(String.fromCharCode(...utf8Bytes));
+    return base64String;
+  }
+
   useEffect(() => {
-    if (typeof window === "undefined") return; // Server side renderingdan himoya
+    if (typeof window === "undefined") return;
 
     const telegramWebApp = window?.Telegram?.WebApp;
 
     if (telegramWebApp && telegramWebApp.initDataUnsafe?.user) {
-      // Telegram foydalanuvchi ma'lumotlarini olish
       const user = telegramWebApp.initDataUnsafe.user;
       const telegramId = user.id.toString();
       const fullName = `${user.first_name}${
-        user.last_name ? "" + user.last_name : ""
+        user.last_name ? " " + user.last_name : ""
       }`;
-      const secretKey =
-        "django-insecure-m+8j64=s_8l8ykb36((5e@d^p(eh81h^k(pren3^_(y)r_33f8"; // Bu sizning server tomoningizdan berilishi kerak
+      const secretKey = "SIZNING_SECRET_KEY_BU_YERDA_BO‘LMASLIGI_KERAK";
+      const combinedData = `${telegramId}:${fullName}:${secretKey}`;
+      const encodedData = encodeToBase64(combinedData);
 
-      function encodeTelegramId(telegramId, fullName, secretKey) {
-        const combined = `${telegramId}:${fullName}:${secretKey}`;
-        const encryptedData = btoa(combined); // browser uchun
-        return encryptedData;
-      }
-
-      const encodedData = encodeTelegramId(telegramId, fullName, secretKey);
-
-      const loginUser1 = async () => {
+      const loginUser = async () => {
         try {
           const response = await axiosInstance.post(
             `client/auth/telegram/login-new/`,
-            {
-              dev_mode: encodedData,
-            }
+            { dev_mode: encodedData }
           );
-          try {
-            localStorage.setItem("profileData", JSON.stringify(response.data));
-          } catch (e) {
-            console.error("LocalStorage xatosi:", e);
-          }
+          localStorage.setItem("profileData", JSON.stringify(response.data));
         } catch (error) {
-          alert(error.data.response);
+          console.error("Login xatoligi:", error);
         }
       };
 
-      loginUser1();
-    } else {
-      console.log(
-        "Telegram ma'lumotlari mavjud emas, test ma'lumotlaridan foydalanilmoqda"
-      );
+      loginUser();
     }
-  }, []); 
+  }, []);
 
   const devMode1 = useMemo(() => {
     if (!bot) return null;
-
     const match = bot.match(/dev_mode=(.*)/);
     return match ? match[1] : null;
   }, [bot]);
@@ -72,18 +58,15 @@ const HeaderSwiper = () => {
       try {
         const response = await axiosInstance.post(
           `client/auth/telegram/login-new/`,
-          {
-            dev_mode: devMode1,
-          }
+          { dev_mode: devMode1 }
         );
         localStorage.setItem("profileData", JSON.stringify(response.data));
       } catch (error) {
-        console.log(error);
+        console.error("DevMode orqali login xatoligi:", error);
       }
     };
 
     loginUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [devMode1]);
 
   useEffect(() => {
@@ -94,12 +77,14 @@ const HeaderSwiper = () => {
   useEffect(() => {
     const fetchBanner = async () => {
       try {
+        const botValue = sessionStorage.getItem("bot");
+        if (!botValue) return;
         const response = await axiosInstance.get(
-          `/client/webapp/banner/${sessionStorage.getItem("bot")}`
+          `/client/webapp/banner/${botValue}`
         );
         setData(response.data || null);
       } catch (error) {
-        console.error("Ma'lumotlarni yuklashda xatolik:", error);
+        console.error("Banner yuklashda xatolik:", error);
       }
     };
 
@@ -107,17 +92,15 @@ const HeaderSwiper = () => {
   }, []);
 
   return (
-    <>
-      <div className="mx-auto w-full">
-        <div
-          className="bg_hero"
-          style={{
-            background:
-              data?.banner && `url(${data.banner}) center/cover no-repeat`,
-          }}
-        ></div>
-      </div>
-    </>
+    <div className="mx-auto w-full">
+      <div
+        className="bg_hero"
+        style={{
+          background:
+            data?.banner && `url(${data.banner}) center/cover no-repeat`,
+        }}
+      ></div>
+    </div>
   );
 };
 
