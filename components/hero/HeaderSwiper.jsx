@@ -20,7 +20,7 @@ const HeaderSwiper = () => {
       const user = telegramWebApp.initDataUnsafe.user;
       const telegramId = user.id.toString();
       const fullName = `${user.first_name}${
-        user.last_name ? " " + user.last_name : ""
+        user.last_name ? "" + user.last_name : ""
       }`;
       const secretKey =
         "django-insecure-m+8j64=s_8l8ykb36((5e@d^p(eh81h^k(pren3^_(y)r_33f8"; // Bu sizning server tomoningizdan berilishi kerak
@@ -47,7 +47,7 @@ const HeaderSwiper = () => {
             console.error("LocalStorage xatosi:", e);
           }
         } catch (error) {
-          console.log("Login xatosi:", error);
+          alert(error.data.response);
         }
       };
 
