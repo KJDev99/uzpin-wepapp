@@ -161,6 +161,7 @@ export default function ProfilInfo() {
           <input
             id="email"
             name="email"
+            disabled
             value={profileData.email || ""}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-[#E7E7E7] bg-[#F9F9F9] rounded-md shadow-sm outline-none"
@@ -177,6 +178,7 @@ export default function ProfilInfo() {
           <input
             id="phone"
             name="phone"
+            disabled
             value={profileData.phone || ""}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-[#E7E7E7] bg-[#F9F9F9] rounded-md shadow-sm outline-none"
