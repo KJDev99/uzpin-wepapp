@@ -30,7 +30,7 @@ const HeaderSwiper = () => {
       const combinedData = `${telegramId}:${fullName}:${secretKey}`;
       const encodedData = encodeToBase64(combinedData);
 
-      const loginUser = async () => {
+      const loginUser1 = async () => {
         try {
           const response = await axiosInstance.post(
             `client/auth/telegram/login-new/`,
@@ -42,7 +42,7 @@ const HeaderSwiper = () => {
         }
       };
 
-      loginUser();
+      loginUser1();
     }
   }, []);
 
