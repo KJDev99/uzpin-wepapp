@@ -42,21 +42,23 @@ export default function BalansBox() {
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [text, setText] = useState(false);
   const [comment, setComment] = useState("");
   const [copied1, setCopied1] = useState(false);
   const [copied2, setCopied2] = useState(false);
   const [crypto, setCrypto] = useState(false);
   const [language, setLanguage] = useState("");
 
-  useEffect(() => {
-    const language = localStorage.getItem("language");
-    setLanguage(language);
-  }, []);
-  console.log(language, "l");
   const handleCardSelect = (card) => {
     setSelectedCard(card);
   };
 
+  useEffect(() => {
+    const language = localStorage.getItem("language");
+    setLanguage(language);
+  }, []);
+  console.log(language);
   const copyCryptoNumber = () => {
     const text = buttonRef.current.innerText;
     if (text) {
@@ -71,7 +73,6 @@ export default function BalansBox() {
         });
     }
   };
-
   const copyCardNumber = () => {
     if (selectedCard.card_number) {
       navigator.clipboard
@@ -85,6 +86,7 @@ export default function BalansBox() {
         });
     }
   };
+
   const copyCardNumber1 = () => {
     if (selectedCard.card_number) {
       navigator.clipboard
@@ -100,11 +102,7 @@ export default function BalansBox() {
   };
 
   const toggleCardVisibile = () => {
-    setVisibleCard((prev) => true);
-    window.scrollTo({
-      top: 500,
-      behavior: "smooth",
-    });
+    setVisibleCard((prev) => !prev);
   };
 
   useEffect(() => {
@@ -143,46 +141,6 @@ export default function BalansBox() {
     }
   }, [token]);
 
-  const FetchCryptoType1 = async () => {
-    const formattedData = {
-      amount: +inputValue,
-    };
-    if (selectedCard?.id === "36832140-0df0-4541-9644-6bb7b8f20540") {
-      formattedData.type = "trc20";
-    }
-    if (selectedCard?.id === "444e1647-80ac-4777-a209-0e28f3a66f84") {
-      formattedData.type = "bep20";
-    }
-    if (selectedCard?.id === "07873980-c9d4-4de6-8e19-964f7d37afbe") {
-      formattedData.type = "aptos";
-    }
-    try {
-      const response = await axiosInstance.post(
-        "/client/transfer-amount/create/",
-        formattedData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setCrypto(true);
-    } catch (error) {
-      setCrypto(false);
-      setError2(true);
-      console.log(error.response.data.uz[0]);
-      if (language === "uz") {
-        setErrorMessage(error.response.data.uz[0]);
-      }
-      if (language === "ru") {
-        setErrorMessage(error.response.data.ru[0]);
-      }
-      if (language === "en") {
-        setErrorMessage(error.response.data.en[0]);
-      }
-    }
-  };
-
   const checkBalance = async () => {
     if (token) {
       try {
@@ -193,11 +151,8 @@ export default function BalansBox() {
         const response = await axiosInstance.get("client/auth/check-binance/", {
           headers,
         });
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
+        window.location.reload();
       } catch (error) {
-        console.log(error);
         if (language === "uz") {
           setErrorMessage(error.response.data.uz[0]);
         }
@@ -207,8 +162,6 @@ export default function BalansBox() {
         if (language === "en") {
           setErrorMessage(error.response.data.en[0]);
         }
-      } finally {
-        setErrorMessage("");
       }
     } else {
       console.log("Token mavjud emas!");
@@ -228,25 +181,19 @@ export default function BalansBox() {
           }
         );
         setCart(response.data);
-        console.log(response.data);
       } catch (error) {
         if (error.status === 403) {
           localStorage.removeItem("profileData");
           setTimeout(() => {
-            if (typeof window !== "undefined") {
-              window.location.reload();
-              router.push("/login");
-            }
+            window.location.reload();
+            router.push("/login");
           }, 300);
         }
-        console.log(error.status);
         if (error.status === 401) {
           localStorage.removeItem("profileData");
           setTimeout(() => {
-            if (typeof window !== "undefined") {
-              window.location.reload();
-              router.push("/login");
-            }
+            window.location.reload();
+            router.push("/login");
           }, 300);
         }
       } finally {
@@ -268,15 +215,20 @@ export default function BalansBox() {
   };
 
   const fetchHandle = async () => {
-    setLoading(true);
+    if (!selectedCard) {
+      setText(true);
+      return;
+    }
+
     const formattedData = {
       currency: selectedCurrency,
       amount: inputValue,
       chek: photo,
-      from_bot: false,
+      from_bot: true,
       card: selectedCard.id,
     };
 
+    setIsLoading(true);
     try {
       const response = await axiosInstance.post(
         "/client/transaction/create",
@@ -294,26 +246,21 @@ export default function BalansBox() {
         "Sizda hali kutilayotgan taranzaksiya mavjud!"
       ) {
         setError1(true);
+        console.log(error.response.data.detail);
       } else {
         setError(true);
       }
     } finally {
-      setLoading(false);
       setTimeout(() => {
         setInputValue("");
         setPhoto("");
-        // onClose();
         setError(false);
         setSuccess(false);
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
+        setIsLoading(false);
       }, 3000);
     }
   };
-
   const formatNumber = (num) => {
-    if (num === undefined || num === null) return "0"; // Xatoni oldini olish
     const str = num.toString();
     if (str.includes(".")) {
       const [integerPart, decimalPart] = str.split(".");
@@ -321,6 +268,84 @@ export default function BalansBox() {
     }
     return str;
   };
+
+  const FetchCryptoType1 = async () => {
+    const formattedData = {
+      amount: +inputValue,
+    };
+    if (selectedCard?.id === "36832140-0df0-4541-9644-6bb7b8f20540") {
+      formattedData.type = "trc20";
+    }
+    if (selectedCard?.id === "444e1647-80ac-4777-a209-0e28f3a66f84") {
+      formattedData.type = "bep20";
+    }
+    if (selectedCard?.id === "07873980-c9d4-4de6-8e19-964f7d37afbe") {
+      formattedData.type = "aptos";
+    }
+    if (
+      selectedCard?.id === "7edfd32a-e076-41da-acbc-862e9c0aa47d" ||
+      selectedCard?.id === "faf3ef4a-9156-487b-a7a0-53f8c75397ac"
+    ) {
+      formattedData.type = "uzcard";
+    }
+    if (
+      selectedCard?.id === "f0488bed-7934-4ae9-94b3-f0ffc4baa4a0" ||
+      selectedCard?.id === "c5b8b570-e2c1-49c1-a6b7-7d2342109393"
+    ) {
+      formattedData.type = "humo";
+    }
+    try {
+      const response = await axiosInstance.post(
+        "/client/transfer-amount/create/",
+        formattedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCrypto(true);
+    } catch (error) {
+      setCrypto(false);
+      setError2(true);
+      if (language === "uz") {
+        setErrorMessage(error.response.data.uz[0]);
+      }
+      if (language === "ru") {
+        setErrorMessage(error.response.data.ru[0]);
+      }
+      if (language === "en") {
+        setErrorMessage(error.response.data.en[0]);
+      }
+    }
+  };
+
+  const checkBalance2 = async () => {
+    try {
+      const response = await axiosInstance.get("client/auth/check-binance/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      window.location.reload();
+    } catch (error) {
+      if (language === "uz") {
+        setErrorMessage(error.response.data.uz[0]);
+      }
+      if (language === "ru") {
+        setErrorMessage(error.response.data.ru[0]);
+      }
+      if (language === "en") {
+        setErrorMessage(error.response.data.en[0]);
+      }
+    } finally {
+      setErrorMessage("");
+    }
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   if (selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") {
     const fetchComment = async () => {
@@ -342,16 +367,30 @@ export default function BalansBox() {
 
     fetchComment();
   }
-  console.log(errorMessage, "1");
-  if (loading) {
-    return <Loader />;
-  }
+
   return (
-    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-4 mb-20">
+    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-20">
       {error && (
-        <Alert status={400} title={t("profile14")} message={t("profile15")} />
+        <Alert
+          onClose={() => {
+            setError(false);
+            window.location.reload();
+          }}
+          status={400}
+          title={t("profile14")}
+          message={t("profile15")}
+        />
       )}
-      {error1 && <Alert status={300} title={t("profile55")} />}
+      {error1 && (
+        <Alert
+          onClose={() => {
+            setError1(false);
+            window.location.href = "/";
+          }}
+          status={300}
+          title={t("profile54")}
+        />
+      )}
       {error2 && (
         <Alert
           status={400}
@@ -359,18 +398,30 @@ export default function BalansBox() {
           message={errorMessage}
           onClose={() => {
             setError2(false);
-            if (typeof window !== "undefined") {
-              window.location.reload();
-            }
+            window.location.reload();
           }}
         />
       )}
-      {success && (
-        <Alert status={200} title={t("profile16")} message={t("profile17")} />
+      {text && (
+        <Alert
+          onClose={() => {
+            setText(false);
+          }}
+          status={300}
+          title={t("profile51")}
+        />
       )}
-      <div className="px-6 py-4 max-md:border-b max-md:hidden">
-        <h2 className="text-xl font-bold md:mb-4">{t("profile1")}</h2>
-      </div>
+      {success && (
+        <Alert
+          onClose={() => {
+            setSuccess(false);
+            window.location.href = "/";
+          }}
+          status={200}
+          title={t("profile16")}
+          message={t("profile17")}
+        />
+      )}
       <Link
         href={"/profile/profile-mobile"}
         className="md:px-6 py-4 max-md:border-b flex items-center max-md:gap-5 md:hidden"
@@ -378,8 +429,9 @@ export default function BalansBox() {
         <IoIosArrowBack className="text-2xl md:hidden" />
         <h2 className="text-xl font-bold md:mb-4">{t("profile2")}</h2>
       </Link>
+      {/* web */}
       <div className="flex justify-between items-center mt-5 mb-8 max-sm:hidden">
-        <h1 className="text-2xl font-semibold">Balans</h1>
+        <h1 className="text-2xl font-semibold">{t("profile2")}</h1>
         <div className="flex gap-2">
           <button
             onClick={() => handleCurrencyChange("UZS")}
@@ -392,7 +444,9 @@ export default function BalansBox() {
             UZS
           </button>
           <button
-            onClick={() => handleCurrencyChange("USD")}
+            onClick={() => {
+              handleCurrencyChange("USD");
+            }}
             className={`px-4 py-2 rounded-lg ${
               selectedCurrency === "USD"
                 ? "bg-zinc-800 text-white"
@@ -413,15 +467,16 @@ export default function BalansBox() {
           </button>
         </div>
       </div>
+      {/* web */}
 
-      <div className="grid md:grid-cols-2 gap-8 max-sm:mt-5 max-sm:gap-12">
+      <div className="grid md:grid-cols-2 gap-8 max-sm:mt-5 max-sm:gap-20">
         <div className="bg-[#FFFCF6] p-6 rounded-2xl shadow-custom max-sm:pt-0 max-sm:pb-[10px] max-sm:px-5">
           <div className="space-y-4 max-sm:space-y-[10px]">
             <div className="flex items-center justify-between">
-              <h2 className="text-gray-600 max-sm:hidden">
+              <h2 className="text-gray-600 max-sm:hidden sm:w-full">
                 Uzpin {t("profile18")}
               </h2>
-              <div className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center justify-between sm:justify-end">
                 <h2 className="sm:hidden font-semibold text-[20px] text-[#313131]">
                   {fullname}
                 </h2>
@@ -441,7 +496,6 @@ export default function BalansBox() {
                 {selectedCurrency == "UZS" && balance?.account_uzs
                   ? formatNumber(balance?.account_uzs)
                   : ""}
-                {console.log(formatNumber(balance?.account_uzs))}
                 {selectedCurrency == "USD" && balance?.account_usd
                   ? formatNumber(balance?.account_usd)
                   : ""}
@@ -464,13 +518,13 @@ export default function BalansBox() {
 
         <div className="space-y-6">
           <h2 className="text-xl font-semibold">{t("profile20")}</h2>
-
+          {/* mobile */}
           <div className="flex flex-col sm:hidden">
             <h2>{t("profile21")}</h2>
             <div className="mt-2.5">
               <button
                 onClick={() => handleCurrencyChange("UZS")}
-                className={`px-4 py-2 rounded-l-[5px] max-sm:px-5 ${
+                className={`px-4 py-2 rounded-tl-[5px] rounded-bl-[5px] max-sm:px-5 ${
                   selectedCurrency === "UZS"
                     ? "bg-zinc-800 text-white"
                     : "bg-gray-100 text-[#828282]"
@@ -479,8 +533,10 @@ export default function BalansBox() {
                 UZS
               </button>
               <button
-                onClick={() => handleCurrencyChange("USD")}
-                className={`px-4 py-2 max-sm:px-5 ${
+                onClick={() => {
+                  handleCurrencyChange("USD");
+                }}
+                className={`px-4 py-2  max-sm:px-5 ${
                   selectedCurrency === "USD"
                     ? "bg-zinc-800 text-white"
                     : "bg-gray-100 text-[#828282]"
@@ -500,9 +556,10 @@ export default function BalansBox() {
               </button>
             </div>
           </div>
+          {/* mobile */}
 
           <div className="space-y-4">
-            {selectedCurrency !== "USD" && (
+            {selectedCurrency !== "USD" && selectedCurrency !== "UZS" && (
               <div>
                 <label className="block text-sm text-gray-600 mb-2">
                   {t("profile22")} {selectedCurrency}
@@ -512,7 +569,6 @@ export default function BalansBox() {
                   value={inputValue}
                   onChange={(e) => {
                     const value = e.target.value;
-                    // Faqat raqamlar va '.' ni qabul qilish uchun tekshirish
                     if (/^[0-9.]*$/.test(value)) {
                       setInputValue(value);
                     }
@@ -523,33 +579,55 @@ export default function BalansBox() {
               </div>
             )}
             <button
+              onClick={openModal}
+              disabled={
+                selectedCurrency !== "USD" &&
+                selectedCurrency !== "UZS" &&
+                !inputValue.trim()
+              }
+              className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors max-sm:hidden ${
+                !inputValue.trim() &&
+                selectedCurrency !== "USD" &&
+                selectedCurrency !== "UZS"
+                  ? "bg-[#b7b7b7] hover:bg-[#b7b7b7] cursor-not-allowed"
+                  : ""
+              }`}
+            >
+              {t("profile23")}
+            </button>
+            <button
               onClick={toggleCardVisibile}
-              disabled={!inputValue && selectedCurrency !== "USD"}
-              className={`w-full py-3 text-black font-medium rounded-lg transition-colors sm:hidden ${
-                inputValue || selectedCurrency === "USD"
-                  ? "bg-[#FFC149] hover:bg-[#FFB529]"
-                  : "bg-[#9d9d9d] cursor-not-allowed"
+              disabled={
+                selectedCurrency !== "USD" &&
+                selectedCurrency !== "UZS" &&
+                !inputValue.trim()
+              }
+              className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden ${
+                !inputValue.trim() &&
+                selectedCurrency !== "USD" &&
+                selectedCurrency !== "UZS"
+                  ? "bg-[#b7b7b7] hover:bg-[#b7b7b7] cursor-not-allowed"
+                  : ""
               }`}
             >
               {t("profile23")}
             </button>
           </div>
 
-          <div className={`${visibleCard ? "block " : "hidden"}`}>
+          {/* {visibleCard && <BalansCardModal />} */}
+          <div className={`${visibleCard ? "block" : "hidden"}`}>
             <div>
-              {selectedCurrency === "USD" && (
-                <iframe
-                  width="100%"
-                  height="200"
-                  src={
-                    selectedCard?.video_url ||
-                    "https://www.youtube.com/embed/1SLF36y9qMk?si=r9tWQMx06YW7_C3L"
-                  }
-                  className="mb-5"
-                  allowFullScreen
-                ></iframe>
-              )}
-              <h3 className="font-semibold text-[16px] ">{t("profile24")}</h3>
+              <iframe
+                width="100%"
+                height="200"
+                src={
+                  selectedCard?.video_url ||
+                  "https://www.youtube.com/embed/1SLF36y9qMk?si=r9tWQMx06YW7_C3L"
+                }
+                className="mb-5"
+                allowFullScreen
+              ></iframe>
+              <h3 className="font-semibold text-[16px]">{t("profile24")}</h3>
               <p className="mt-2.5 font-medium text-[#313131] text-[14px]">
                 {t("profile25")}
               </p>
@@ -558,7 +636,7 @@ export default function BalansBox() {
                   <div
                     key={card.id}
                     onClick={() => handleCardSelect(card)}
-                    className={`rounded-[5px] p-1 border ${
+                    className={`rounded-[5px] shadow-lg p-1 border ${
                       selectedCard?.id === card.id
                         ? "border-[#ffba00]"
                         : "border-[#fff]"
@@ -580,341 +658,342 @@ export default function BalansBox() {
             </div>
 
             {selectedCard && (
-              <>
-                <div className="mt-[30px] bg-[#f9f9f9] rounded-[5px] py-[10px]">
-                  {selectedCard.id !== "36832140-0df0-4541-9644-6bb7b8f20540" &&
-                    selectedCard.id !==
-                      "444e1647-80ac-4777-a209-0e28f3a66f84" &&
-                    selectedCard.id !==
-                      "07873980-c9d4-4de6-8e19-964f7d37afbe" && (
-                      <>
-                        <p className="font-semibold text-[16px]">
-                          {selectedCard.card_name}
-                        </p>
-                        <p className="mt-[6px] font-semibold text-[16px]">
-                          {selectedCard.card_holder}
-                        </p>
-                        <Image
-                          src={selectedCard.photo}
-                          className="w-[210px] h-[132px] rounded-[10px] mt-5 mx-auto"
-                          width={210}
-                          height={132}
-                          alt="card"
-                        />
-                        <button
-                          className={`flex mx-auto items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
-                            selectedCard.card_number.length > 19
-                              ? "text-[10px]"
-                              : ""
-                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                          style={{
-                            wordBreak:
-                              selectedCard.card_number.length > 33
-                                ? "break-word"
-                                : "normal",
-                            whiteSpace:
-                              selectedCard.card_number.length > 33
-                                ? "pre-line"
-                                : "nowrap",
-                            fontSize:
-                              selectedCard.card_number.length > 33
-                                ? "10px"
-                                : "",
-                          }}
-                          onClick={copyCardNumber}
-                        >
-                          {copied ? (
-                            <MdCheck size={24} />
-                          ) : (
-                            <MdOutlineContentCopy size={24} />
-                          )}
-                          {selectedCard.card_number}
-                        </button>
-                      </>
-                    )}
-                  {/* <p className="font-semibold text-[16px]">
-                     {selectedCard.card_name}
-                   </p>
-                   <p className="mt-[6px] font-semibold text-[16px]">
-                     {selectedCard.card_holder}
-                   </p>
-                   <Image
-                     src={selectedCard.photo}
-                     className="w-[210px] h-[132px] rounded-[10px] mt-5 mx-auto"
-                     width={210}
-                     height={132}
-                     alt="card"
-                   />
-                   <button
-                     className={`flex items-center gap-[5px] mt-5 mx-auto font-medium ${
-                       selectedCard.card_number.length > 19
-                         ? "text-[10px] flex-col p-1"
-                         : "p-3"
-                     } text-[14px] bg-[#ffba00] rounded-[5px]`}
-                     onClick={copyCardNumber}
-                   >
-                     {copied ? (
-                       <MdCheck size={16} />
-                     ) : (
-                       <MdOutlineContentCopy size={16} />
-                     )}
-                     {selectedCard.card_number}
-                   </button> */}
-                  {selectedCard.id ===
-                  "36832140-0df0-4541-9644-6bb7b8f20540" ? (
+              <div className="mt-[30px] bg-[#f9f9f9] rounded-[5px] p-[10px]">
+                {selectedCard.id !== "36832140-0df0-4541-9644-6bb7b8f20540" &&
+                  selectedCard.id !== "444e1647-80ac-4777-a209-0e28f3a66f84" &&
+                  selectedCard.id !== "07873980-c9d4-4de6-8e19-964f7d37afbe" &&
+                  selectedCurrency !== "UZS" && (
                     <>
-                      {crypto && (
-                        <>
-                          <Image
-                            src="/trc20.jpg"
-                            className="mt-5 mx-auto w-[200px] h-[200px]"
-                            width={241}
-                            height={241}
-                            alt="img"
-                          />
-                          <button
-                            ref={buttonRef}
-                            className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                              selectedCard.card_number.length > 19
-                                ? "text-[9px]"
-                                : ""
-                            } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                            onClick={copyCryptoNumber}
-                          >
-                            {copied2 ? (
-                              <MdCheck size={24} />
-                            ) : (
-                              <MdOutlineContentCopy size={24} />
-                            )}
-                            TAKhi9hHNuajmi5WyWj2fLDmaCFUKPuGVQ
-                          </button>
-                        </>
-                      )}
-                    </>
-                  ) : selectedCard.id ===
-                    "444e1647-80ac-4777-a209-0e28f3a66f84" ? (
-                    <>
-                      {crypto && (
-                        <>
-                          <Image
-                            src="/bep20.jpg"
-                            className="mt-5 mx-auto w-[200px] h-[200px]"
-                            width={241}
-                            height={241}
-                            alt="img"
-                          />
-                          <button
-                            ref={buttonRef}
-                            className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                              selectedCard.card_number.length > 19
-                                ? "text-[9px]"
-                                : ""
-                            } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                            onClick={copyCryptoNumber}
-                          >
-                            {copied2 ? (
-                              <MdCheck size={24} />
-                            ) : (
-                              <MdOutlineContentCopy size={24} />
-                            )}
-                            0x1b246eee83c122106612d36bbaedc241933f4d94
-                          </button>
-                        </>
-                      )}
-                    </>
-                  ) : selectedCard.id ===
-                    "07873980-c9d4-4de6-8e19-964f7d37afbe" ? (
-                    <>
-                      {crypto && (
-                        <>
-                          <Image
-                            src="/aptos.jpg"
-                            className="mt-5 mx-auto w-[200px] h-[200px]"
-                            width={241}
-                            height={241}
-                            alt="img"
-                          />
-                          <button
-                            ref={buttonRef}
-                            className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                              selectedCard.card_number.length > 19
-                                ? "text-[9px]"
-                                : ""
-                            } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                            onClick={copyCryptoNumber}
-                          >
-                            {copied2 ? (
-                              <MdCheck size={24} />
-                            ) : (
-                              <MdOutlineContentCopy size={24} />
-                            )}
-                            <span className="text-left">
-                              0x523f93300e905007437ca0c7180716
-                              <br className="block sm:hidden" />
-                              384b6d690b11093f7b50816cff4b9c005d
-                            </span>
-                          </button>
-                        </>
-                      )}
-                    </>
-                  ) : null}
-                  {selectedCurrency === "USD" &&
-                    selectedCard?.id !==
-                      "8f31f905-d153-4cb9-8514-5c3c5b53dac5" && (
-                      <div className="flex flex-col items-center mt-10">
-                        <label className="block font-normal text-[20px] leading-[22px] mb-2">
-                          {t("profile22")} {selectedCurrency}
-                        </label>
-                        <input
-                          type="text"
-                          value={inputValue}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            // Faqat raqamlar va '.' ni qabul qilish uchun tekshirish
-                            if (/^[0-9.]*$/.test(value)) {
-                              setInputValue(value);
-                            }
-                          }}
-                          placeholder={t("profile22")}
-                          className="max-w-[482px] w-full p-3 border rounded-lg border-[#E7E7E7] bg-[#F9F9F9] focus:ring-yellow-400"
-                        />
-                        {(selectedCard.id ===
-                          "36832140-0df0-4541-9644-6bb7b8f20540" ||
-                          selectedCard.id ===
-                            "444e1647-80ac-4777-a209-0e28f3a66f84" ||
-                          selectedCard.id ===
-                            "07873980-c9d4-4de6-8e19-964f7d37afbe") && (
-                          <div className="flex justify-center">
-                            {!crypto ? (
-                              <button
-                                onClick={FetchCryptoType1}
-                                disabled={!inputValue}
-                                className={`mx-auto mt-5 font-medium leading-[18px] py-[10px] px-[60px] rounded-[10px] ${
-                                  selectedCard && inputValue
-                                    ? "bg-[#ffba00] cursor-pointer"
-                                    : "bg-[#b7b7b7] cursor-not-allowed"
-                                } relative group`}
-                              >
-                                {t("next")}
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => {
-                                  checkBalance();
-                                }}
-                                className={`max-w-[482px] mx-auto mt-5 flex items-center gap-[5px] py-[10px] px-[15px] font-medium text-[16px] text-white leading-[18px] rounded-[10px] ${
-                                  selectedCard && inputValue
-                                    ? "cursor-pointer bg-green-600"
-                                    : "cursor-not-allowed bg-[#b7b7b7]"
-                                }`}
-                              >
-                                {t("pay")} <FaCheck size={18} />
-                              </button>
-                            )}
-                          </div>
+                      <p className="font-semibold text-[16px]">
+                        {selectedCard.card_name}
+                      </p>
+                      <p className="mt-[6px] font-semibold text-[16px]">
+                        {selectedCard.card_holder}
+                      </p>
+                      <Image
+                        src={selectedCard.photo}
+                        className="w-[210px] h-[132px] rounded-[10px] mt-5 mx-auto"
+                        width={210}
+                        height={132}
+                        alt="card"
+                      />
+                      <button
+                        className={`flex mx-auto items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
+                          selectedCard.card_number.length > 19
+                            ? "text-[10px]"
+                            : ""
+                        } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                        style={{
+                          wordBreak:
+                            selectedCard.card_number.length > 33
+                              ? "break-word"
+                              : "normal",
+                          whiteSpace:
+                            selectedCard.card_number.length > 33
+                              ? "pre-line"
+                              : "nowrap",
+                          fontSize:
+                            selectedCard.card_number.length > 33 ? "10px" : "",
+                        }}
+                        onClick={copyCardNumber}
+                      >
+                        {copied ? (
+                          <MdCheck size={24} />
+                        ) : (
+                          <MdOutlineContentCopy size={24} />
                         )}
-                      </div>
-                    )}
-                  {selectedCard?.id ===
-                  "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
-                    <>
-                      <div className="p-5 mt-10 flex flex-col items-center">
-                        <div className="flex items-start space-x-3 max-w-[450px]">
-                          <span className="text-yellow-500 text-2xl">⚠️</span>
-                          <p className="text-red-600 text-base">
-                            {t("comment")}
-                          </p>
-                        </div>
+                        {selectedCard.card_number}
+                      </button>
+                    </>
+                  )}
+                {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
+                  <>
+                    {crypto && (
+                      <>
+                        <Image
+                          src="/trc20.jpg"
+                          className="mt-5 mx-auto w-[200px] h-[200px]"
+                          width={241}
+                          height={241}
+                          alt="img"
+                        />
                         <button
-                          className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
+                          ref={buttonRef}
+                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
                             selectedCard.card_number.length > 19
                               ? "text-[9px]"
                               : ""
                           } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                          onClick={copyCardNumber1}
+                          onClick={copyCryptoNumber}
                         >
-                          {copied1 ? (
+                          {copied2 ? (
                             <MdCheck size={24} />
                           ) : (
                             <MdOutlineContentCopy size={24} />
                           )}
-                          {comment}
+                          TAKhi9hHNuajmi5WyWj2fLDmaCFUKPuGVQ
                         </button>
+                      </>
+                    )}
+                  </>
+                ) : selectedCard.id ===
+                  "444e1647-80ac-4777-a209-0e28f3a66f84" ? (
+                  <>
+                    {crypto && (
+                      <>
+                        <Image
+                          src="/bep20.jpg"
+                          className="mt-5 mx-auto w-[200px] h-[200px]"
+                          width={241}
+                          height={241}
+                          alt="img"
+                        />
                         <button
-                          onClick={checkBalance}
-                          className={`flex items-center gap-[5px] mt-5 py-[10px] px-[15px] font-medium text-[16px] text-white leading-[18px] bg-green-600 rounded-[10px]`}
+                          ref={buttonRef}
+                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
+                            selectedCard.card_number.length > 19
+                              ? "text-[9px]"
+                              : ""
+                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                          onClick={copyCryptoNumber}
                         >
-                          {t("pay")}
+                          {copied2 ? (
+                            <MdCheck size={24} />
+                          ) : (
+                            <MdOutlineContentCopy size={24} />
+                          )}
+                          0x1b246eee83c122106612d36bbaedc241933f4d94
                         </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      {selectedCurrency !== "USD" && (
-                        <div
-                          className={`max-w-[482px] mb-[100px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
-                            photo ? "hidden" : ""
-                          }`}
+                      </>
+                    )}
+                  </>
+                ) : selectedCard.id ===
+                  "07873980-c9d4-4de6-8e19-964f7d37afbe" ? (
+                  <>
+                    {crypto && (
+                      <>
+                        <Image
+                          src="/aptos.jpg"
+                          className="mt-5 mx-auto w-[200px] h-[200px]"
+                          width={241}
+                          height={241}
+                          alt="img"
+                        />
+                        <button
+                          ref={buttonRef}
+                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
+                            selectedCard.card_number.length > 19
+                              ? "text-[9px]"
+                              : ""
+                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                          onClick={copyCryptoNumber}
                         >
-                          <Image
-                            src="/file-upload.svg"
-                            className="mx-auto"
-                            width={26}
-                            height={26}
-                            alt="img"
-                          />
-                          <p className="mt-2.5 text-[14px] text-[#313131]">
-                            {t("profile54")}
-                          </p>
-                          <div className="hidden">
-                            <UploadComponent
-                              onUploadingChange={setLoading1}
-                              triggerRef={modalRef}
-                              onUploadSuccess={(url) =>
-                                handleUploadSuccess("cover", url)
-                              }
-                            />
-                          </div>
-                          <button
-                            onClick={() => modalRef.current.click()}
-                            className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
-                          >
-                            {loading1 ? (
-                              <AiOutlineLoading3Quarters className="animate-spin mr-2" />
-                            ) : (
-                              t("profile27")
-                            )}
-                          </button>
-                        </div>
-                      )}
-                    </>
+                          {copied2 ? (
+                            <MdCheck size={24} />
+                          ) : (
+                            <MdOutlineContentCopy size={24} />
+                          )}
+                          <span className="text-left">
+                            0x523f93300e905007437ca0c7180716
+                            <br className="block sm:hidden" />
+                            384b6d690b11093f7b50816cff4b9c005d
+                          </span>
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : null}
+                {(selectedCurrency === "USD" || selectedCurrency === "UZS") &&
+                  selectedCard?.id !==
+                    "8f31f905-d153-4cb9-8514-5c3c5b53dac5" && (
+                    <div className="flex flex-col items-center mt-10">
+                      <label className="block font-normal text-[20px] leading-[22px] mb-2">
+                        {t("profile22")} {selectedCurrency}
+                      </label>
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (/^[0-9.]*$/.test(value)) {
+                            setInputValue(value);
+                          }
+                        }}
+                        placeholder={t("profile22")}
+                        className="max-w-[482px] w-full p-3 border rounded-lg border-[#E7E7E7] bg-[#F9F9F9] focus:ring-yellow-400"
+                      />
+                    </div>
                   )}
+                {selectedCurrency === "UZS" && crypto && (
+                  <button
+                    className={`flex mx-auto items-center gap-[5px] mt-8 py-[10px] px-[15px] font-medium ${
+                      selectedCard.card_number.length > 19 ? "text-[10px]" : ""
+                    } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                    style={{
+                      wordBreak:
+                        selectedCard.card_number.length > 33
+                          ? "break-word"
+                          : "normal",
+                      whiteSpace:
+                        selectedCard.card_number.length > 33
+                          ? "pre-line"
+                          : "nowrap",
+                      fontSize:
+                        selectedCard.card_number.length > 33 ? "10px" : "",
+                    }}
+                    onClick={copyCardNumber}
+                  >
+                    {copied ? (
+                      <MdCheck size={24} />
+                    ) : (
+                      <MdOutlineContentCopy size={24} />
+                    )}
+                    {selectedCard.card_number}
+                  </button>
+                )}
+                {(selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ||
+                  selectedCard.id === "444e1647-80ac-4777-a209-0e28f3a66f84" ||
+                  selectedCard.id === "07873980-c9d4-4de6-8e19-964f7d37afbe" ||
+                  selectedCurrency === "UZS") && (
+                  <div className="flex justify-center">
+                    {!crypto ? (
+                      <button
+                        onClick={FetchCryptoType1}
+                        disabled={
+                          !selectedCard ||
+                          !inputValue ||
+                          (selectedCurrency === "UZS" &&
+                            parseFloat(inputValue) < 1000)
+                        }
+                        className={`mx-auto mt-10 font-medium leading-[18px] py-[10px] px-[60px] rounded-[10px] relative group ${
+                          !selectedCard ||
+                          !inputValue ||
+                          (selectedCurrency === "UZS" &&
+                            parseFloat(inputValue) < 1000)
+                            ? "bg-[#b7b7b7] cursor-not-allowed"
+                            : "bg-[#ffba00] cursor-pointer"
+                        }`}
+                      >
+                        {t("next")}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          checkBalance2();
+                        }}
+                        className={`max-w-[482px] mx-auto mt-5 flex items-center gap-[5px] py-[10px] px-[15px] font-medium text-[16px] text-white leading-[18px] rounded-[10px] ${
+                          selectedCard && inputValue
+                            ? "cursor-pointer bg-green-600"
+                            : "cursor-not-allowed bg-[#b7b7b7]"
+                        }`}
+                      >
+                        {t("pay")} <FaCheck size={18} />
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div>
+              {selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
+                <div className="p-5 mt-10 flex flex-col items-center">
+                  <div className="flex items-start space-x-3 max-w-[450px]">
+                    <span className="text-yellow-500 text-2xl">⚠️</span>
+                    <p className="text-red-600 text-base">{t("comment")}</p>
+                  </div>
+                  <button
+                    className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
+                      selectedCard.card_number.length > 19 ? "text-[9px]" : ""
+                    } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                    onClick={copyCardNumber1}
+                  >
+                    {copied1 ? (
+                      <MdCheck size={24} />
+                    ) : (
+                      <MdOutlineContentCopy size={24} />
+                    )}
+                    {comment}
+                  </button>
+                  <button
+                    onClick={checkBalance}
+                    className={`flex items-center gap-[5px] mt-5 py-[10px] px-[15px] font-medium text-[16px] text-white leading-[18px] bg-green-600 rounded-[10px]`}
+                  >
+                    {t("pay")} <FaCheck size={18} />
+                  </button>
                 </div>
-                <div>
-                  {photo.length ? (
-                    <div className="flex flex-col mb-[120px]">
-                      <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
-                        <div>
-                          <p>{photo.split("/").pop()}</p>
-                        </div>
-                        <button
-                          onClick={clearFile}
-                          className="text-black underline"
-                        >
-                          <X className="h-6 w-6" />
-                        </button>
+              ) : (
+                selectedCard &&
+                selectedCurrency !== "USD" &&
+                selectedCurrency !== "UZS" && (
+                  <>
+                    <div
+                      className={`max-w-[482px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
+                        photo ? "hidden" : ""
+                      }`}
+                    >
+                      <Image
+                        src="/file-upload.svg"
+                        className="mx-auto"
+                        width={26}
+                        height={26}
+                        alt="img"
+                      />
+                      <p className="mt-2.5 text-[14px] text-[#313131]">
+                        {t("profile26")}
+                      </p>
+                      <p className="mt-2.5 text-[12px] text-[#acacac]">
+                        {t("login-text12")}
+                      </p>
+                      <div className="hidden">
+                        <UploadComponent
+                          onUploadingChange={setLoading1}
+                          triggerRef={modalRef}
+                          onUploadSuccess={(url) =>
+                            handleUploadSuccess("cover", url)
+                          }
+                        />
                       </div>
                       <button
-                        onClick={fetchHandle}
-                        className="mx-auto mt-5 font-medium leading-[18px] bg-[#ffba00] py-[10px] px-[60px] rounded-[10px]"
+                        onClick={() => modalRef.current.click()}
+                        className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
                       >
-                        {t("profile28")}
+                        {loading1 ? (
+                          <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                        ) : (
+                          t("profile27")
+                        )}
                       </button>
                     </div>
-                  ) : null}
+                  </>
+                )
+              )}
+              {photo.length ? (
+                <div className="flex flex-col">
+                  <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
+                    <div>
+                      <p>{photo.split("/").pop()}</p>
+                    </div>
+                    <button
+                      onClick={clearFile}
+                      className="text-black underline"
+                    >
+                      <X className="h-6 w-6" />
+                    </button>
+                  </div>
+                  <button
+                    onClick={fetchHandle}
+                    className={`flex justify-center mx-auto mt-5 font-medium leading-[18px] bg-[#ffba00] py-[10px] px-[60px] rounded-[10px]`}
+                  >
+                    {isLoading ? (
+                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                    ) : (
+                      t("profile28")
+                    )}
+                  </button>
                 </div>
-              </>
-            )}
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
