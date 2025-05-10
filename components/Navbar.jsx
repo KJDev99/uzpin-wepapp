@@ -67,6 +67,15 @@ export default function Navbar() {
     { code: "en", flag: "/flagen.svg", alt: "English flag" },
   ];
 
+  useEffect(() => {
+    const language1 = localStorage.getItem("language");
+
+    if (!language1) {
+      const savedLanguage = localStorage.setItem("language", "uz");
+      console.log(savedLanguage);
+    }
+  }, []);
+
   const handleLanguageChange = (code) => {
     setSelectedLang(code);
     i18n.changeLanguage(code);
