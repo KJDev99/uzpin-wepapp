@@ -348,48 +348,26 @@ export default function BalansBox() {
     return <Loader />;
   }
 
-  // if (selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") {
-  //   const fetchComment = async () => {
-  //     try {
-  //       const response = await axiosInstance.get(
-  //         "client/auth/user-binance-comment/",
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
+  if (selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") {
+    const fetchComment = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "client/auth/user-binance-comment/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  //       setComment(response.data.comment);
-  //     } catch (error) {
-  //       console.error("Ma'lumotni olishda xatolik:", error);
-  //     }
-  //   };
+        setComment(response.data.comment);
+      } catch (error) {
+        console.error("Ma'lumotni olishda xatolik:", error);
+      }
+    };
 
-  //   fetchComment();
-  // }
-
-  useEffect(() => {
-    if (selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") {
-      const fetchComment = async () => {
-        try {
-          const response = await axiosInstance.get(
-            "client/auth/user-binance-comment/",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setComment(response.data.comment);
-        } catch (error) {
-          console.error("Ma'lumotni olishda xatolik:", error);
-        }
-      };
-
-      fetchComment();
-    }
-  }, [selectedCard, token]);
+    fetchComment();
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-20">
