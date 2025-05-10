@@ -329,6 +329,9 @@ export default function BalansBox() {
       });
       window.location.reload();
     } catch (error) {
+      if(error.response.status === 500) {
+        setErrorMessage("Server error");
+      }
       if (language === "uz") {
         setErrorMessage(error.response.data.uz[0]);
       }
