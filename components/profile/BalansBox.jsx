@@ -329,7 +329,7 @@ export default function BalansBox() {
       });
       window.location.reload();
     } catch (error) {
-      if(error.response.status === 500) {
+      if (error.response.status === 500) {
         setErrorMessage("Server error");
       }
       if (language === "uz") {
@@ -341,8 +341,6 @@ export default function BalansBox() {
       if (language === "en") {
         setErrorMessage(error.response.data.en[0]);
       }
-    } finally {
-      setErrorMessage("");
     }
   };
 
@@ -350,26 +348,48 @@ export default function BalansBox() {
     return <Loader />;
   }
 
-  if (selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") {
-    const fetchComment = async () => {
-      try {
-        const response = await axiosInstance.get(
-          "client/auth/user-binance-comment/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  // if (selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") {
+  //   const fetchComment = async () => {
+  //     try {
+  //       const response = await axiosInstance.get(
+  //         "client/auth/user-binance-comment/",
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
 
-        setComment(response.data.comment);
-      } catch (error) {
-        console.error("Ma'lumotni olishda xatolik:", error);
-      }
-    };
+  //       setComment(response.data.comment);
+  //     } catch (error) {
+  //       console.error("Ma'lumotni olishda xatolik:", error);
+  //     }
+  //   };
 
-    fetchComment();
-  }
+  //   fetchComment();
+  // }
+
+  useEffect(() => {
+    if (selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") {
+      const fetchComment = async () => {
+        try {
+          const response = await axiosInstance.get(
+            "client/auth/user-binance-comment/",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setComment(response.data.comment);
+        } catch (error) {
+          console.error("Ma'lumotni olishda xatolik:", error);
+        }
+      };
+
+      fetchComment();
+    }
+  }, [selectedCard, token]);
 
   return (
     <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-20">
@@ -401,6 +421,7 @@ export default function BalansBox() {
           message={errorMessage}
           onClose={() => {
             setError2(false);
+            setErrorMessage("");
             window.location.reload();
           }}
         />
