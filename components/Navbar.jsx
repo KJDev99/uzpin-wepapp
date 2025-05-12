@@ -153,7 +153,7 @@ export default function Navbar() {
                   </button>
 
                   {isOpen && (
-                    <ul className="absolute z-10 left-0 mt-2 w-22 bg-white border rounded-md shadow-lg">
+                    <ul className="absolute z-50 left-0 mt-2 w-22 bg-white border rounded-md shadow-lg">
                       {languages.map((lang) => (
                         <li
                           key={lang.code}
@@ -174,50 +174,6 @@ export default function Navbar() {
                   )}
                 </div>
               </div>
-
-              {/* <div
-                className={`relative flex  justify-end  transition-all ${
-                  isHovered ? "w-[150px] max-md:w-max" : "w-max"
-                }`}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <button className="flex grow-1 w-7 items-center justify-end">
-                  <Image
-                    src={
-                      languages.find((lang) => lang.code === selectedLang).flag
-                    }
-                    alt={
-                      languages.find((lang) => lang.code === selectedLang).alt
-                    }
-                    width={28}
-                    height={20}
-                    className="cursor-pointer w-7"
-                  />
-                </button>
-
-                <div
-                  className={`absolute z-[999] max-md:flex max-md:flex-col max-md:top-4 max-md:pt-3 w-max  flex gap-2 transition-all duration-300 translate-x-2 ${
-                    isHovered
-                      ? "right-[43px] max-md:right-[30%]"
-                      : "right-[-200px]"
-                  }`}
-                >
-                  {languages
-                    .filter((lang) => lang.code !== selectedLang)
-                    .map((lang) => (
-                      <Image
-                        key={lang.code}
-                        src={lang.flag}
-                        alt={lang.alt}
-                        width={24}
-                        height={24}
-                        className="cursor-pointer transition-transform  h-5 w-7 "
-                        onClick={() => handleLanguageChange(lang.code)}
-                      />
-                    ))}
-                </div>
-              </div> */}
             </div>
             <CurrencySelector />
           </div>
