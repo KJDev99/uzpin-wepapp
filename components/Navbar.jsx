@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import axiosInstance from "@/libs/axios";
 import CurrencySelector from "./CurrencySelector";
 import Loader from "@/components/Loader";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 export default function Navbar() {
   const { i18n } = useTranslation();
@@ -130,7 +131,7 @@ export default function Navbar() {
                   </button>
                 </Link>
               )}
-              <div className="relative">
+              {/* <div className="relative">
                 <div className="text-left">
                   <button
                     onClick={() => setIsOpen(!isOpen)}
@@ -172,6 +173,37 @@ export default function Navbar() {
                       ))}
                     </ul>
                   )}
+                </div>
+              </div> */}
+              {/* <div className="relative">
+                <select
+                  value={selectedLang}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  className="px-3 py-2 text-[#ffba00] font-medium uppercase rounded-md shadow-md border"
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.code}
+                    </option>
+                  ))}
+                </select>
+              </div> */}
+              <div className="relative">
+                <select
+                  value={selectedLang}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  className="w-full appearance-none px-4 py-2 pr-10 text-[#ffba00] font-medium uppercase rounded-md shadow-md border border-gray-300 focus:outline-none"
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.code}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Arrow Icon */}
+                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500">
+                  <MdKeyboardArrowDown />
                 </div>
               </div>
             </div>
