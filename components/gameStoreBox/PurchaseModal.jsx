@@ -35,6 +35,8 @@ export function PurchaseModal({
   const [isOpenBuy, setIsOpenBuy] = useState(false);
   const [buyCode, setBuyCode] = useState();
   const [loading, setLoading] = useState(false);
+  const sold_type = sessionStorage.getItem("bot");
+  const cleanSoldType = sold_type.split("?")[0];
 
   const router = useRouter();
 
@@ -110,7 +112,7 @@ export function PurchaseModal({
     const formattedData = {
       currency: savedCurrency,
       gamer_id: playerId == "" ? undefined : playerId,
-      sold_type: sessionStorage.getItem("bot"),
+      sold_type: cleanSoldType,
       items: cart.map((item) => ({
         promocode: item.id,
         count: item.quantity,
