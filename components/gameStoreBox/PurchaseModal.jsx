@@ -110,6 +110,7 @@ export function PurchaseModal({
     const formattedData = {
       currency: savedCurrency,
       gamer_id: playerId == "" ? undefined : playerId,
+      sold_type: sessionStorage.getItem("bot"),
       items: cart.map((item) => ({
         promocode: item.id,
         count: item.quantity,
