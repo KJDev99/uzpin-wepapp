@@ -1,20 +1,20 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { X } from "lucide-react";
-import BalansCardModal from "./BalansCardModal";
 import axiosInstance from "@/libs/axios";
-import Loader from "../Loader";
-import Link from "next/link";
-import { IoIosArrowBack } from "react-icons/io";
+import { X } from "lucide-react";
 import Image from "next/image";
-import { MdCheck, MdOutlineContentCopy } from "react-icons/md";
-import UploadComponent from "../UploadComponent";
-import { Alert } from "../Alert";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { TfiReload } from "react-icons/tfi";
 import { FaCheck } from "react-icons/fa6";
+import { IoIosArrowBack } from "react-icons/io";
+import { MdCheck, MdOutlineContentCopy } from "react-icons/md";
+import { TfiReload } from "react-icons/tfi";
+import { Alert } from "../Alert";
+import Loader from "../Loader";
+import UploadComponent from "../UploadComponent";
+import BalansCardModal from "./BalansCardModal";
 
 export default function BalansBox() {
   const { t } = useTranslation();
@@ -58,7 +58,6 @@ export default function BalansBox() {
     const language = localStorage.getItem("language");
     setLanguage(language);
   }, []);
-  console.log(language);
   const copyCryptoNumber = () => {
     const text = buttonRef.current.innerText;
     if (text) {
@@ -329,9 +328,6 @@ export default function BalansBox() {
       });
       window.location.reload();
     } catch (error) {
-      if (error.response.status === 500) {
-        setErrorMessage("Server error");
-      }
       if (language === "uz") {
         setErrorMessage(error.response.data.uz[0]);
       }
@@ -341,6 +337,8 @@ export default function BalansBox() {
       if (language === "en") {
         setErrorMessage(error.response.data.en[0]);
       }
+    } finally {
+      setErrorMessage("");
     }
   };
 
@@ -370,7 +368,7 @@ export default function BalansBox() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-20">
+    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-4">
       {error && (
         <Alert
           onClose={() => {
@@ -399,7 +397,6 @@ export default function BalansBox() {
           message={errorMessage}
           onClose={() => {
             setError2(false);
-            setErrorMessage("");
             window.location.reload();
           }}
         />
@@ -525,7 +522,10 @@ export default function BalansBox() {
             <h2>{t("profile21")}</h2>
             <div className="mt-2.5">
               <button
-                onClick={() => handleCurrencyChange("UZS")}
+                onClick={() => {
+                  handleCurrencyChange("UZS");
+                  setSelectedCard("");
+                }}
                 className={`px-4 py-2 rounded-tl-[5px] rounded-bl-[5px] max-sm:px-5 ${
                   selectedCurrency === "UZS"
                     ? "bg-zinc-800 text-white"
@@ -537,6 +537,7 @@ export default function BalansBox() {
               <button
                 onClick={() => {
                   handleCurrencyChange("USD");
+                  setSelectedCard("");
                 }}
                 className={`px-4 py-2  max-sm:px-5 ${
                   selectedCurrency === "USD"
@@ -547,7 +548,10 @@ export default function BalansBox() {
                 USD
               </button>
               <button
-                onClick={() => handleCurrencyChange("RUB")}
+                onClick={() => {
+                  handleCurrencyChange("RUB");
+                  setSelectedCard("");
+                }}
                 className={`px-4 py-2 rounded-br-[5px] rounded-tr-[5px] max-sm:px-5 ${
                   selectedCurrency === "RUB"
                     ? "bg-zinc-800 text-white"
@@ -617,18 +621,17 @@ export default function BalansBox() {
           </div>
 
           {/* {visibleCard && <BalansCardModal />} */}
-          <div className={`${visibleCard ? "block" : "hidden"}`}>
+          <div className={`${visibleCard ? "block pb-20" : "hidden"}`}>
             <div>
-              <iframe
-                width="100%"
-                height="200"
-                src={
-                  selectedCard?.video_url ||
-                  "https://www.youtube.com/embed/1SLF36y9qMk?si=r9tWQMx06YW7_C3L"
-                }
-                className="mb-5"
-                allowFullScreen
-              ></iframe>
+              {selectedCard?.video_url && (
+                <iframe
+                  width="100%"
+                  height="200"
+                  src={selectedCard?.video_url}
+                  className="mb-5"
+                  allowFullScreen
+                ></iframe>
+              )}
               <h3 className="font-semibold text-[16px]">{t("profile24")}</h3>
               <p className="mt-2.5 font-medium text-[#313131] text-[14px]">
                 {t("profile25")}
