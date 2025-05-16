@@ -321,7 +321,7 @@ export default function BalansCardModal({
       )}
       <div className="bg-white rounded-[10px] shadow-lg">
         <div className="flex relative justify-between">
-          <div className="max-w-[682px] w-full my-8 mx-8 ">
+          <div className="w-[682px] mt-8 ml-8 mb-8">
             <p className="font-medium text-[20px] leading-[22px]">
               {t("profile25")}
             </p>
@@ -421,6 +421,50 @@ export default function BalansCardModal({
                       </div>
                     </>
                   )}
+                {(selectedCard?.id === "5e41111f-2187-493c-94ae-69bb1e137c10" ||
+                  selectedCard?.id ===
+                    "31067404-94d2-4717-90c7-51463263ef1b") && (
+                  <div className={`${!inputValue ? "hidden" : ""}`}>
+                    <p className="mt-5 text-center font-medium text-[20px] leading-[22px]">
+                      {t("profile29")}
+                    </p>
+                    <div
+                      className={`max-w-[482px] mt-5 p-[35px] mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
+                        photo ? "hidden" : ""
+                      }`}
+                    >
+                      <Image
+                        src="/file-upload.svg"
+                        className="mx-auto"
+                        width={40}
+                        height={40}
+                        alt="img"
+                      />
+                      <p className="mt-2.5 text-[14px] leading-4 text-[#828282]">
+                        {t("profile26")}
+                      </p>
+                      <div className="hidden">
+                        <UploadComponent
+                          triggerRef={modalRef}
+                          onUploadingChange={setLoading1}
+                          onUploadSuccess={(url) =>
+                            handleUploadSuccess("cover", url)
+                          }
+                        />
+                      </div>
+                      <button
+                        onClick={() => modalRef.current.click()}
+                        className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
+                      >
+                        {loading1 ? (
+                          <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                        ) : (
+                          t("profile27")
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {selectedCurrency !== "USD" &&
                 selectedCurrency !== "UZS" &&
@@ -485,6 +529,13 @@ export default function BalansCardModal({
                                 parseFloat(inputValue) < 1000)
                                 ? "bg-[#b7b7b7] cursor-not-allowed"
                                 : "bg-[#ffba00] cursor-pointer"
+                            } ${
+                              selectedCard?.id ===
+                                "5e41111f-2187-493c-94ae-69bb1e137c10" ||
+                              selectedCard?.id ===
+                                "31067404-94d2-4717-90c7-51463263ef1b"
+                                ? "hidden"
+                                : ""
                             }`}
                           >
                             {t("next")}
@@ -506,7 +557,16 @@ export default function BalansCardModal({
                             </button>
                           </div>
                         )}
-                        <p className="mt-10 max-w-[330px] mx-auto text-center text-[14px] leading-[18px]">
+                        <p
+                          className={`mt-10 max-w-[330px] mx-auto text-center text-[14px] leading-[18px] ${
+                            selectedCard?.id ===
+                              "5e41111f-2187-493c-94ae-69bb1e137c10" ||
+                            selectedCard?.id ===
+                              "31067404-94d2-4717-90c7-51463263ef1b"
+                              ? "hidden"
+                              : ""
+                          }`}
+                        >
                           {t("profile30")}{" "}
                           <a href="t.me/Barbossa_gaming">@Barbossa_gaming</a>{" "}
                           {t("profile31")}
@@ -704,6 +764,24 @@ export default function BalansCardModal({
                   {selectedCard.card_number}
                 </button>
               )}
+              <button
+                className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
+                  selectedCard.card_number.length > 19 ? "text-[9px]" : ""
+                } ${
+                  selectedCard?.id !== "5e41111f-2187-493c-94ae-69bb1e137c10" &&
+                  selectedCard?.id !== "31067404-94d2-4717-90c7-51463263ef1b"
+                    ? "hidden"
+                    : ""
+                } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                onClick={copyCardNumber}
+              >
+                {copied ? (
+                  <MdCheck size={24} />
+                ) : (
+                  <MdOutlineContentCopy size={24} />
+                )}
+                {selectedCard.card_number}
+              </button>
               <p className="mt-[87px] text-[14px] leading-[18px]">
                 {t("profile30")}{" "}
                 <a href="t.me/Barbossa_gaming">@Barbossa_gaming</a>{" "}
@@ -725,3 +803,4 @@ export default function BalansCardModal({
     </div>
   );
 }
+  

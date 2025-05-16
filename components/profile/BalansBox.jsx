@@ -621,7 +621,7 @@ export default function BalansBox() {
           </div>
 
           {/* {visibleCard && <BalansCardModal />} */}
-          <div className={`${visibleCard ? "block pb-20" : "hidden"}`}>
+          <div className={`${visibleCard ? "block pb-24" : "hidden"}`}>
             <div>
               {selectedCard?.video_url && (
                 <iframe
@@ -811,7 +811,54 @@ export default function BalansBox() {
                 {(selectedCurrency === "USD" || selectedCurrency === "UZS") &&
                   selectedCard?.id !==
                     "8f31f905-d153-4cb9-8514-5c3c5b53dac5" && (
-                    <div className="flex flex-col items-center mt-10">
+                    <div className={`flex flex-col items-center mt-10`}>
+                      <div
+                        className={`flex flex-col items-center mb-4 ${
+                          selectedCard?.id ===
+                            "5e41111f-2187-493c-94ae-69bb1e137c10" ||
+                          selectedCard?.id ===
+                            "31067404-94d2-4717-90c7-51463263ef1b"
+                            ? ""
+                            : "hidden"
+                        }`}
+                      >
+                        <Image
+                          src={selectedCard?.photo}
+                          className="mt-5 mx-auto w-[200px] h-[200px]"
+                          width={200}
+                          height={200}
+                          alt="img"
+                        />
+                        <button
+                          className={`flex mx-auto items-center gap-[5px] mt-8 py-[10px] px-[15px] font-medium ${
+                            selectedCard.card_number.length > 19
+                              ? "text-[10px]"
+                              : ""
+                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                          style={{
+                            wordBreak:
+                              selectedCard.card_number.length > 33
+                                ? "break-word"
+                                : "normal",
+                            whiteSpace:
+                              selectedCard.card_number.length > 33
+                                ? "pre-line"
+                                : "nowrap",
+                            fontSize:
+                              selectedCard.card_number.length > 33
+                                ? "10px"
+                                : "",
+                          }}
+                          onClick={copyCardNumber}
+                        >
+                          {copied ? (
+                            <MdCheck size={24} />
+                          ) : (
+                            <MdOutlineContentCopy size={24} />
+                          )}
+                          {selectedCard.card_number}
+                        </button>
+                      </div>
                       <label className="block font-normal text-[20px] leading-[22px] mb-2">
                         {t("profile22")} {selectedCurrency}
                       </label>
@@ -877,6 +924,13 @@ export default function BalansBox() {
                             parseFloat(inputValue) < 1000)
                             ? "bg-[#b7b7b7] cursor-not-allowed"
                             : "bg-[#ffba00] cursor-pointer"
+                        } ${
+                          selectedCard?.id ===
+                            "5e41111f-2187-493c-94ae-69bb1e137c10" ||
+                          selectedCard?.id ===
+                            "31067404-94d2-4717-90c7-51463263ef1b"
+                            ? "hidden"
+                            : ""
                         }`}
                       >
                         {t("next")}
@@ -973,6 +1027,50 @@ export default function BalansBox() {
                   </>
                 )
               )}
+
+              {(selectedCard?.id === "5e41111f-2187-493c-94ae-69bb1e137c10" ||
+                selectedCard?.id ===
+                  "31067404-94d2-4717-90c7-51463263ef1b") && (
+                <div
+                  className={`max-w-[482px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
+                    photo ? "hidden" : ""
+                  } ${!inputValue ? "hidden" : ""}`}
+                >
+                  <Image
+                    src="/file-upload.svg"
+                    className="mx-auto"
+                    width={26}
+                    height={26}
+                    alt="img"
+                  />
+                  <p className="mt-2.5 text-[14px] text-[#313131]">
+                    {t("profile26")}
+                  </p>
+                  <p className="mt-2.5 text-[12px] text-[#acacac]">
+                    {t("login-text12")}
+                  </p>
+                  <div className="hidden">
+                    <UploadComponent
+                      onUploadingChange={setLoading1}
+                      triggerRef={modalRef}
+                      onUploadSuccess={(url) =>
+                        handleUploadSuccess("cover", url)
+                      }
+                    />
+                  </div>
+                  <button
+                    onClick={() => modalRef.current.click()}
+                    className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
+                  >
+                    {loading1 ? (
+                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+                    ) : (
+                      t("profile27")
+                    )}
+                  </button>
+                </div>
+              )}
+
               {photo.length ? (
                 <div className="flex flex-col">
                   <div className="max-w-[482px] w-full mx-auto mt-5 py-5 px-8 border border-[#828282] rounded-[10px] flex items-center justify-between">
