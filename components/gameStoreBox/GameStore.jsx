@@ -453,14 +453,16 @@ export default function GameStore({ data, gameId }) {
                             {t("all-games-text10")}
                           </button>
                         )}
-                        {gameId !== "28f97b34-7c40-4a98-947c-a0499c108141" && (
-                          <button
-                            onClick={() => setShowPurchaseModal(2)}
-                            className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black]"
-                          >
-                            {t("all-games-text11")}
-                          </button>
-                        )}
+                        {gameId !== "28f97b34-7c40-4a98-947c-a0499c108141" &&
+                          gameId !== "8e3cba6c-a5db-4711-a781-c3d35d5eba7d" &&
+                          gameId !== "ef5eb029-7de6-4263-ae0a-ea08d83c7ddd" && (
+                            <button
+                              onClick={() => setShowPurchaseModal(2)}
+                              className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black]"
+                            >
+                              {t("all-games-text11")}
+                            </button>
+                          )}
                       </>
                     )}
                 </div>
