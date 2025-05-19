@@ -49,6 +49,28 @@ export default function BalansBox() {
   const [copied2, setCopied2] = useState(false);
   const [crypto, setCrypto] = useState(false);
   const [language, setLanguage] = useState("");
+  const [copiedCardId, setCopiedCardId] = useState(null);
+  const [copiedPhoneId, setCopiedPhoneId] = useState(null);
+
+  const handleCopyCardNumber = async (cardId, cardNumber) => {
+    try {
+      await navigator.clipboard.writeText(cardNumber);
+      setCopiedCardId(cardId);
+      setTimeout(() => setCopiedCardId(null), 2000);
+    } catch (err) {
+      console.error("Failed to copy card number: ", err);
+    }
+  };
+
+  const handleCopyPhoneNumber = async (cardId, phoneNumber) => {
+    try {
+      await navigator.clipboard.writeText(phoneNumber);
+      setCopiedPhoneId(cardId);
+      setTimeout(() => setCopiedPhoneId(null), 2000);
+    } catch (err) {
+      console.error("Failed to copy phone number: ", err);
+    }
+  };
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);
@@ -621,7 +643,7 @@ export default function BalansBox() {
           </div>
 
           {/* {visibleCard && <BalansCardModal />} */}
-          <div className={`${visibleCard ? "block pb-24" : "hidden"}`}>
+          <div className={`${visibleCard ? "block" : "hidden"} pb-24`}>
             <div>
               {selectedCard?.video_url && (
                 <iframe
@@ -663,7 +685,7 @@ export default function BalansBox() {
             </div>
 
             {selectedCard && (
-              <div className="mt-[30px] bg-[#f9f9f9] rounded-[5px] p-[10px]">
+              <div className="mt-4 bg-[#f9f9f9] rounded-[5px]">
                 {selectedCard.id !== "36832140-0df0-4541-9644-6bb7b8f20540" &&
                   selectedCard.id !== "444e1647-80ac-4777-a209-0e28f3a66f84" &&
                   selectedCard.id !== "07873980-c9d4-4de6-8e19-964f7d37afbe" &&
@@ -808,10 +830,52 @@ export default function BalansBox() {
                     )}
                   </>
                 ) : null}
+
+                {selectedCard?.extra_cards.length > 0 &&
+                  selectedCard?.extra_cards.map((card, index) => (
+                    <div
+                      key={index}
+                      className="w-full border border-[#ffba00] rounded-[5px] p-1 mt-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <button
+                          onClick={() =>
+                            handleCopyCardNumber(card.id, card.card_number)
+                          }
+                          className="flex items-center gap-1 font-medium text-[14px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
+                        >
+                          {copiedCardId === card.id ? (
+                            <MdCheck size={18} />
+                          ) : (
+                            <MdOutlineContentCopy size={18} />
+                          )}
+                          {card.card_number}
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleCopyPhoneNumber(card.id, card.phone_number)
+                          }
+                          className="flex items-center gap-[5px] font-medium text-[14px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
+                        >
+                          {copiedPhoneId === card.id ? (
+                            <MdCheck size={18} />
+                          ) : (
+                            <MdOutlineContentCopy size={18} />
+                          )}
+                          {card.phone_number}
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between text-[12px]">
+                        <p>{card.full_name}</p>
+                        <p>{card.bank_name}</p>
+                      </div>
+                    </div>
+                  ))}
+
                 {(selectedCurrency === "USD" || selectedCurrency === "UZS") &&
                   selectedCard?.id !==
                     "8f31f905-d153-4cb9-8514-5c3c5b53dac5" && (
-                    <div className={`flex flex-col items-center mt-10`}>
+                    <div className={`flex flex-col items-center mt-5`}>
                       <div
                         className={`flex flex-col items-center mb-4 ${
                           selectedCard?.id ===
@@ -859,6 +923,7 @@ export default function BalansBox() {
                           {selectedCard.card_number}
                         </button>
                       </div>
+
                       <label className="block font-normal text-[20px] leading-[22px] mb-2">
                         {t("profile22")} {selectedCurrency}
                       </label>
@@ -925,12 +990,7 @@ export default function BalansBox() {
                             ? "bg-[#b7b7b7] cursor-not-allowed"
                             : "bg-[#ffba00] cursor-pointer"
                         } ${
-                          selectedCard?.id ===
-                            "5e41111f-2187-493c-94ae-69bb1e137c10" ||
-                          selectedCard?.id ===
-                            "31067404-94d2-4717-90c7-51463263ef1b"
-                            ? "hidden"
-                            : ""
+                          selectedCard?.extra_cards.length > 0 ? "hidden" : ""
                         }`}
                       >
                         {t("next")}
@@ -1028,11 +1088,9 @@ export default function BalansBox() {
                 )
               )}
 
-              {(selectedCard?.id === "5e41111f-2187-493c-94ae-69bb1e137c10" ||
-                selectedCard?.id ===
-                  "31067404-94d2-4717-90c7-51463263ef1b") && (
+              {selectedCard?.extra_cards.length > 0 && (
                 <div
-                  className={`max-w-[482px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
+                  className={`max-w-[482px] mt-3 p-2 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
                     photo ? "hidden" : ""
                   } ${!inputValue ? "hidden" : ""}`}
                 >
@@ -1043,10 +1101,10 @@ export default function BalansBox() {
                     height={26}
                     alt="img"
                   />
-                  <p className="mt-2.5 text-[14px] text-[#313131]">
+                  <p className="mt-1 text-[14px] text-[#313131]">
                     {t("profile26")}
                   </p>
-                  <p className="mt-2.5 text-[12px] text-[#acacac]">
+                  <p className="mt-1 text-[12px] text-[#acacac]">
                     {t("login-text12")}
                   </p>
                   <div className="hidden">
@@ -1060,7 +1118,7 @@ export default function BalansBox() {
                   </div>
                   <button
                     onClick={() => modalRef.current.click()}
-                    className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
+                    className="mt-1 font-medium text-[14px] bg-[#ffba00] py-1 px-5 rounded-[5px]"
                   >
                     {loading1 ? (
                       <AiOutlineLoading3Quarters className="animate-spin mr-2" />

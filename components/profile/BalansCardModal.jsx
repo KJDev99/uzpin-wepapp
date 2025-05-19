@@ -35,6 +35,7 @@ export default function BalansCardModal({
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedExtraCard, setSelectedExtraCard] = useState(null);
   const [comment, setComment] = useState("");
   const [crypto, setCrypto] = useState(false);
 
@@ -42,6 +43,28 @@ export default function BalansCardModal({
   const [copied1, setCopied1] = useState(false);
   const [copied2, setCopied2] = useState(false);
   const [language, setLanguage] = useState("");
+  const [copiedCardId, setCopiedCardId] = useState(null);
+  const [copiedPhoneId, setCopiedPhoneId] = useState(null);
+
+  const handleCopyCardNumber = async (cardId, cardNumber) => {
+    try {
+      await navigator.clipboard.writeText(cardNumber);
+      setCopiedCardId(cardId);
+      setTimeout(() => setCopiedCardId(null), 2000);
+    } catch (err) {
+      console.error("Failed to copy card number: ", err);
+    }
+  };
+
+  const handleCopyPhoneNumber = async (cardId, phoneNumber) => {
+    try {
+      await navigator.clipboard.writeText(phoneNumber);
+      setCopiedPhoneId(cardId);
+      setTimeout(() => setCopiedPhoneId(null), 2000);
+    } catch (err) {
+      console.error("Failed to copy phone number: ", err);
+    }
+  };
 
   useEffect(() => {
     const language = localStorage.getItem("language");
@@ -50,6 +73,10 @@ export default function BalansCardModal({
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);
+  };
+
+  const handleExtraCardSelect = (card) => {
+    setSelectedExtraCard(card);
   };
 
   const checkBalance1 = async () => {
@@ -321,11 +348,11 @@ export default function BalansCardModal({
       )}
       <div className="bg-white rounded-[10px] shadow-lg">
         <div className="flex relative justify-between">
-          <div className="w-[682px] mt-8 ml-8 mb-8">
+          <div className="max-w-[750px] w-full mt-8 ml-8 mb-8">
             <p className="font-medium text-[20px] leading-[22px]">
               {t("profile25")}
             </p>
-            <div className="flex gap-[30px] mt-[18px]">
+            <div className="flex gap-5 flex-wrap mt-[18px]">
               {cart.length > 0 &&
                 cart.map((card) => (
                   <div
@@ -347,6 +374,45 @@ export default function BalansCardModal({
                   </div>
                 ))}
             </div>
+
+            <div className="flex gap-2 flex-wrap mt-4">
+              {selectedCard?.extra_cards?.map((card) => (
+                <div
+                  key={card.id}
+                  className="flex items-center gap-2 border border-[#ffba00] px-3 py-1 rounded-lg"
+                >
+                  <button
+                    onClick={() =>
+                      handleCopyCardNumber(card.id, card.card_number)
+                    }
+                    className="flex items-center gap-1 mx-auto px-[15px] font-medium text-[16px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
+                  >
+                    {copiedCardId === card.id ? (
+                      <MdCheck size={24} />
+                    ) : (
+                      <MdOutlineContentCopy size={24} />
+                    )}
+                    {card.card_number}
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleCopyPhoneNumber(card.id, card.phone_number)
+                    }
+                    className="flex items-center gap-[5px] mx-auto px-[15px] font-medium text-[16px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
+                  >
+                    {copiedPhoneId === card.id ? (
+                      <MdCheck size={24} />
+                    ) : (
+                      <MdOutlineContentCopy size={24} />
+                    )}
+                    {card.phone_number}
+                  </button>
+                  <p>{card.full_name}</p>
+                  <p>{card.bank_name}</p>
+                </div>
+              ))}
+            </div>
+
             {selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
               <div className="p-5 mt-10 flex flex-col items-center">
                 <div className="flex items-start space-x-3 max-w-[450px]">
@@ -401,7 +467,7 @@ export default function BalansCardModal({
                   selectedCard?.id !== "8f31f905-d153-4cb9-8514-5c3c5b53dac5" &&
                   selectedCard && (
                     <>
-                      <div className="flex flex-col items-center mt-10">
+                      <div className="flex flex-col items-center mt-4">
                         <label className="block font-medium text-[20px] leading-[22px] mb-2">
                           {t("profile22")} {selectedCurrency}
                         </label>
@@ -421,15 +487,14 @@ export default function BalansCardModal({
                       </div>
                     </>
                   )}
-                {(selectedCard?.id === "5e41111f-2187-493c-94ae-69bb1e137c10" ||
-                  selectedCard?.id ===
-                    "31067404-94d2-4717-90c7-51463263ef1b") && (
+
+                {selectedCard?.extra_cards?.length > 0 && (
                   <div className={`${!inputValue ? "hidden" : ""}`}>
                     <p className="mt-5 text-center font-medium text-[20px] leading-[22px]">
                       {t("profile29")}
                     </p>
                     <div
-                      className={`max-w-[482px] mt-5 p-[35px] mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
+                      className={`max-w-[482px] mt-1 p-2 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
                         photo ? "hidden" : ""
                       }`}
                     >
@@ -440,7 +505,7 @@ export default function BalansCardModal({
                         height={40}
                         alt="img"
                       />
-                      <p className="mt-2.5 text-[14px] leading-4 text-[#828282]">
+                      <p className="text-[14px] leading-4 text-[#828282]">
                         {t("profile26")}
                       </p>
                       <div className="hidden">
@@ -454,7 +519,7 @@ export default function BalansCardModal({
                       </div>
                       <button
                         onClick={() => modalRef.current.click()}
-                        className="mt-2.5 font-medium text-[14px] bg-[#ffba00] py-3 px-10 rounded-[5px]"
+                        className="mt-2 font-medium text-[14px] bg-[#ffba00] py-1 px-5 rounded-[5px]"
                       >
                         {loading1 ? (
                           <AiOutlineLoading3Quarters className="animate-spin mr-2" />
@@ -530,10 +595,7 @@ export default function BalansCardModal({
                                 ? "bg-[#b7b7b7] cursor-not-allowed"
                                 : "bg-[#ffba00] cursor-pointer"
                             } ${
-                              selectedCard?.id ===
-                                "5e41111f-2187-493c-94ae-69bb1e137c10" ||
-                              selectedCard?.id ===
-                                "31067404-94d2-4717-90c7-51463263ef1b"
+                              selectedCard?.extra_cards?.length > 0
                                 ? "hidden"
                                 : ""
                             }`}
@@ -557,20 +619,6 @@ export default function BalansCardModal({
                             </button>
                           </div>
                         )}
-                        <p
-                          className={`mt-10 max-w-[330px] mx-auto text-center text-[14px] leading-[18px] ${
-                            selectedCard?.id ===
-                              "5e41111f-2187-493c-94ae-69bb1e137c10" ||
-                            selectedCard?.id ===
-                              "31067404-94d2-4717-90c7-51463263ef1b"
-                              ? "hidden"
-                              : ""
-                          }`}
-                        >
-                          {t("profile30")}{" "}
-                          <a href="t.me/Barbossa_gaming">@Barbossa_gaming</a>{" "}
-                          {t("profile31")}
-                        </p>
                       </div>
                     )}
                   </>
@@ -616,7 +664,7 @@ export default function BalansCardModal({
           </div>
           {selectedCard && selectedCurrency === "USD" && (
             <div
-              className={`max-w-[430px] ${
+              className={`max-w-[400px] w-full ${
                 (selectedCard.video_url ||
                   crypto ||
                   selectedCard.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") &&
@@ -735,20 +783,22 @@ export default function BalansCardModal({
             </div>
           )}
           {selectedCard && selectedCurrency !== "USD" && (
-            <div className="max-w-[430px] w-full px-[24px] pt-8 pb-8 bg-[#f9f9f9] rounded-tr-[10px] rounded-br-[10px]">
+            <div className="max-w-[400px] w-full px-[24px] pt-8 pb-8 bg-[#f9f9f9] rounded-tr-[10px] rounded-br-[10px]">
               <p className="font-semibold text-[24px] leading-[28px]">
                 {selectedCard.card_name}
               </p>
               <p className="mt-2.5 font-semibold text-[24px] leading-[28px]">
                 {selectedCard.card_holder}
               </p>
-              <iframe
-                width="100%"
-                height="200"
-                src={selectedCard?.video_url}
-                className="mt-5 rounded-xl"
-                allowFullScreen
-              ></iframe>
+              {selectedCard?.video_url && (
+                <iframe
+                  width="100%"
+                  height="200"
+                  src={selectedCard?.video_url}
+                  className="mt-5 rounded-xl"
+                  allowFullScreen
+                ></iframe>
+              )}
               {crypto && (
                 <button
                   className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
@@ -803,4 +853,3 @@ export default function BalansCardModal({
     </div>
   );
 }
-  
