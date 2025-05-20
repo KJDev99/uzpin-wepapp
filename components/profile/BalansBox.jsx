@@ -670,7 +670,7 @@ export default function BalansBox() {
                 {selectedCard.id !== "36832140-0df0-4541-9644-6bb7b8f20540" &&
                   selectedCard.id !== "444e1647-80ac-4777-a209-0e28f3a66f84" &&
                   selectedCard.id !== "07873980-c9d4-4de6-8e19-964f7d37afbe" &&
-                  selectedCurrency !== "UZS" && (
+                  selectedCard?.extra_cards?.length === 0 && (
                     <>
                       <p className="font-semibold text-[16px]">
                         {selectedCard.card_name}

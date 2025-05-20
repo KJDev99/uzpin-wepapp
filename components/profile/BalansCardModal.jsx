@@ -732,7 +732,7 @@ export default function BalansCardModal({
                     allowFullScreen
                   ></iframe>
                 )}
-                {crypto && selectedCard?.is_auto_pay === false && (
+                {crypto && selectedCard?.extra_cards?.length === 0 && (
                   <button
                     className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
                       selectedCard.card_number.length > 19 ? "text-[9px]" : ""
