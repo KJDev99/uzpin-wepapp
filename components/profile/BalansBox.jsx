@@ -1088,7 +1088,7 @@ export default function BalansBox() {
                 )
               )}
 
-              {selectedCard?.extra_cards.length > 0 && (
+              {selectedCard?.extra_cards?.length > 0 && (
                 <div
                   className={`max-w-[482px] mt-3 p-2 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
                     photo ? "hidden" : ""
