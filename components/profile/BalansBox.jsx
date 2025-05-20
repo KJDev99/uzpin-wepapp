@@ -20,13 +20,11 @@ export default function BalansBox() {
   const { t } = useTranslation();
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("UZS");
   const [visibleCard, setVisibleCard] = useState(false);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
   const [balance, setBalance] = useState();
   const [token, setToken] = useState(null);
   const [fullname, setFullName] = useState(null);
@@ -94,6 +92,7 @@ export default function BalansBox() {
         });
     }
   };
+
   const copyCardNumber = () => {
     if (selectedCard.card_number) {
       navigator.clipboard
@@ -294,26 +293,8 @@ export default function BalansBox() {
     const formattedData = {
       amount: +inputValue,
     };
-    if (selectedCard?.id === "36832140-0df0-4541-9644-6bb7b8f20540") {
-      formattedData.type = "trc20";
-    }
-    if (selectedCard?.id === "444e1647-80ac-4777-a209-0e28f3a66f84") {
-      formattedData.type = "bep20";
-    }
-    if (selectedCard?.id === "07873980-c9d4-4de6-8e19-964f7d37afbe") {
-      formattedData.type = "aptos";
-    }
-    if (
-      selectedCard?.id === "7edfd32a-e076-41da-acbc-862e9c0aa47d" ||
-      selectedCard?.id === "faf3ef4a-9156-487b-a7a0-53f8c75397ac"
-    ) {
-      formattedData.type = "uzcard";
-    }
-    if (
-      selectedCard?.id === "f0488bed-7934-4ae9-94b3-f0ffc4baa4a0" ||
-      selectedCard?.id === "c5b8b570-e2c1-49c1-a6b7-7d2342109393"
-    ) {
-      formattedData.type = "humo";
+    if (selectedCard) {
+      formattedData.type = selectedCard?.auto_pay_type;
     }
     try {
       const response = await axiosInstance.post(
@@ -733,6 +714,7 @@ export default function BalansBox() {
                       </button>
                     </>
                   )}
+
                 {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
                   <>
                     {crypto && (
@@ -876,54 +858,6 @@ export default function BalansBox() {
                   selectedCard?.id !==
                     "8f31f905-d153-4cb9-8514-5c3c5b53dac5" && (
                     <div className={`flex flex-col items-center mt-5`}>
-                      <div
-                        className={`flex flex-col items-center mb-4 ${
-                          selectedCard?.id ===
-                            "5e41111f-2187-493c-94ae-69bb1e137c10" ||
-                          selectedCard?.id ===
-                            "31067404-94d2-4717-90c7-51463263ef1b"
-                            ? ""
-                            : "hidden"
-                        }`}
-                      >
-                        <Image
-                          src={selectedCard?.photo}
-                          className="mt-5 mx-auto w-[200px] h-[200px]"
-                          width={200}
-                          height={200}
-                          alt="img"
-                        />
-                        <button
-                          className={`flex mx-auto items-center gap-[5px] mt-8 py-[10px] px-[15px] font-medium ${
-                            selectedCard.card_number.length > 19
-                              ? "text-[10px]"
-                              : ""
-                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                          style={{
-                            wordBreak:
-                              selectedCard.card_number.length > 33
-                                ? "break-word"
-                                : "normal",
-                            whiteSpace:
-                              selectedCard.card_number.length > 33
-                                ? "pre-line"
-                                : "nowrap",
-                            fontSize:
-                              selectedCard.card_number.length > 33
-                                ? "10px"
-                                : "",
-                          }}
-                          onClick={copyCardNumber}
-                        >
-                          {copied ? (
-                            <MdCheck size={24} />
-                          ) : (
-                            <MdOutlineContentCopy size={24} />
-                          )}
-                          {selectedCard.card_number}
-                        </button>
-                      </div>
-
                       <label className="block font-normal text-[20px] leading-[22px] mb-2">
                         {t("profile22")} {selectedCurrency}
                       </label>
@@ -941,33 +875,7 @@ export default function BalansBox() {
                       />
                     </div>
                   )}
-                {selectedCurrency === "UZS" && crypto && (
-                  <button
-                    className={`flex mx-auto items-center gap-[5px] mt-8 py-[10px] px-[15px] font-medium ${
-                      selectedCard.card_number.length > 19 ? "text-[10px]" : ""
-                    } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                    style={{
-                      wordBreak:
-                        selectedCard.card_number.length > 33
-                          ? "break-word"
-                          : "normal",
-                      whiteSpace:
-                        selectedCard.card_number.length > 33
-                          ? "pre-line"
-                          : "nowrap",
-                      fontSize:
-                        selectedCard.card_number.length > 33 ? "10px" : "",
-                    }}
-                    onClick={copyCardNumber}
-                  >
-                    {copied ? (
-                      <MdCheck size={24} />
-                    ) : (
-                      <MdOutlineContentCopy size={24} />
-                    )}
-                    {selectedCard.card_number}
-                  </button>
-                )}
+
                 {(selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ||
                   selectedCard.id === "444e1647-80ac-4777-a209-0e28f3a66f84" ||
                   selectedCard.id === "07873980-c9d4-4de6-8e19-964f7d37afbe" ||
@@ -989,8 +897,6 @@ export default function BalansBox() {
                             parseFloat(inputValue) < 1000)
                             ? "bg-[#b7b7b7] cursor-not-allowed"
                             : "bg-[#ffba00] cursor-pointer"
-                        } ${
-                          selectedCard?.extra_cards.length > 0 ? "hidden" : ""
                         }`}
                       >
                         {t("next")}
@@ -1042,9 +948,7 @@ export default function BalansBox() {
                   </button>
                 </div>
               ) : (
-                selectedCard &&
-                selectedCurrency !== "USD" &&
-                selectedCurrency !== "UZS" && (
+                selectedCard?.is_auto_pay === false && (
                   <>
                     <div
                       className={`max-w-[482px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
@@ -1086,47 +990,6 @@ export default function BalansBox() {
                     </div>
                   </>
                 )
-              )}
-
-              {selectedCard?.extra_cards?.length > 0 && (
-                <div
-                  className={`max-w-[482px] mt-3 p-2 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
-                    photo ? "hidden" : ""
-                  } ${!inputValue ? "hidden" : ""}`}
-                >
-                  <Image
-                    src="/file-upload.svg"
-                    className="mx-auto"
-                    width={26}
-                    height={26}
-                    alt="img"
-                  />
-                  <p className="mt-1 text-[14px] text-[#313131]">
-                    {t("profile26")}
-                  </p>
-                  <p className="mt-1 text-[12px] text-[#acacac]">
-                    {t("login-text12")}
-                  </p>
-                  <div className="hidden">
-                    <UploadComponent
-                      onUploadingChange={setLoading1}
-                      triggerRef={modalRef}
-                      onUploadSuccess={(url) =>
-                        handleUploadSuccess("cover", url)
-                      }
-                    />
-                  </div>
-                  <button
-                    onClick={() => modalRef.current.click()}
-                    className="mt-1 font-medium text-[14px] bg-[#ffba00] py-1 px-5 rounded-[5px]"
-                  >
-                    {loading1 ? (
-                      <AiOutlineLoading3Quarters className="animate-spin mr-2" />
-                    ) : (
-                      t("profile27")
-                    )}
-                  </button>
-                </div>
               )}
 
               {photo.length ? (

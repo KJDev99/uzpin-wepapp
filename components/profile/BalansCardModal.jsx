@@ -33,12 +33,9 @@ export default function BalansCardModal({
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [selectedCard, setSelectedCard] = useState(null);
-  const [selectedExtraCard, setSelectedExtraCard] = useState(null);
   const [comment, setComment] = useState("");
   const [crypto, setCrypto] = useState(false);
-
   const [copied, setCopied] = useState(false);
   const [copied1, setCopied1] = useState(false);
   const [copied2, setCopied2] = useState(false);
@@ -73,10 +70,6 @@ export default function BalansCardModal({
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);
-  };
-
-  const handleExtraCardSelect = (card) => {
-    setSelectedExtraCard(card);
   };
 
   const checkBalance1 = async () => {
@@ -251,26 +244,8 @@ export default function BalansCardModal({
     const formattedData = {
       amount: +inputValue,
     };
-    if (selectedCard?.id === "36832140-0df0-4541-9644-6bb7b8f20540") {
-      formattedData.type = "trc20";
-    }
-    if (selectedCard?.id === "444e1647-80ac-4777-a209-0e28f3a66f84") {
-      formattedData.type = "bep20";
-    }
-    if (selectedCard?.id === "07873980-c9d4-4de6-8e19-964f7d37afbe") {
-      formattedData.type = "aptos";
-    }
-    if (
-      selectedCard?.id === "7edfd32a-e076-41da-acbc-862e9c0aa47d" ||
-      selectedCard?.id === "faf3ef4a-9156-487b-a7a0-53f8c75397ac"
-    ) {
-      formattedData.type = "uzcard";
-    }
-    if (
-      selectedCard?.id === "f0488bed-7934-4ae9-94b3-f0ffc4baa4a0" ||
-      selectedCard?.id === "c5b8b570-e2c1-49c1-a6b7-7d2342109393"
-    ) {
-      formattedData.type = "humo";
+    if (selectedCard) {
+      formattedData.type = selectedCard?.auto_pay_type;
     }
     try {
       const response = await axiosInstance.post(
@@ -476,7 +451,6 @@ export default function BalansCardModal({
                           value={inputValue}
                           onChange={(e) => {
                             const value = e.target.value;
-                            // Faqat raqamlar va '.' ni qabul qilish uchun tekshirish
                             if (/^[0-9.]*$/.test(value)) {
                               setInputValue(value);
                             }
@@ -488,51 +462,7 @@ export default function BalansCardModal({
                     </>
                   )}
 
-                {selectedCard?.extra_cards?.length > 0 && (
-                  <div className={`${!inputValue ? "hidden" : ""}`}>
-                    <p className="mt-5 text-center font-medium text-[20px] leading-[22px]">
-                      {t("profile29")}
-                    </p>
-                    <div
-                      className={`max-w-[482px] mt-1 p-2 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
-                        photo ? "hidden" : ""
-                      }`}
-                    >
-                      <Image
-                        src="/file-upload.svg"
-                        className="mx-auto"
-                        width={40}
-                        height={40}
-                        alt="img"
-                      />
-                      <p className="text-[14px] leading-4 text-[#828282]">
-                        {t("profile26")}
-                      </p>
-                      <div className="hidden">
-                        <UploadComponent
-                          triggerRef={modalRef}
-                          onUploadingChange={setLoading1}
-                          onUploadSuccess={(url) =>
-                            handleUploadSuccess("cover", url)
-                          }
-                        />
-                      </div>
-                      <button
-                        onClick={() => modalRef.current.click()}
-                        className="mt-2 font-medium text-[14px] bg-[#ffba00] py-1 px-5 rounded-[5px]"
-                      >
-                        {loading1 ? (
-                          <AiOutlineLoading3Quarters className="animate-spin mr-2" />
-                        ) : (
-                          t("profile27")
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {selectedCurrency !== "USD" &&
-                selectedCurrency !== "UZS" &&
+                {selectedCard?.is_auto_pay === false &&
                 selectedCard?.id !== "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
                   <>
                     <p className="mt-5 text-center font-medium text-[20px] leading-[22px]">
@@ -594,10 +524,6 @@ export default function BalansCardModal({
                                 parseFloat(inputValue) < 1000)
                                 ? "bg-[#b7b7b7] cursor-not-allowed"
                                 : "bg-[#ffba00] cursor-pointer"
-                            } ${
-                              selectedCard?.extra_cards?.length > 0
-                                ? "hidden"
-                                : ""
                             }`}
                           >
                             {t("next")}
@@ -662,147 +588,174 @@ export default function BalansCardModal({
               ""
             )}
           </div>
-          {selectedCard && selectedCurrency === "USD" && (
-            <div
-              className={`max-w-[400px] w-full ${
-                (selectedCard.video_url ||
-                  crypto ||
-                  selectedCard.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5") &&
-                "w-full px-6"
-              } pt-8 pb-8 bg-[#f9f9f9] rounded-tr-[10px] rounded-br-[10px]`}
-            >
-              {selectedCard?.video_url && (
-                <iframe
-                  width="100%"
-                  height="200"
-                  src={selectedCard?.video_url}
-                  allowFullScreen
-                ></iframe>
-              )}
-              {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
-                <>
-                  {crypto && (
-                    <>
-                      <Image
-                        src="/trc20.jpg"
-                        className="mt-5 mx-auto w-[200px] h-[200px]"
-                        width={241}
-                        height={241}
-                        alt="img"
-                      />
-                      <button
-                        ref={buttonRef}
-                        className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                          selectedCard.card_number.length > 19
-                            ? "text-[9px]"
-                            : ""
-                        } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                        onClick={copyCryptoNumber}
-                      >
-                        {copied2 ? (
-                          <MdCheck size={24} />
-                        ) : (
-                          <MdOutlineContentCopy size={24} />
-                        )}
-                        TAKhi9hHNuajmi5WyWj2fLDmaCFUKPuGVQ
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : selectedCard.id === "444e1647-80ac-4777-a209-0e28f3a66f84" ? (
-                <>
-                  {crypto && (
-                    <>
-                      <Image
-                        src="/bep20.jpg"
-                        className="mt-5 mx-auto w-[200px] h-[200px]"
-                        width={241}
-                        height={241}
-                        alt="img"
-                      />
-                      <button
-                        ref={buttonRef}
-                        className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                          selectedCard.card_number.length > 19
-                            ? "text-[9px]"
-                            : ""
-                        } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                        onClick={copyCryptoNumber}
-                      >
-                        {copied2 ? (
-                          <MdCheck size={24} />
-                        ) : (
-                          <MdOutlineContentCopy size={24} />
-                        )}
-                        0x1b246eee83c122106612d36bbaedc241933f4d94
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : selectedCard.id === "07873980-c9d4-4de6-8e19-964f7d37afbe" ? (
-                <>
-                  {crypto && (
-                    <>
-                      <Image
-                        src="/aptos.jpg"
-                        className="mt-5 mx-auto w-[200px] h-[200px]"
-                        width={241}
-                        height={241}
-                        alt="img"
-                      />
-                      <button
-                        ref={buttonRef}
-                        className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                          selectedCard.card_number.length > 19
-                            ? "text-[9px]"
-                            : ""
-                        } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                        onClick={copyCryptoNumber}
-                      >
-                        {copied2 ? (
-                          <MdCheck size={24} />
-                        ) : (
-                          <MdOutlineContentCopy size={24} />
-                        )}
-                        0x523f93300e905007437ca0c7180716384b6d690b11093f7b50816cff4b9c005d
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : selectedCard.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
-                <>
-                  <Image
-                    src={selectedCard.photo}
-                    className="mt-5 mx-auto rounded-xl w-[241px] h-[152px]"
-                    width={241}
-                    height={152}
-                    alt="img"
-                  />
-                </>
-              ) : null}
-            </div>
-          )}
-          {selectedCard && selectedCurrency !== "USD" && (
-            <div className="max-w-[400px] w-full px-[24px] pt-8 pb-8 bg-[#f9f9f9] rounded-tr-[10px] rounded-br-[10px]">
-              <p className="font-semibold text-[24px] leading-[28px]">
-                {selectedCard.card_name}
-              </p>
-              <p className="mt-2.5 font-semibold text-[24px] leading-[28px]">
-                {selectedCard.card_holder}
-              </p>
-              {selectedCard?.video_url && (
-                <iframe
-                  width="100%"
-                  height="200"
-                  src={selectedCard?.video_url}
-                  className="mt-5 rounded-xl"
-                  allowFullScreen
-                ></iframe>
-              )}
-              {crypto && (
+
+          <div>
+            {selectedCard && selectedCurrency === "USD" && (
+              <div
+                className={`max-w-[400px] w-full ${
+                  (selectedCard.video_url ||
+                    crypto ||
+                    selectedCard.id ===
+                      "8f31f905-d153-4cb9-8514-5c3c5b53dac5") &&
+                  "w-full px-6"
+                } pt-8 pb-8 bg-[#f9f9f9] rounded-tr-[10px] rounded-br-[10px]`}
+              >
+                {selectedCard?.video_url && (
+                  <iframe
+                    width="100%"
+                    height="200"
+                    src={selectedCard?.video_url}
+                    allowFullScreen
+                  ></iframe>
+                )}
+
+                {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
+                  <>
+                    {crypto && (
+                      <>
+                        <Image
+                          src="/trc20.jpg"
+                          className="mt-5 mx-auto w-[200px] h-[200px]"
+                          width={241}
+                          height={241}
+                          alt="img"
+                        />
+                        <button
+                          ref={buttonRef}
+                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
+                            selectedCard.card_number.length > 19
+                              ? "text-[9px]"
+                              : ""
+                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                          onClick={copyCryptoNumber}
+                        >
+                          {copied2 ? (
+                            <MdCheck size={24} />
+                          ) : (
+                            <MdOutlineContentCopy size={24} />
+                          )}
+                          TAKhi9hHNuajmi5WyWj2fLDmaCFUKPuGVQ
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : selectedCard.id ===
+                  "444e1647-80ac-4777-a209-0e28f3a66f84" ? (
+                  <>
+                    {crypto && (
+                      <>
+                        <Image
+                          src="/bep20.jpg"
+                          className="mt-5 mx-auto w-[200px] h-[200px]"
+                          width={241}
+                          height={241}
+                          alt="img"
+                        />
+                        <button
+                          ref={buttonRef}
+                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
+                            selectedCard.card_number.length > 19
+                              ? "text-[9px]"
+                              : ""
+                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                          onClick={copyCryptoNumber}
+                        >
+                          {copied2 ? (
+                            <MdCheck size={24} />
+                          ) : (
+                            <MdOutlineContentCopy size={24} />
+                          )}
+                          0x1b246eee83c122106612d36bbaedc241933f4d94
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : selectedCard.id ===
+                  "07873980-c9d4-4de6-8e19-964f7d37afbe" ? (
+                  <>
+                    {crypto && (
+                      <>
+                        <Image
+                          src="/aptos.jpg"
+                          className="mt-5 mx-auto w-[200px] h-[200px]"
+                          width={241}
+                          height={241}
+                          alt="img"
+                        />
+                        <button
+                          ref={buttonRef}
+                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
+                            selectedCard.card_number.length > 19
+                              ? "text-[9px]"
+                              : ""
+                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                          onClick={copyCryptoNumber}
+                        >
+                          {copied2 ? (
+                            <MdCheck size={24} />
+                          ) : (
+                            <MdOutlineContentCopy size={24} />
+                          )}
+                          0x523f93300e905007437ca0c7180716384b6d690b11093f7b50816cff4b9c005d
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : selectedCard.id ===
+                  "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
+                  <>
+                    <Image
+                      src={selectedCard.photo}
+                      className="mt-5 mx-auto rounded-xl w-[241px] h-[152px]"
+                      width={241}
+                      height={152}
+                      alt="img"
+                    />
+                  </>
+                ) : null}
+              </div>
+            )}
+            {selectedCard && selectedCurrency !== "USD" && (
+              <div className="max-w-[400px] w-full px-[24px] pt-8 pb-8 bg-[#f9f9f9] rounded-tr-[10px] rounded-br-[10px]">
+                <p className="font-semibold text-[24px] leading-[28px]">
+                  {selectedCard.card_name}
+                </p>
+                <p className="mt-2.5 font-semibold text-[24px] leading-[28px]">
+                  {selectedCard.card_holder}
+                </p>
+                {selectedCard?.video_url && (
+                  <iframe
+                    width="100%"
+                    height="200"
+                    src={selectedCard?.video_url}
+                    className="mt-5 rounded-xl"
+                    allowFullScreen
+                  ></iframe>
+                )}
+                {crypto && (
+                  <button
+                    className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
+                      selectedCard.card_number.length > 19 ? "text-[9px]" : ""
+                    } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                    onClick={copyCardNumber}
+                  >
+                    {copied ? (
+                      <MdCheck size={24} />
+                    ) : (
+                      <MdOutlineContentCopy size={24} />
+                    )}
+                    {selectedCard.card_number}
+                  </button>
+                )}
                 <button
                   className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
                     selectedCard.card_number.length > 19 ? "text-[9px]" : ""
+                  } ${
+                    selectedCard?.id !==
+                      "5e41111f-2187-493c-94ae-69bb1e137c10" &&
+                    selectedCard?.id !== "31067404-94d2-4717-90c7-51463263ef1b"
+                      ? "hidden"
+                      : ""
                   } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
                   onClick={copyCardNumber}
                 >
@@ -813,32 +766,14 @@ export default function BalansCardModal({
                   )}
                   {selectedCard.card_number}
                 </button>
-              )}
-              <button
-                className={`flex items-center gap-[5px] mt-10 py-[10px] px-[15px] font-medium ${
-                  selectedCard.card_number.length > 19 ? "text-[9px]" : ""
-                } ${
-                  selectedCard?.id !== "5e41111f-2187-493c-94ae-69bb1e137c10" &&
-                  selectedCard?.id !== "31067404-94d2-4717-90c7-51463263ef1b"
-                    ? "hidden"
-                    : ""
-                } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                onClick={copyCardNumber}
-              >
-                {copied ? (
-                  <MdCheck size={24} />
-                ) : (
-                  <MdOutlineContentCopy size={24} />
-                )}
-                {selectedCard.card_number}
-              </button>
-              <p className="mt-[87px] text-[14px] leading-[18px]">
-                {t("profile30")}{" "}
-                <a href="t.me/Barbossa_gaming">@Barbossa_gaming</a>{" "}
-                {t("profile31")}
-              </p>
-            </div>
-          )}
+                <p className="mt-[87px] text-[14px] leading-[18px]">
+                  {t("profile30")}{" "}
+                  <a href="t.me/Barbossa_gaming">@Barbossa_gaming</a>{" "}
+                  {t("profile31")}
+                </p>
+              </div>
+            )}
+          </div>
           <button
             onClick={() => {
               onClose;
