@@ -351,41 +351,44 @@ export default function BalansCardModal({
             </div>
 
             <div className="flex gap-2 flex-wrap mt-4">
-              {selectedCard?.extra_cards?.map((card) => (
-                <div
-                  key={card.id}
-                  className="flex items-center gap-2 border border-[#ffba00] px-3 py-1 rounded-lg"
-                >
-                  <button
-                    onClick={() =>
-                      handleCopyCardNumber(card.id, card.card_number)
-                    }
-                    className="flex items-center gap-1 mx-auto px-[15px] font-medium text-[16px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
+              {(crypto || selectedCard?.is_auto_pay === false) &&
+                selectedCard?.extra_cards?.map((card) => (
+                  <div
+                    key={card.id}
+                    className="flex items-center gap-2 border border-[#ffba00] px-3 py-1 rounded-lg"
                   >
-                    {copiedCardId === card.id ? (
-                      <MdCheck size={24} />
-                    ) : (
-                      <MdOutlineContentCopy size={24} />
-                    )}
-                    {card.card_number}
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleCopyPhoneNumber(card.id, card.phone_number)
-                    }
-                    className="flex items-center gap-[5px] mx-auto px-[15px] font-medium text-[16px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
-                  >
-                    {copiedPhoneId === card.id ? (
-                      <MdCheck size={24} />
-                    ) : (
-                      <MdOutlineContentCopy size={24} />
-                    )}
-                    {card.phone_number}
-                  </button>
-                  <p>{card.full_name}</p>
-                  <p>{card.bank_name}</p>
-                </div>
-              ))}
+                    <button
+                      onClick={() =>
+                        handleCopyCardNumber(card.id, card.card_number)
+                      }
+                      className="flex items-center gap-1 mx-auto px-[15px] font-medium text-[16px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
+                    >
+                      {copiedCardId === card.id ? (
+                        <MdCheck size={24} />
+                      ) : (
+                        <MdOutlineContentCopy size={24} />
+                      )}
+                      {card.card_number}
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleCopyPhoneNumber(card.id, card.phone_number)
+                      }
+                      className={`flex items-center gap-[5px] mx-auto px-[15px] font-medium text-[16px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer ${
+                        card.phone_number ? "" : "hidden"
+                      }`}
+                    >
+                      {copiedPhoneId === card.id ? (
+                        <MdCheck size={24} />
+                      ) : (
+                        <MdOutlineContentCopy size={24} />
+                      )}
+                      {card.phone_number}
+                    </button>
+                    <p>{card.full_name}</p>
+                    <p>{card.bank_name}</p>
+                  </div>
+                ))}
             </div>
 
             {selectedCard?.id === "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
@@ -464,7 +467,7 @@ export default function BalansCardModal({
 
                 {selectedCard?.is_auto_pay === false &&
                 selectedCard?.id !== "8f31f905-d153-4cb9-8514-5c3c5b53dac5" ? (
-                  <>
+                  <div className={`${!inputValue ? "hidden" : ""}`}>
                     <p className="mt-5 text-center font-medium text-[20px] leading-[22px]">
                       {t("profile29")}
                     </p>
@@ -503,7 +506,7 @@ export default function BalansCardModal({
                         )}
                       </button>
                     </div>
-                  </>
+                  </div>
                 ) : (
                   <>
                     {selectedCard && (

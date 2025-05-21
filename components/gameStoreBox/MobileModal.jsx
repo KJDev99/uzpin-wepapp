@@ -1,31 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import Image from "next/image";
 import axiosInstance from "@/libs/axios";
-import { Alert } from "../Alert";
 import { X } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Alert } from "../Alert";
 
-export function MobileModal({
-  //   data,
-  isOpen,
-  onClose,
-  cart,
-  //   totalUC,
-  //   totalPrice,
-  clear,
-  //   savedCurrency,
-  gameId,
-}) {
+export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   const pathname = usePathname();
   const id = pathname.replace("/all-games/", "");
   const router = useRouter();
   const { t } = useTranslation();
   const [token, setToken] = useState(null);
-
   const [error2, setError] = useState(false);
   const [error3, setError3] = useState(false);
   const [error4, setError4] = useState(false);
@@ -40,6 +29,7 @@ export function MobileModal({
   const [discount, setDiscount] = useState(null);
   const [buttonLabel, setButtonLabel] = useState("Tekshirish");
   const [loading, setLoading] = useState(false);
+  const [errormessage, setErrorMessage] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedProfileData = localStorage.getItem("profileData");
@@ -169,79 +159,167 @@ export function MobileModal({
     if (promo_code.trim() !== "") {
       formattedData.promo_code = promo_code;
     }
-    if (cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc") {
+    if (
+      cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
+      server === "ph"
+    ) {
       formattedData.server = ph;
     }
-    if (cleanedGameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
+    if (
+      cleanedGameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
+      server === "ru"
+    ) {
       formattedData.server = ru;
     }
     setLoading(true);
-    try {
-      const response = await axiosInstance.post(
-        "/client/mobile-legands/buy/promocode",
-        formattedData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    if (server === "ph") {
+      try {
+        const response = await axiosInstance.post(
+          // "/client/mobile-legands/buy/promocode",
+          "/client/mobile-legands/buy/promocode/new/",
+          formattedData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      setSuccess(true);
-    } catch (error) {
-      if (error.status == 401) {
-        setError401(true);
-        setTimeout(() => {
-          router.push("/login");
-        }, 1000);
-      } else if (error.response.data.code == -32014) {
+        setSuccess(true);
+      } catch (error) {
+        console.log(error.response.data.error);
         setError3(true);
-        setTimeout(() => {
-          setError3(false);
-          onClose();
-        }, 2000);
-      } else if (
-        error.response.data.error_en ==
-        "You have already used this promo code before."
-      ) {
-        setError4(true);
-        setTimeout(() => {
-          setError4(false);
-          onClose();
-        }, 2000);
-      } else if (
-        error.response.data.error_en == "Such a promo code was not found."
-      ) {
-        setError5(true);
-        setTimeout(() => {
+        setErrorMessage(
+          error.response.data.detail || error.response.data.error
+        );
+        if (error.status == 401) {
+          setError401(true);
+          setTimeout(() => {
+            router.push("/login");
+          }, 1000);
+        } else if (error.response.data.code == -32014) {
+          setError3(true);
+          setTimeout(() => {
+            setError3(false);
+            onClose();
+          }, 2000);
+        } else if (
+          error.response.data.error_en ==
+          "You have already used this promo code before."
+        ) {
+          setError4(true);
+          setTimeout(() => {
+            setError4(false);
+            onClose();
+          }, 2000);
+        } else if (
+          error.response.data.error_en == "Such a promo code was not found."
+        ) {
+          setError5(true);
+          setTimeout(() => {
+            setError5(false);
+            onClose();
+          }, 2000);
+        } else {
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+            onClose();
+          }, 2000);
+        }
+      } finally {
+        if (promo_code.trim() === "") {
           setError5(false);
-          onClose();
-        }, 2000);
-      } else {
-        setError(true);
-        setTimeout(() => {
-          setError(false);
-          onClose();
-        }, 2000);
+        }
+        if (isOpen == 2) {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 2000);
+        } else {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 2000);
+        }
+        setLoading(false);
       }
-    } finally {
-      if (promo_code.trim() === "") {
-        setError5(false);
+    } else {
+      try {
+        const response = await axiosInstance.post(
+          "/client/mobile-legands/buy/promocode",
+          // "/client/mobile-legands/buy/promocode/new/",
+          formattedData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setSuccess(true);
+      } catch (error) {
+        console.log(error.response.data.error);
+        setError3(true);
+        setErrorMessage(
+          error.response.data.detail || error.response.data.error
+        );
+        if (error.status == 401) {
+          setError401(true);
+          setTimeout(() => {
+            router.push("/login");
+          }, 1000);
+        } else if (error.response.data.code == -32014) {
+          setError3(true);
+          setTimeout(() => {
+            setError3(false);
+            onClose();
+          }, 2000);
+        } else if (
+          error.response.data.error_en ==
+          "You have already used this promo code before."
+        ) {
+          setError4(true);
+          setTimeout(() => {
+            setError4(false);
+            onClose();
+          }, 2000);
+        } else if (
+          error.response.data.error_en == "Such a promo code was not found."
+        ) {
+          setError5(true);
+          setTimeout(() => {
+            setError5(false);
+            onClose();
+          }, 2000);
+        } else {
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+            onClose();
+          }, 2000);
+        }
+      } finally {
+        if (promo_code.trim() === "") {
+          setError5(false);
+        }
+        if (isOpen == 2) {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 2000);
+        } else {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 2000);
+        }
+        setLoading(false);
       }
-      if (isOpen == 2) {
-        setTimeout(() => {
-          setSuccess(false);
-          clear();
-          onClose();
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          setSuccess(false);
-          clear();
-          onClose();
-        }, 2000);
-      }
-      setLoading(false);
     }
   };
   const handleClose = () => {
@@ -262,8 +340,8 @@ export function MobileModal({
       {error3 && (
         <Alert
           status={400}
-          title={t("profile55")}
-          message={t("profile56")}
+          title="Error"
+          message={errormessage}
           onClose={handleClose}
         />
       )}
@@ -473,6 +551,122 @@ export function MobileModal({
                   </div>
                 ))}
               </div>
+              {/* <div className="space-y-4">
+                <div className="space-y-2 flex justify-between items-center">
+                  <label
+                    htmlFor="userId"
+                    className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
+                  >
+                    User ID
+                  </label>
+                  <input
+                    id="userId"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                    placeholder="User ID"
+                    className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                  />
+                </div>
+                <div className="space-y-2 flex justify-between items-center">
+                  <label
+                    htmlFor="serverId"
+                    className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
+                  >
+                    Server ID
+                  </label>
+                  <input
+                    id="serverId"
+                    value={serverId}
+                    onChange={(e) => setServerId(e.target.value)}
+                    placeholder="Server ID"
+                    className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                  />
+                </div>
+                <div className="flex flex-col items-center space-y-4">
+                  {userName && (
+                    <p className="text-green-600 font-medium">
+                      {t("mobile1")} {userName}
+                    </p>
+                  )}
+                  {error1 && (
+                    <p className="text-red-600 font-medium">{t("mobile2")}</p>
+                  )}
+                  <div className="w-full space-y-2 flex justify-between items-center">
+                    <div className="w-full flex flex-col items-center">
+                      <div className="w-full flex items-center justify-between mb-3">
+                        <label
+                          htmlFor="serverId"
+                          className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
+                        >
+                          Promokod kiriting
+                        </label>
+                        <input
+                          id="serverId"
+                          // value={promo_code}
+                          onChange={(e) => setPromo_Code(e.target.value)}
+                          placeholder="Promokod kiriting"
+                          className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                        />
+                      </div>
+                      {discount && (
+                        <p className="text-green-600 font-medium">
+                          Chegirma narxi {item.price
+                        .toLocaleString("fr-FR", {
+                          useGrouping: true,
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 3,
+                        })
+                        .replace(",", ".")}
+                        </p>
+                      )}
+                      {error4 && (
+                        <p className="text-red-600 font-medium">
+                          {t("error4")}
+                        </p>
+                      )}
+                      {error5 && (
+                        <p className="text-red-600 font-medium">
+                          {t("error5")}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    disabled={
+                      userId.length === 0 || serverId.length === 0 || loading
+                    }
+                    onClick={
+                      buttonLabel === "Tekshirish"
+                        ? handleCheckUserAndPromo
+                        : fetchBuyHandle
+                    }
+                    className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
+                      buttonLabel === "Tekshirish"
+                        ? "bg-[#FFBA00] border-[black]"
+                        : "bg-[#FFBA00] border-[black]"
+                    } ${
+                      loading
+                        ? "bg-gray-400 border-gray-600 cursor-not-allowed"
+                        : "bg-[#FFBA00] border-black"
+                    } `}
+                  >
+                    {loading ? (
+                      <AiOutlineLoading3Quarters className="animate-spin" />
+                    ) : (
+                      buttonLabel
+                    )}
+                  </button>
+                </div>
+              </div> */}
+              {/* {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
+              <>
+                <MobileGameStore
+                  cart={cart}
+                  clear={() => ClearTash()}
+                  onClose={() => setShowPurchaseModal(false)}
+                />
+              </>
+            )} */}
             </>
           ) : (
             <div

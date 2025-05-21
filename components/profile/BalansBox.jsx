@@ -813,7 +813,7 @@ export default function BalansBox() {
                   </>
                 ) : null}
 
-                {selectedCard?.extra_cards.length > 0 &&
+                {(crypto || selectedCard?.is_auto_pay === false) &&
                   selectedCard?.extra_cards.map((card, index) => (
                     <div
                       key={index}
@@ -837,7 +837,9 @@ export default function BalansBox() {
                           onClick={() =>
                             handleCopyPhoneNumber(card.id, card.phone_number)
                           }
-                          className="flex items-center gap-[5px] font-medium text-[14px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer"
+                          className={`flex items-center gap-[5px] font-medium text-[14px] text-[#ffba00] leading-[18px] rounded-[10px] cursor-pointer ${
+                            card.phone_number ? "" : "hidden"
+                          }`}
                         >
                           {copiedPhoneId === card.id ? (
                             <MdCheck size={18} />
@@ -880,7 +882,11 @@ export default function BalansBox() {
                   selectedCard.id === "444e1647-80ac-4777-a209-0e28f3a66f84" ||
                   selectedCard.id === "07873980-c9d4-4de6-8e19-964f7d37afbe" ||
                   selectedCurrency === "UZS") && (
-                  <div className="flex justify-center">
+                  <div
+                    className={`flex justify-center ${
+                      selectedCard?.is_auto_pay === false ? "hidden" : ""
+                    }`}
+                  >
                     {!crypto ? (
                       <button
                         onClick={FetchCryptoType1}
@@ -952,7 +958,7 @@ export default function BalansBox() {
                   <>
                     <div
                       className={`max-w-[482px] mt-5 p-5 mx-auto border-2 border-gray-500 border-dashed rounded-lg text-center ${
-                        photo ? "hidden" : ""
+                        photo || !inputValue ? "hidden" : ""
                       }`}
                     >
                       <Image
