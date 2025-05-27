@@ -187,8 +187,6 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
 
         setSuccess(true);
       } catch (error) {
-        console.log(error.response.data.error);
-        setError3(true);
         setErrorMessage(
           error.response.data.detail || error.response.data.error
         );
@@ -198,6 +196,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
             router.push("/login");
           }, 1000);
         } else if (error.response.data.message) {
+          setError3(true);
           setErrorMessage(error.response.data.message);
           setTimeout(() => {
             setErrorMessage(false);
@@ -205,10 +204,6 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           }, 5000);
         } else if (error.response.data.code == -32014) {
           setError3(true);
-          setTimeout(() => {
-            setError3(false);
-            onClose();
-          }, 2000);
         } else if (
           error.response.data.error_en ==
           "You have already used this promo code before."
@@ -242,13 +237,13 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
             setSuccess(false);
             clear();
             onClose();
-          }, 2000);
+          }, 5000);
         } else {
           setTimeout(() => {
             setSuccess(false);
             clear();
             onClose();
-          }, 2000);
+          }, 5000);
         }
         setLoading(false);
       }
@@ -285,10 +280,6 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           }, 5000);
         } else if (error.response.data.code == -32014) {
           setError3(true);
-          setTimeout(() => {
-            setError3(false);
-            onClose();
-          }, 2000);
         } else if (
           error.response.data.error_en ==
           "You have already used this promo code before."
@@ -322,13 +313,13 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
             setSuccess(false);
             clear();
             onClose();
-          }, 2000);
+          }, 5000);
         } else {
           setTimeout(() => {
             setSuccess(false);
             clear();
             onClose();
-          }, 2000);
+          }, 5000);
         }
         setLoading(false);
       }
