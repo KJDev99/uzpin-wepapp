@@ -197,6 +197,12 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           setTimeout(() => {
             router.push("/login");
           }, 1000);
+        } else if (error.response.data.message) {
+          setErrorMessage(error.response.data.message);
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 2000);
         } else if (error.response.data.code == -32014) {
           setError3(true);
           setTimeout(() => {
@@ -271,6 +277,12 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           setTimeout(() => {
             router.push("/login");
           }, 1000);
+        } else if (error.response.data.message) {
+          setErrorMessage(error.response.data.message);
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 2000);
         } else if (error.response.data.code == -32014) {
           setError3(true);
           setTimeout(() => {
