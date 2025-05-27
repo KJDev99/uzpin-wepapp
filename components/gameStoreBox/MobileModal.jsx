@@ -202,7 +202,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           setTimeout(() => {
             setErrorMessage(false);
             onClose();
-          }, 2000);
+          }, 5000);
         } else if (error.response.data.code == -32014) {
           setError3(true);
           setTimeout(() => {
@@ -282,7 +282,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           setTimeout(() => {
             setErrorMessage(false);
             onClose();
-          }, 2000);
+          }, 5000);
         } else if (error.response.data.code == -32014) {
           setError3(true);
           setTimeout(() => {
