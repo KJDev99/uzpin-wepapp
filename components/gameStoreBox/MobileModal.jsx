@@ -27,7 +27,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   const [promo_code, setPromo_Code] = useState("");
   const [userName, setUserName] = useState(null);
   const [discount, setDiscount] = useState(null);
-  const [buttonLabel, setButtonLabel] = useState("Tekshirish");
+  const [buttonLabel, setButtonLabel] = useState("Sotib Olish");
   const [loading, setLoading] = useState(false);
   const [errormessage, setErrorMessage] = useState("");
   useEffect(() => {
@@ -195,6 +195,12 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           setTimeout(() => {
             router.push("/login");
           }, 1000);
+        } else if (error.status == 500) {
+          setErrorMessage("Server Error");
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 5000);
         } else if (error.response.data.message) {
           setError3(true);
           setErrorMessage(error.response.data.message);
@@ -262,7 +268,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
 
         setSuccess(true);
       } catch (error) {
-        console.log(error.response.data.error);
+        console.log(error);
         setError3(true);
         setErrorMessage(
           error.response.data.detail || error.response.data.error
@@ -272,6 +278,12 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
           setTimeout(() => {
             router.push("/login");
           }, 1000);
+        } else if (error.status == 500) {
+          setErrorMessage("Server Error");
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 5000);
         } else if (error.response.data.message) {
           setErrorMessage(error.response.data.message);
           setTimeout(() => {
@@ -340,6 +352,14 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
 
   return (
     <>
+      {errormessage && (
+        <Alert
+          status={400}
+          title="Error"
+          message={errormessage}
+          onClose={handleClose}
+        />
+      )}
       {error3 && (
         <Alert
           status={400}
@@ -481,47 +501,6 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                             {t("mobile2")}
                           </p>
                         )}
-                        <div className="w-full space-y-2 flex justify-between items-center">
-                          {/* <div className="w-full flex flex-col items-center">
-                            <div className="w-full flex items-center justify-between mb-3">
-                              <label
-                                htmlFor="serverId"
-                                className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
-                              >
-                                Promokod kiriting
-                              </label>
-                              <input
-                                id="serverId"
-                                // value={promo_code}
-                                onChange={(e) => setPromo_Code(e.target.value)}
-                                placeholder="Promokod kiriting"
-                                className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                              />
-                            </div>
-                            {discount && (
-                              <p className="text-green-600 font-medium">
-                                Chegirma narxi{" "}
-                                {(item.price * (1 - discount / 100))
-                                  .toLocaleString("fr-FR", {
-                                    useGrouping: true,
-                                    minimumFractionDigits: 0,
-                                    maximumFractionDigits: 3,
-                                  })
-                                  .replace(",", ".")}
-                              </p>
-                            )}
-                            {error4 && (
-                              <p className="text-red-600 font-medium">
-                                {t("error4")}
-                              </p>
-                            )}
-                            {error5 && (
-                              <p className="text-red-600 font-medium">
-                                {t("error5")}
-                              </p>
-                            )}
-                          </div> */}
-                        </div>
                         <button
                           disabled={
                             userId.length === 0 ||
@@ -529,8 +508,9 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                             loading
                           }
                           onClick={
-                            buttonLabel === "Tekshirish"
-                              ? handleCheckUserAndPromo
+                            buttonLabel === "Sotib Olish"
+                              ? // ? handleCheckUserAndPromo
+                                fetchBuyHandle
                               : fetchBuyHandle
                           }
                           className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
@@ -554,122 +534,6 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                   </div>
                 ))}
               </div>
-              {/* <div className="space-y-4">
-                <div className="space-y-2 flex justify-between items-center">
-                  <label
-                    htmlFor="userId"
-                    className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
-                  >
-                    User ID
-                  </label>
-                  <input
-                    id="userId"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    placeholder="User ID"
-                    className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                  />
-                </div>
-                <div className="space-y-2 flex justify-between items-center">
-                  <label
-                    htmlFor="serverId"
-                    className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
-                  >
-                    Server ID
-                  </label>
-                  <input
-                    id="serverId"
-                    value={serverId}
-                    onChange={(e) => setServerId(e.target.value)}
-                    placeholder="Server ID"
-                    className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                  />
-                </div>
-                <div className="flex flex-col items-center space-y-4">
-                  {userName && (
-                    <p className="text-green-600 font-medium">
-                      {t("mobile1")} {userName}
-                    </p>
-                  )}
-                  {error1 && (
-                    <p className="text-red-600 font-medium">{t("mobile2")}</p>
-                  )}
-                  <div className="w-full space-y-2 flex justify-between items-center">
-                    <div className="w-full flex flex-col items-center">
-                      <div className="w-full flex items-center justify-between mb-3">
-                        <label
-                          htmlFor="serverId"
-                          className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
-                        >
-                          Promokod kiriting
-                        </label>
-                        <input
-                          id="serverId"
-                          // value={promo_code}
-                          onChange={(e) => setPromo_Code(e.target.value)}
-                          placeholder="Promokod kiriting"
-                          className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                        />
-                      </div>
-                      {discount && (
-                        <p className="text-green-600 font-medium">
-                          Chegirma narxi {item.price
-                        .toLocaleString("fr-FR", {
-                          useGrouping: true,
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 3,
-                        })
-                        .replace(",", ".")}
-                        </p>
-                      )}
-                      {error4 && (
-                        <p className="text-red-600 font-medium">
-                          {t("error4")}
-                        </p>
-                      )}
-                      {error5 && (
-                        <p className="text-red-600 font-medium">
-                          {t("error5")}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    disabled={
-                      userId.length === 0 || serverId.length === 0 || loading
-                    }
-                    onClick={
-                      buttonLabel === "Tekshirish"
-                        ? handleCheckUserAndPromo
-                        : fetchBuyHandle
-                    }
-                    className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
-                      buttonLabel === "Tekshirish"
-                        ? "bg-[#FFBA00] border-[black]"
-                        : "bg-[#FFBA00] border-[black]"
-                    } ${
-                      loading
-                        ? "bg-gray-400 border-gray-600 cursor-not-allowed"
-                        : "bg-[#FFBA00] border-black"
-                    } `}
-                  >
-                    {loading ? (
-                      <AiOutlineLoading3Quarters className="animate-spin" />
-                    ) : (
-                      buttonLabel
-                    )}
-                  </button>
-                </div>
-              </div> */}
-              {/* {gameId == "00984e54-78f0-44f8-ad48-dac23d838bdc" && (
-              <>
-                <MobileGameStore
-                  cart={cart}
-                  clear={() => ClearTash()}
-                  onClose={() => setShowPurchaseModal(false)}
-                />
-              </>
-            )} */}
             </>
           ) : (
             <div
