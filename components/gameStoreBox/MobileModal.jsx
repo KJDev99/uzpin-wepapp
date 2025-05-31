@@ -256,8 +256,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
     } else {
       try {
         const response = await axiosInstance.post(
-          "/client/mobile-legands/buy/promocode",
-          // "/client/mobile-legands/buy/promocode/new/",
+          "/client/mobile-legands/buy/promocode/new/",
           formattedData,
           {
             headers: {
