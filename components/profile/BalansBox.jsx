@@ -661,7 +661,7 @@ export default function BalansBox() {
           </div>
 
           {/* {visibleCard && <BalansCardModal />} */}
-          <div className={`${visibleCard ? "block" : "hidden"}`}>
+          <div className={`${visibleCard ? "block" : "hidden"} pb-24`}>
             <div>
               {selectedCard?.video_url && (
                 <iframe
