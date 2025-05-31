@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaCheck } from "react-icons/fa6";
 import { MdCheck, MdOutlineContentCopy } from "react-icons/md";
+import ReactPlayer from "react-player";
 import { Alert } from "../Alert";
 import Loader from "../Loader";
 import UploadComponent from "../UploadComponent";
@@ -604,12 +605,18 @@ export default function BalansCardModal({
                 } pt-8 pb-8 bg-[#f9f9f9] rounded-tr-[10px] rounded-br-[10px]`}
               >
                 {selectedCard?.video_url && (
-                  <iframe
+                  <ReactPlayer
+                    url={selectedCard?.video_url}
+                    controls
                     width="100%"
-                    height="200"
-                    src={selectedCard?.video_url}
-                    allowFullScreen
-                  ></iframe>
+                    height="200px"
+                  />
+                  // <iframe
+                  //   width="100%"
+                  //   height="200"
+                  //   src={selectedCard?.video_url}
+                  //   allowFullScreen
+                  // ></iframe>
                 )}
 
                 {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
@@ -727,13 +734,20 @@ export default function BalansCardModal({
                   {selectedCard.card_holder}
                 </p>
                 {selectedCard?.video_url && (
-                  <iframe
+                  <ReactPlayer
+                    url={selectedCard?.video_url}
+                    controls
                     width="100%"
-                    height="200"
-                    src={selectedCard?.video_url}
+                    height="200px"
                     className="mt-5 rounded-xl"
-                    allowFullScreen
-                  ></iframe>
+                  />
+                  // <iframe
+                  //   width="100%"
+                  //   height="200"
+                  //   src={selectedCard?.video_url}
+                  //   className="mt-5 rounded-xl"
+                  //   allowFullScreen
+                  // ></iframe>
                 )}
                 {crypto && selectedCard?.extra_cards?.length === 0 && (
                   <button

@@ -11,6 +11,7 @@ import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdCheck, MdOutlineContentCopy } from "react-icons/md";
 import { TfiReload } from "react-icons/tfi";
+import ReactPlayer from "react-player";
 import { Alert } from "../Alert";
 import Loader from "../Loader";
 import UploadComponent from "../UploadComponent";
@@ -664,13 +665,20 @@ export default function BalansBox() {
           <div className={`${visibleCard ? "block" : "hidden"} pb-24`}>
             <div>
               {selectedCard?.video_url && (
-                <iframe
+                <ReactPlayer
+                  url={selectedCard?.video_url}
+                  controls
                   width="100%"
-                  height="200"
-                  src={selectedCard?.video_url}
+                  height="200px"
                   className="mb-5"
-                  allowFullScreen
-                ></iframe>
+                />
+                // <iframe
+                //   width="100%"
+                //   height="200"
+                //   src={selectedCard?.video_url}
+                //   className="mb-5"
+                //   allowFullScreen
+                // ></iframe>
               )}
               <h3 className="font-semibold text-[16px]">{t("profile24")}</h3>
               <p className="mt-2.5 font-medium text-[#313131] text-[14px]">
