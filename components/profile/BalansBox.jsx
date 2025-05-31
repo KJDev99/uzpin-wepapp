@@ -38,6 +38,7 @@ export default function BalansBox() {
   const [error1, setError1] = useState(false);
   const [error2, setError2] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [rublError, setRublError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -345,6 +346,26 @@ export default function BalansBox() {
     }
   };
 
+  const rublAutoPay = async () => {
+    try {
+      const response = await axiosInstance.post(
+        "client/create-code-pay-payment/",
+        {
+          amount: +inputValue,
+          method: "sbp",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      window.open(response.data.url, "_blank");
+    } catch (error) {
+      setRublError(true);
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -381,6 +402,16 @@ export default function BalansBox() {
           status={400}
           title={t("profile14")}
           message={t("profile15")}
+        />
+      )}
+      {rublError && (
+        <Alert
+          onClose={() => {
+            setRublError(false);
+            window.location.reload();
+          }}
+          status={400}
+          title={"Error"}
         />
       )}
       {error1 && (
@@ -588,16 +619,18 @@ export default function BalansBox() {
               </div>
             )}
             <button
-              onClick={openModal}
+              onClick={selectedCurrency === "RUB" ? rublAutoPay : openModal}
               disabled={
                 selectedCurrency !== "USD" &&
                 selectedCurrency !== "UZS" &&
-                !inputValue.trim()
+                // !inputValue.trim() &&
+                inputValue < 10
               }
               className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors max-sm:hidden ${
-                !inputValue.trim() &&
+                // !inputValue.trim() &&
                 selectedCurrency !== "USD" &&
-                selectedCurrency !== "UZS"
+                selectedCurrency !== "UZS" &&
+                inputValue < 10
                   ? "bg-[#b7b7b7] hover:bg-[#b7b7b7] cursor-not-allowed"
                   : ""
               }`}
@@ -605,14 +638,18 @@ export default function BalansBox() {
               {t("profile23")}
             </button>
             <button
-              onClick={toggleCardVisibile}
+              onClick={
+                selectedCurrency === "RUB" ? rublAutoPay : toggleCardVisibile
+              }
               disabled={
                 selectedCurrency !== "USD" &&
                 selectedCurrency !== "UZS" &&
-                !inputValue.trim()
+                inputValue < 10
+                // !inputValue.trim()
               }
               className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden ${
-                !inputValue.trim() &&
+                // !inputValue.trim() &&
+                inputValue < 10 &&
                 selectedCurrency !== "USD" &&
                 selectedCurrency !== "UZS"
                   ? "bg-[#b7b7b7] hover:bg-[#b7b7b7] cursor-not-allowed"
@@ -624,7 +661,7 @@ export default function BalansBox() {
           </div>
 
           {/* {visibleCard && <BalansCardModal />} */}
-          <div className={`${visibleCard ? "block" : "hidden"} pb-24`}>
+          <div className={`${visibleCard ? "block" : "hidden"}`}>
             <div>
               {selectedCard?.video_url && (
                 <iframe
