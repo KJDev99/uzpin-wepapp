@@ -347,18 +347,10 @@ export default function BalansBox() {
     }
   };
 
-  const rublAutoPay = () => {
-    // Yangi tab yoki popup ni darhol ochish
-    const newTab = window.open("", "_blank");
-
-    // Agar popup bloklangan bo‘lsa
-    if (!newTab) {
-      setRublError(true);
-      return;
-    }
-
-    axiosInstance
-      .post(
+  const rublAutoPay = async () => {
+    try {
+      // So‘rov yuboriladi
+      const response = await axiosInstance.post(
         "client/create-code-pay-payment/",
         {
           amount: +inputValue,
@@ -369,15 +361,13 @@ export default function BalansBox() {
             Authorization: `Bearer ${token}`,
           },
         }
-      )
-      .then((response) => {
-        // URL ni yangi ochilgan tabga yo‘naltirish
-        newTab.location.href = response.data.url;
-      })
-      .catch((error) => {
-        newTab.close(); // xatolik bo‘lsa, oynani yopish
-        setRublError(true);
-      });
+      );
+
+      // iPhone WebApp rejimida ishonchli redirect
+      window.location.href = response.data.url;
+    } catch (error) {
+      setRublError(true);
+    }
   };
 
   if (loading) {
