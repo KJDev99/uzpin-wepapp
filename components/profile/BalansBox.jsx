@@ -620,13 +620,13 @@ export default function BalansBox() {
                   placeholder={t("profile22")}
                   className="w-full p-3 border rounded-lg border-[#E7E7E7] bg-[#F9F9F9] focus:ring-yellow-400"
                 />
-                <ReactPlayer
+                {/* <ReactPlayer
                   url={selectedCard?.video_url}
                   controls
                   width="100%"
                   height="200px"
                   className="mb-5"
-                />
+                /> */}
               </div>
             )}
             <button
