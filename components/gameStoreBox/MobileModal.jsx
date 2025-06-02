@@ -7,7 +7,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { BsQuestionCircle } from "react-icons/bs";
 import { Alert } from "../Alert";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   const pathname = usePathname();
@@ -30,6 +36,9 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   const [buttonLabel, setButtonLabel] = useState("Sotib Olish");
   const [loading, setLoading] = useState(false);
   const [errormessage, setErrorMessage] = useState("");
+  // Fixed the useState type declaration
+  const [hoveredMenu, setHoveredMenu] = useState(null);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedProfileData = localStorage.getItem("profileData");
@@ -39,9 +48,28 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
       }
     }
   }, []);
-  const ru = "ru";
+
+  // Hover event handlers
+  const handleMouseEnter = (menu) => {
+    // Faqat desktop da hover ishlashi uchun
+    if (window.innerWidth >= 768) {
+      setHoveredMenu(menu);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    // Faqat desktop da hover ishlashi uchun
+    if (window.innerWidth >= 768) {
+      setHoveredMenu(null);
+    }
+  };
+
+  const handleClick = (menu) => {
+    setHoveredMenu(hoveredMenu === menu ? null : menu);
+  };
   const ph = "ph";
   const cleanedGameId = id ? id.trim() : "";
+
   const handleCheckUser = async () => {
     const formattedData = {
       user_id: userId,
@@ -257,6 +285,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
       try {
         const response = await axiosInstance.post(
           "/client/mobile-legands/buy/promocode/new/",
+          // "/client/mobile-legands/buy/promocode/new/",
           formattedData,
           {
             headers: {
@@ -336,6 +365,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
       }
     }
   };
+
   const handleClose = () => {
     setSuccess(false);
     setError(false);
@@ -401,7 +431,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
         open={isOpen}
       >
         <div
-          className={`sticky top-[25%] col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:fixed max-sm:top-auto max-sm:bottom-[110px] left-0 right-0 max-w-[500px] mx-auto max-sm:col-span-5 max-sm:${
+          className={`sticky top-[25%] col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:fixed max-sm:top-auto max-sm:bottom-[110px] left-0 right-0 max-w-[500px] w-full mx-auto max-sm:col-span-5 max-sm:${
             cart.length > 0 ? "block" : "hidden"
           }`}
         >
@@ -466,13 +496,53 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                         >
                           User ID
                         </label>
-                        <input
-                          id="userId"
-                          value={userId}
-                          onChange={(e) => setUserId(e.target.value)}
-                          placeholder="User ID"
-                          className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                        />
+                        <div className="flex items-center gap-3">
+                          <input
+                            id="userId"
+                            value={userId}
+                            onChange={(e) => setUserId(e.target.value)}
+                            placeholder="User ID"
+                            className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                          />
+                          <DropdownMenu
+                            modal={false}
+                            open={hoveredMenu === "user"}
+                            onOpenChange={(open) => {
+                              // Faqat tashqaridan yopilganda state ni yangilash
+                              if (!open && hoveredMenu === "user") {
+                                setHoveredMenu(null);
+                              }
+                            }}
+                          >
+                            <DropdownMenuTrigger asChild>
+                              <div
+                                onMouseEnter={() => handleMouseEnter("user")}
+                                onMouseLeave={handleMouseLeave}
+                                onClick={() => handleClick("user")}
+                              >
+                                <BsQuestionCircle
+                                  size={24}
+                                  className="cursor-pointer"
+                                />
+                              </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                              onMouseEnter={() => handleMouseEnter("user")}
+                              onMouseLeave={handleMouseLeave}
+                              className="bg-transparent border-none shadow-none drop-shadow-none"
+                            >
+                              <div className="p-2 bg-transparent">
+                                <Image
+                                  src="/user-id.jpg"
+                                  width={500}
+                                  height={500}
+                                  className="max-w-[500px] w-full h-auto"
+                                  alt="img"
+                                />
+                              </div>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
                       </div>
                       <div className="space-y-2 flex justify-between items-center">
                         <label
@@ -481,13 +551,53 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                         >
                           Server ID
                         </label>
-                        <input
-                          id="serverId"
-                          value={serverId}
-                          onChange={(e) => setServerId(e.target.value)}
-                          placeholder="Server ID"
-                          className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                        />
+                        <div className="flex items-center gap-3">
+                          <input
+                            id="serverId"
+                            value={serverId}
+                            onChange={(e) => setServerId(e.target.value)}
+                            placeholder="Server ID"
+                            className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
+                          />
+                          <DropdownMenu
+                            modal={false}
+                            open={hoveredMenu === "server"}
+                            onOpenChange={(open) => {
+                              // Faqat tashqaridan yopilganda state ni yangilash
+                              if (!open && hoveredMenu === "server") {
+                                setHoveredMenu(null);
+                              }
+                            }}
+                          >
+                            <DropdownMenuTrigger asChild>
+                              <div
+                                onMouseEnter={() => handleMouseEnter("server")}
+                                onMouseLeave={handleMouseLeave}
+                                onClick={() => handleClick("server")}
+                              >
+                                <BsQuestionCircle
+                                  size={24}
+                                  className="cursor-pointer"
+                                />
+                              </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                              onMouseEnter={() => handleMouseEnter("server")}
+                              onMouseLeave={handleMouseLeave}
+                              className="bg-transparent border-none shadow-none drop-shadow-none"
+                            >
+                              <div className="p-2 bg-transparent">
+                                <Image
+                                  src="/server-id.jpg"
+                                  width={400}
+                                  height={400}
+                                  className="max-w-[500px] w-full h-auto"
+                                  alt="img"
+                                />
+                              </div>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
                       </div>
                       <div className="flex flex-col items-center space-y-4">
                         {userName && (

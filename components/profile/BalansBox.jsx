@@ -347,9 +347,18 @@ export default function BalansBox() {
     }
   };
 
-  const rublAutoPay = async () => {
-    try {
-      const response = await axiosInstance.post(
+  const rublAutoPay = () => {
+    // Yangi tab yoki popup ni darhol ochish
+    const newTab = window.open("", "_blank");
+
+    // Agar popup bloklangan bo‘lsa
+    if (!newTab) {
+      setRublError(true);
+      return;
+    }
+
+    axiosInstance
+      .post(
         "client/create-code-pay-payment/",
         {
           amount: +inputValue,
@@ -360,11 +369,15 @@ export default function BalansBox() {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      window.open(response.data.url, "_blank");
-    } catch (error) {
-      setRublError(true);
-    }
+      )
+      .then((response) => {
+        // URL ni yangi ochilgan tabga yo‘naltirish
+        newTab.location.href = response.data.url;
+      })
+      .catch((error) => {
+        newTab.close(); // xatolik bo‘lsa, oynani yopish
+        setRublError(true);
+      });
   };
 
   if (loading) {
@@ -393,7 +406,7 @@ export default function BalansBox() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-4">
+    <div className="p-6 max-w-4xl mx-auto max-sm:p-0 max-sm:pb-32">
       {error && (
         <Alert
           onClose={() => {
@@ -617,6 +630,13 @@ export default function BalansBox() {
                   placeholder={t("profile22")}
                   className="w-full p-3 border rounded-lg border-[#E7E7E7] bg-[#F9F9F9] focus:ring-yellow-400"
                 />
+                <ReactPlayer
+                  url={selectedCard?.video_url}
+                  controls
+                  width="100%"
+                  height="200px"
+                  className="mb-5"
+                />
               </div>
             )}
             <button
@@ -624,11 +644,9 @@ export default function BalansBox() {
               disabled={
                 selectedCurrency !== "USD" &&
                 selectedCurrency !== "UZS" &&
-                // !inputValue.trim() &&
                 inputValue < 10
               }
               className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors max-sm:hidden ${
-                // !inputValue.trim() &&
                 selectedCurrency !== "USD" &&
                 selectedCurrency !== "UZS" &&
                 inputValue < 10
@@ -646,7 +664,6 @@ export default function BalansBox() {
                 selectedCurrency !== "USD" &&
                 selectedCurrency !== "UZS" &&
                 inputValue < 10
-                // !inputValue.trim()
               }
               className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden ${
                 // !inputValue.trim() &&

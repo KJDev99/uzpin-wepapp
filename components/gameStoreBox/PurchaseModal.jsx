@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { X } from "lucide-react";
 import axiosInstance from "@/libs/axios";
-import { Alert } from "../Alert";
-import { useTranslation } from "react-i18next";
-import PurchasesModal from "../profile/PurchasesModal";
+import { X } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Alert } from "../Alert";
+import PurchasesModal from "../profile/PurchasesModal";
 
 export function PurchaseModal({
   isOpen,
@@ -20,6 +20,7 @@ export function PurchaseModal({
   savedCurrency,
   gameId,
 }) {
+  console.log(gameId);
   const { t } = useTranslation();
   const [playerId, setPlayerId] = useState("");
   const [promo_code, setPromo_Code] = useState("");
@@ -35,8 +36,6 @@ export function PurchaseModal({
   const [isOpenBuy, setIsOpenBuy] = useState(false);
   const [buyCode, setBuyCode] = useState();
   const [loading, setLoading] = useState(false);
-  const sold_type = sessionStorage.getItem("bot");
-  const cleanSoldType = sold_type.split("?")[0];
 
   const router = useRouter();
 
@@ -112,7 +111,6 @@ export function PurchaseModal({
     const formattedData = {
       currency: savedCurrency,
       gamer_id: playerId == "" ? undefined : playerId,
-      sold_type: cleanSoldType,
       items: cart.map((item) => ({
         promocode: item.id,
         count: item.quantity,
@@ -308,6 +306,7 @@ export function PurchaseModal({
                             </label>
                             <input
                               id="promo_code"
+                              // value={promo_code}
                               onChange={(e) => setPromo_Code(e.target.value)}
                               placeholder="Promokod Kiriting"
                               className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
@@ -346,53 +345,21 @@ export function PurchaseModal({
                             htmlFor="playerId"
                             className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
                           >
-                            {t("all-games-text13")}
+                            {gameId === "3f2ef70d-6e80-4f1a-8c65-9645a2e22d95"
+                              ? t("id")
+                              : t("all-games-text13")}
                           </label>
                           <input
                             id="playerId"
                             onChange={(e) => setPlayerId(e.target.value)}
-                            placeholder={t("all-games-text13")}
+                            placeholder={
+                              gameId === "3f2ef70d-6e80-4f1a-8c65-9645a2e22d95"
+                                ? t("id")
+                                : t("all-games-text13")
+                            }
                             className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
                           />
                         </div>
-                        {/* <div className="space-y-2 flex flex-col justify-between items-center">
-                          <div className="w-full flex items-center justify-between">
-                            <label
-                              htmlFor="playerId"
-                              className="text-lg font-semibold max-sm:font-normal max-sm:text-base"
-                            >
-                              Promokod Kiriting
-                            </label>
-                            <input
-                              id="promo_code"
-                              onChange={(e) => setPromo_Code(e.target.value)}
-                              placeholder="Promokod Kiriting"
-                              className="border border-[#E7E7E7] rounded-[5px] py-3 px-5 font-semibold outline-none max-sm:max-w-[163px]"
-                            />
-                          </div>
-                          {discount && (
-                            <p className="text-green-600 font-medium">
-                              Chegirma narxi{" "}
-                              {(item.price * (1 - discount / 100))
-                                .toLocaleString("fr-FR", {
-                                  useGrouping: true,
-                                  minimumFractionDigits: 0,
-                                  maximumFractionDigits: 3,
-                                })
-                                .replace(",", ".")}
-                            </p>
-                          )}
-                          {error4 && (
-                            <p className="text-red-600 font-medium">
-                              {t("error4")}
-                            </p>
-                          )}
-                          {error5 && (
-                            <p className="text-red-600 font-medium">
-                              {t("error5")}
-                            </p>
-                          )}
-                        </div> */}
 
                         <button
                           onClick={

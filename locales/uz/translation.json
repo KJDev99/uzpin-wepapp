@@ -173,5 +173,6 @@
   "comment": "Diqqat! To‘lovni amalga oshirishdan oldin izoh (comment) yozilishi majburiy. Izohsiz yuborilgan to‘lovlar qabul qilinmaydi va avtomatik ravishda rad etiladi.",
   "pay": "To'ladim",
   "update": "Yangilash",
-  "next": "Keyingisi"
+  "next": "Keyingisi",
+  "id": "User name kiriting"
 }
