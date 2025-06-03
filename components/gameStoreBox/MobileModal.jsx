@@ -68,6 +68,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
     setHoveredMenu(hoveredMenu === menu ? null : menu);
   };
   const ph = "ph";
+  const ru = "ru";
   const cleanedGameId = id ? id.trim() : "";
 
   const handleCheckUser = async () => {
@@ -200,169 +201,82 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
       formattedData.server = ru;
     }
     setLoading(true);
-    if (server === "ph") {
-      try {
-        const response = await axiosInstance.post(
-          // "/client/mobile-legands/buy/promocode",
-          "/client/mobile-legands/buy/promocode/new/",
-          formattedData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    try {
+      const response = await axiosInstance.post(
+        "/client/mobile-legands/buy/promocode/new/",
+        formattedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-        setSuccess(true);
-      } catch (error) {
-        setErrorMessage(
-          error.response.data.detail || error.response.data.error
-        );
-        if (error.status == 401) {
-          setError401(true);
-          setTimeout(() => {
-            router.push("/login");
-          }, 1000);
-        } else if (error.status == 500) {
-          setErrorMessage("Server Error");
-          setTimeout(() => {
-            setErrorMessage(false);
-            onClose();
-          }, 5000);
-        } else if (error.response.data.message) {
-          setError3(true);
-          setErrorMessage(error.response.data.message);
-          setTimeout(() => {
-            setErrorMessage(false);
-            onClose();
-          }, 5000);
-        } else if (error.response.data.code == -32014) {
-          setError3(true);
-        } else if (
-          error.response.data.error_en ==
-          "You have already used this promo code before."
-        ) {
-          setError4(true);
-          setTimeout(() => {
-            setError4(false);
-            onClose();
-          }, 2000);
-        } else if (
-          error.response.data.error_en == "Such a promo code was not found."
-        ) {
-          setError5(true);
-          setTimeout(() => {
-            setError5(false);
-            onClose();
-          }, 2000);
-        } else {
-          setError(true);
-          setTimeout(() => {
-            setError(false);
-            onClose();
-          }, 2000);
-        }
-      } finally {
-        if (promo_code.trim() === "") {
-          setError5(false);
-        }
-        if (isOpen == 2) {
-          setTimeout(() => {
-            setSuccess(false);
-            clear();
-            onClose();
-          }, 5000);
-        } else {
-          setTimeout(() => {
-            setSuccess(false);
-            clear();
-            onClose();
-          }, 5000);
-        }
-        setLoading(false);
-      }
-    } else {
-      try {
-        const response = await axiosInstance.post(
-          "/client/mobile-legands/buy/promocode/new/",
-          // "/client/mobile-legands/buy/promocode/new/",
-          formattedData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setSuccess(true);
-      } catch (error) {
-        console.log(error);
+      setSuccess(true);
+    } catch (error) {
+      setErrorMessage(error.response.data.detail || error.response.data.error);
+      if (error.status == 401) {
+        setError401(true);
+        setTimeout(() => {
+          router.push("/login");
+        }, 1000);
+      } else if (error.status == 500) {
+        setErrorMessage("Server Error");
+        setTimeout(() => {
+          setErrorMessage(false);
+          onClose();
+        }, 5000);
+      } else if (error.response.data.message) {
         setError3(true);
-        setErrorMessage(
-          error.response.data.detail || error.response.data.error
-        );
-        if (error.status == 401) {
-          setError401(true);
-          setTimeout(() => {
-            router.push("/login");
-          }, 1000);
-        } else if (error.status == 500) {
-          setErrorMessage("Server Error");
-          setTimeout(() => {
-            setErrorMessage(false);
-            onClose();
-          }, 5000);
-        } else if (error.response.data.message) {
-          setErrorMessage(error.response.data.message);
-          setTimeout(() => {
-            setErrorMessage(false);
-            onClose();
-          }, 5000);
-        } else if (error.response.data.code == -32014) {
-          setError3(true);
-        } else if (
-          error.response.data.error_en ==
-          "You have already used this promo code before."
-        ) {
-          setError4(true);
-          setTimeout(() => {
-            setError4(false);
-            onClose();
-          }, 2000);
-        } else if (
-          error.response.data.error_en == "Such a promo code was not found."
-        ) {
-          setError5(true);
-          setTimeout(() => {
-            setError5(false);
-            onClose();
-          }, 2000);
-        } else {
-          setError(true);
-          setTimeout(() => {
-            setError(false);
-            onClose();
-          }, 2000);
-        }
-      } finally {
-        if (promo_code.trim() === "") {
+        setErrorMessage(error.response.data.message);
+        setTimeout(() => {
+          setErrorMessage(false);
+          onClose();
+        }, 5000);
+      } else if (error.response.data.code == -32014) {
+        setError3(true);
+      } else if (
+        error.response.data.error_en ==
+        "You have already used this promo code before."
+      ) {
+        setError4(true);
+        setTimeout(() => {
+          setError4(false);
+          onClose();
+        }, 2000);
+      } else if (
+        error.response.data.error_en == "Such a promo code was not found."
+      ) {
+        setError5(true);
+        setTimeout(() => {
           setError5(false);
-        }
-        if (isOpen == 2) {
-          setTimeout(() => {
-            setSuccess(false);
-            clear();
-            onClose();
-          }, 5000);
-        } else {
-          setTimeout(() => {
-            setSuccess(false);
-            clear();
-            onClose();
-          }, 5000);
-        }
-        setLoading(false);
+          onClose();
+        }, 2000);
+      } else {
+        setError(true);
+        setTimeout(() => {
+          setError(false);
+          onClose();
+        }, 2000);
       }
+    } finally {
+      if (promo_code.trim() === "") {
+        setError5(false);
+      }
+      if (isOpen == 2) {
+        setTimeout(() => {
+          setSuccess(false);
+          clear();
+          onClose();
+        }, 5000);
+      } else {
+        setTimeout(() => {
+          setSuccess(false);
+          clear();
+          onClose();
+        }, 5000);
+      }
+      setLoading(false);
     }
   };
 
