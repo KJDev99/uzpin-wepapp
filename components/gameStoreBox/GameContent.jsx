@@ -16,6 +16,10 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState([]);
   const [token, setToken] = useState(null);
+  const isMobile =
+    gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
+    gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
+    gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2";
 
   // Token ni localStoragedan olish
   useEffect(() => {
@@ -117,6 +121,7 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
   // Komponent yuklanganda va kerakli o'zgarishlarda ma'lumotlarni yangilash
   useEffect(() => {
     fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.id, token, showPurchaseModal, showMobileModal]);
 
   // Korzinkadagi miqdorni yangilash
@@ -177,19 +182,7 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
 
   return (
     <div className="max-w-[1200px] mt-10 border-b border-[#828282] mx-auto font-sans max-sm:px-4 max-sm:py-5">
-      {/* Sarlavha va tavsif */}
-      {/* <div className="grid grid-cols-5">
-        <h1 className="col-span-5 text-3xl font-bold my-5 max-sm:hidden">
-          {data.name}
-        </h1>
-        <p className="col-span-3 text-lg text-[#313131] mb-[10px] max-sm:text-sm max-sm:col-span-5">
-          {data.note}
-        </p>
-      </div> */}
-
-      {/* Asosiy kontent */}
       <div className="grid grid-cols-5 gap-[50px] mb-[40px]">
-        {/* Mahsulotlar ro'yxati */}
         <div
           className={`${
             gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
@@ -329,9 +322,7 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
                         )}
 
                       {/* Mobile o'yinlar uchun maxsus tugma */}
-                      {(gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-                        gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-                        gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2") && (
+                      {isMobile && (
                         <div>
                           <button
                             onClick={() => {
@@ -354,11 +345,7 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
         {/* Korzinka paneli */}
         <div
           className={`${
-            gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-            gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-            gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
-              ? "hidden"
-              : "block"
+            isMobile ? "hidden" : "block"
           } sticky top-10 col-span-2 bg-[#F9F9F9] rounded-lg shadow-lg p-6 h-max max-sm:fixed max-sm:top-auto max-sm:bottom-[110px] left-0 right-0 w-[90%] mx-auto max-sm:col-span-5 ${
             cart.length > 0 ? "max-sm:block" : "max-sm:hidden"
           }`}
@@ -475,7 +462,9 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
                         onClick={() => setShowPurchaseModal(2)}
                         className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium border-b-2 border-[black]"
                       >
-                        {t("all-games-text11")}
+                        {gameId === "3f2ef70d-6e80-4f1a-8c65-9645a2e22d95"
+                          ? t("username")
+                          : t("all-games-text11")}
                       </button>
                     )}
                 </div>

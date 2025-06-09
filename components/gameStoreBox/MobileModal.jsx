@@ -33,10 +33,9 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   const [promo_code, setPromo_Code] = useState("");
   const [userName, setUserName] = useState(null);
   const [discount, setDiscount] = useState(null);
-  const [buttonLabel, setButtonLabel] = useState("Sotib Olish");
+  const [buttonLabel, setButtonLabel] = useState("Tekshirish");
   const [loading, setLoading] = useState(false);
   const [errormessage, setErrorMessage] = useState("");
-  // Fixed the useState type declaration
   const [hoveredMenu, setHoveredMenu] = useState(null);
 
   useEffect(() => {
@@ -49,16 +48,13 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
     }
   }, []);
 
-  // Hover event handlers
   const handleMouseEnter = (menu) => {
-    // Faqat desktop da hover ishlashi uchun
     if (window.innerWidth >= 768) {
       setHoveredMenu(menu);
     }
   };
 
   const handleMouseLeave = () => {
-    // Faqat desktop da hover ishlashi uchun
     if (window.innerWidth >= 768) {
       setHoveredMenu(null);
     }
@@ -201,82 +197,166 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
       formattedData.server = ru;
     }
     setLoading(true);
-    try {
-      const response = await axiosInstance.post(
-        "/client/mobile-legands/buy/promocode/new/",
-        formattedData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    if (cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc") {
+      try {
+        const response = await axiosInstance.post(
+          "/client/mobile-legands/buy/promocode",
+          formattedData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      setSuccess(true);
-    } catch (error) {
-      setErrorMessage(error.response.data.detail || error.response.data.error);
-      if (error.status == 401) {
-        setError401(true);
-        setTimeout(() => {
-          router.push("/login");
-        }, 1000);
-      } else if (error.status == 500) {
-        setErrorMessage("Server Error");
-        setTimeout(() => {
-          setErrorMessage(false);
-          onClose();
-        }, 5000);
-      } else if (error.response.data.message) {
-        setError3(true);
-        setErrorMessage(error.response.data.message);
-        setTimeout(() => {
-          setErrorMessage(false);
-          onClose();
-        }, 5000);
-      } else if (error.response.data.code == -32014) {
-        setError3(true);
-      } else if (
-        error.response.data.error_en ==
-        "You have already used this promo code before."
-      ) {
-        setError4(true);
-        setTimeout(() => {
-          setError4(false);
-          onClose();
-        }, 2000);
-      } else if (
-        error.response.data.error_en == "Such a promo code was not found."
-      ) {
-        setError5(true);
-        setTimeout(() => {
+        setSuccess(true);
+      } catch (error) {
+        setErrorMessage(
+          error.response.data.detail || error.response.data.error
+        );
+        if (error.status == 401) {
+          setError401(true);
+          setTimeout(() => {
+            router.push("/login");
+          }, 1000);
+        } else if (error.status == 500) {
+          setErrorMessage("Server Error");
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 5000);
+        } else if (error.response.data.message) {
+          setError3(true);
+          setErrorMessage(error.response.data.message);
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 5000);
+        } else if (error.response.data.code == -32014) {
+          setError3(true);
+        } else if (
+          error.response.data.error_en ==
+          "You have already used this promo code before."
+        ) {
+          setError4(true);
+          setTimeout(() => {
+            setError4(false);
+            onClose();
+          }, 2000);
+        } else if (
+          error.response.data.error_en == "Such a promo code was not found."
+        ) {
+          setError5(true);
+          setTimeout(() => {
+            setError5(false);
+            onClose();
+          }, 2000);
+        } else {
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+            onClose();
+          }, 2000);
+        }
+      } finally {
+        if (promo_code.trim() === "") {
           setError5(false);
-          onClose();
-        }, 2000);
-      } else {
-        setError(true);
-        setTimeout(() => {
-          setError(false);
-          onClose();
-        }, 2000);
+        }
+        if (isOpen == 2) {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 5000);
+        } else {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 5000);
+        }
+        setLoading(false);
       }
-    } finally {
-      if (promo_code.trim() === "") {
-        setError5(false);
+    } else {
+      try {
+        const response = await axiosInstance.post(
+          "/client/mobile-legands/buy/promocode/new/",
+          formattedData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setSuccess(true);
+      } catch (error) {
+        setErrorMessage(
+          error.response.data.detail || error.response.data.error
+        );
+        if (error.status == 401) {
+          setError401(true);
+          setTimeout(() => {
+            router.push("/login");
+          }, 1000);
+        } else if (error.status == 500) {
+          setErrorMessage("Server Error");
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 5000);
+        } else if (error.response.data.message) {
+          setError3(true);
+          setErrorMessage(error.response.data.message);
+          setTimeout(() => {
+            setErrorMessage(false);
+            onClose();
+          }, 5000);
+        } else if (error.response.data.code == -32014) {
+          setError3(true);
+        } else if (
+          error.response.data.error_en ==
+          "You have already used this promo code before."
+        ) {
+          setError4(true);
+          setTimeout(() => {
+            setError4(false);
+            onClose();
+          }, 2000);
+        } else if (
+          error.response.data.error_en == "Such a promo code was not found."
+        ) {
+          setError5(true);
+          setTimeout(() => {
+            setError5(false);
+            onClose();
+          }, 2000);
+        } else {
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+            onClose();
+          }, 2000);
+        }
+      } finally {
+        if (promo_code.trim() === "") {
+          setError5(false);
+        }
+        if (isOpen == 2) {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 5000);
+        } else {
+          setTimeout(() => {
+            setSuccess(false);
+            clear();
+            onClose();
+          }, 5000);
+        }
+        setLoading(false);
       }
-      if (isOpen == 2) {
-        setTimeout(() => {
-          setSuccess(false);
-          clear();
-          onClose();
-        }, 5000);
-      } else {
-        setTimeout(() => {
-          setSuccess(false);
-          clear();
-          onClose();
-        }, 5000);
-      }
-      setLoading(false);
     }
   };
 
@@ -524,34 +604,50 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                             {t("mobile2")}
                           </p>
                         )}
-                        <button
-                          disabled={
-                            userId.length === 0 ||
-                            serverId.length === 0 ||
-                            loading
-                          }
-                          onClick={
-                            buttonLabel === "Sotib Olish"
-                              ? // ? handleCheckUserAndPromo
-                                fetchBuyHandle
-                              : fetchBuyHandle
-                          }
-                          className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
-                            buttonLabel === "Tekshirish"
-                              ? "bg-[#FFBA00] border-[black]"
-                              : "bg-[#FFBA00] border-[black]"
-                          } ${
-                            loading
-                              ? "bg-gray-400 border-gray-600 cursor-not-allowed"
-                              : "bg-[#FFBA00] border-black"
-                          } `}
-                        >
-                          {loading ? (
-                            <AiOutlineLoading3Quarters className="animate-spin" />
-                          ) : (
-                            buttonLabel
-                          )}
-                        </button>
+                        {cleanedGameId ===
+                        "00984e54-78f0-44f8-ad48-dac23d838bdc" ? (
+                          <button
+                            disabled={
+                              userId.length === 0 ||
+                              serverId.length === 0 ||
+                              loading
+                            }
+                            onClick={
+                              buttonLabel === "Tekshirish"
+                                ? handleCheckUserAndPromo
+                                : fetchBuyHandle
+                            }
+                            className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
+                              buttonLabel === "Tekshirish"
+                                ? "bg-[#FFBA00] border-[black]"
+                                : "bg-[#FFBA00] border-[black]"
+                            } ${
+                              loading
+                                ? "bg-gray-400 border-gray-600 cursor-not-allowed"
+                                : "bg-[#FFBA00] border-black"
+                            } `}
+                          >
+                            {loading ? (
+                              <AiOutlineLoading3Quarters className="animate-spin" />
+                            ) : (
+                              buttonLabel
+                            )}
+                          </button>
+                        ) : (
+                          <button
+                            disabled={
+                              userId.length === 0 || serverId.length === 0
+                            }
+                            onClick={fetchBuyHandle}
+                            className={`w-full flex justify-center py-2 rounded text-black font-medium border-b-2 disabled:cursor-not-allowed ${
+                              buttonLabel === "Tekshirish"
+                                ? "bg-[#FFBA00] border-[black]"
+                                : "bg-[#FFBA00] border-[black]"
+                            }`}
+                          >
+                            Sotib olish
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -174,5 +174,6 @@
   "pay": "I have paid",
   "update": "Update ",
   "next": "Next",
-  "id": "Enter username"
+  "id": "Enter username",
+  "username": "Get by username"
 }
