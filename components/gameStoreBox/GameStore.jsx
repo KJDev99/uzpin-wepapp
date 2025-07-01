@@ -79,7 +79,7 @@ const GameStore = ({ data, gameId }) => {
           onValueChange={setActiveId}
           className="max-w-[1200px] w-full mt-5 mx-auto"
         >
-          <TabsList className="w-full bg-transparent justify-start gap-5">
+          <TabsList className="w-full h-auto pb-3 bg-transparent justify-start gap-5 overflow-x-auto">
             {data.map((item) => (
               <TabsTrigger
                 key={item.id}
