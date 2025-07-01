@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
+export function MobileModal({ isOpen, onClose, cart, clear, gameId }) {
   const pathname = usePathname();
   const id = pathname.replace("/all-games/", "");
   const router = useRouter();
@@ -65,17 +65,15 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   };
   const ph = "ph";
   const ru = "ru";
-  const cleanedGameId = id ? id.trim() : "";
-
   const handleCheckUser = async () => {
     const formattedData = {
       user_id: userId,
       server_id: serverId,
     };
-    if (cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc") {
+    if (gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc") {
       formattedData.server = ph;
     }
-    if (cleanedGameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
+    if (gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
       formattedData.server = ru;
     }
     setLoading(true);
@@ -103,7 +101,6 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
         }, 2000);
       }
       setError1(true);
-      console.error("Xatolik yuz berdi:", error);
     } finally {
       setLoading(false);
     }
@@ -185,21 +182,22 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
       formattedData.promo_code = promo_code;
     }
     if (
-      cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-      server === "ph"
+      gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
+      gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
     ) {
       formattedData.server = ph;
     }
-    if (
-      cleanedGameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-      server === "ru"
-    ) {
+    if (gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
       formattedData.server = ru;
+    }
+    if (gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d") {
+      formattedData.extra = true;
     }
     setLoading(true);
     if (
-      cleanedGameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-      cleanedGameId === "322d0721-1dca-4720-a0a3-68371ba8ed22"
+      gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
+      gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
+      gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d"
     ) {
       try {
         setLoading(true);
@@ -609,10 +607,8 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                             {t("mobile2")}
                           </p>
                         )}
-                        {cleanedGameId ===
-                          "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-                        cleanedGameId ===
-                          "322d0721-1dca-4720-a0a3-68371ba8ed22" ? (
+                        {gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
+                        gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ? (
                           <button
                             disabled={
                               userId.length === 0 ||

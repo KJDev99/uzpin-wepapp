@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function GameInfo({ data }) {
@@ -67,16 +67,17 @@ export default function GameInfo({ data }) {
                   loop
                   width="100%"
                   height="335px"
+                  className="max-w-[600px] w-full h-[335px] max-sm:h-[191px]"
                 ></video>
               </div>
             </>
           ) : (
             <iframe
-              src={data.video||null}
+              src={data.video || null}
               width="100%"
               height="335px"
-              allow="autoplay; fullscreen"
               allowFullScreen
+              style={{ height: "335px" }}
             ></iframe>
           )}
         </div>

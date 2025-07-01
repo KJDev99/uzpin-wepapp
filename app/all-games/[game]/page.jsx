@@ -11,36 +11,43 @@ export default function GameDetails() {
   const [loading, setLoading] = useState(false);
 
   const pathname = useParams();
-  const gameName = pathname.game; // pathname.game ни ўзгарувчига олиш
-
   useEffect(() => {
-    if (typeof window === "undefined") return; // Сервер томонида ишламаслик учун
-
     setLoading(true);
     const fetchStats = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/client/games/${gameName}/detail`
-        );
-        setData(response.data || []);
-      } catch (error) {
-        console.error("Ma'lumotlarni yuklashda xatolik:", error);
-      } finally {
-        setLoading(false);
+      if (pathname.game !== "1") {
+        try {
+          const response = await axiosInstance.get(
+            `/client/games/${pathname.game}/detail`
+          );
+          setData(response.data || []);
+        } catch (error) {
+          console.error("Ma'lumotlarni yuklashda xatolik:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        try {
+          const response = await axiosInstance.get(`/client/tap-games/`);
+          setData(response.data || []);
+        } catch (error) {
+          console.error("Ma'lumotlarni yuklashda xatolik:", error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
-
     fetchStats();
-  }, [gameName]); // pathname.game ўрнига gameName қўшилди
-
+  }, []);
   if (loading) {
     return <Loader />;
   }
 
   return (
     <div>
-      <GameStore data={data} gameId={gameName} />
-      <GameInfo data={data} />
+      <div className="game__content_bg">
+        <GameStore data={data} gameId={pathname.game} />
+        <GameInfo data={data} />
+      </div>
     </div>
   );
 }

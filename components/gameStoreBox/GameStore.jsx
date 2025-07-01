@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import GameContent from "./GameContent";
 
 const GameStore = ({ data, gameId }) => {
   const { t } = useTranslation();
+  const [activeId, setActiveId] = useState(data[0]?.id ?? "");
   const savedCurrency =
     typeof window !== "undefined"
       ? localStorage.getItem("currency") || "uzs"
@@ -16,14 +18,17 @@ const GameStore = ({ data, gameId }) => {
       <div
         className="game_bg"
         style={{
-          backgroundImage: `url(${data.cover})`,
+          backgroundImage: `url(${
+            data?.cover ||
+            "https://api.uzpin.games/media/uploads/31f1076d-d48b-472a-8722-9be49e24bfa4.jpg"
+          })`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
       />
 
-      <div className="grid grid-cols-5 max-w-[1200px] w-full mt-5 mx-auto">
+      <div className="grid grid-cols-5 max-w-[1200px] w-full mx-auto">
         <h1 className="col-span-5 text-3xl font-bold my-5 max-sm:hidden">
           {data.name}
         </h1>
@@ -55,7 +60,6 @@ const GameStore = ({ data, gameId }) => {
               gameId={gameId}
               savedCurrency={savedCurrency}
               t={t}
-              server="ph"
             />
           </TabsContent>
 
@@ -65,9 +69,38 @@ const GameStore = ({ data, gameId }) => {
               gameId={gameId}
               savedCurrency={savedCurrency}
               t={t}
-              server="ru"
             />
           </TabsContent>
+        </Tabs>
+      ) : gameId === "1" ? (
+        <Tabs
+          defaultValue={data[0]?.id ?? ""}
+          value={activeId}
+          onValueChange={setActiveId}
+          className="max-w-[1200px] w-full mt-5 mx-auto"
+        >
+          <TabsList className="w-full bg-transparent justify-start gap-5">
+            {data.map((item) => (
+              <TabsTrigger
+                key={item.id}
+                value={item.id}
+                className="w-[25%] max-sm:w-full py-3 text-[18px] border-2 border-[#c0bfbf] data-[state=active]:bg-[#ffba00] text-black data-[state=active]:text-black data-[state=active]:border-none"
+              >
+                {item.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          {data.map((item) => (
+            <TabsContent key={item.id} value={item.id}>
+              <GameContent
+                data={data}
+                gameId={item.id}
+                savedCurrency={savedCurrency}
+                t={t}
+              />
+            </TabsContent>
+          ))}
         </Tabs>
       ) : (
         <div className="max-w-[1200px] w-full mt-5 mx-auto">

@@ -2,6 +2,7 @@
 
 import axiosInstance from "@/libs/axios";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GoTrash } from "react-icons/go";
 import MobileGameStore from "./MobileGameStore";
@@ -9,7 +10,8 @@ import { MobileModal } from "./MobileModal";
 import { PurchaseModal } from "./PurchaseModal";
 
 // GameContent komponenti - asosiy mantiq va UI uchun
-const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
+const GameContent = ({ data, gameId, savedCurrency, t }) => {
+  const pathname = useParams().game;
   const [cart, setCart] = useState([]);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [showMobileModal, setShowMobileModal] = useState(false);
@@ -19,7 +21,8 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
   const isMobile =
     gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
     gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-    gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2";
+    gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2" ||
+    gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d";
 
   // Token ni localStoragedan olish
   useEffect(() => {
@@ -32,45 +35,6 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
     }
   }, []);
 
-  // Promocodelarni yuklash
-  // const fetchStats = async () => {
-  //   setLoading(true);
-  //   let sendData = { Currency: savedCurrency };
-  //   if (token) {
-  //     sendData = {
-  //       Authorization: `Bearer ${token}`,
-  //       Currency: savedCurrency,
-  //     };
-  //   }
-  //   if (data.id) {
-  //     try {
-  //       const response = await axiosInstance.get(
-  //         `/client/promocodes/${data.id}`,
-  //         { headers: sendData }
-  //       );
-
-  //       // Maxsus gameId lar uchun count ni 1000 qilish
-  //       if (
-  //         gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-  //         gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-  //         gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
-  //       ) {
-  //         const updatedData = response.data.map((item) => ({
-  //           ...item,
-  //           count: 1000,
-  //         }));
-  //         setCode(updatedData);
-  //       } else {
-  //         setCode(response.data || []);
-  //       }
-  //     } catch (error) {
-  //       console.error("Ma'lumotlarni yuklashda xatolik:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-  // };
-
   const fetchStats = async () => {
     setLoading(true);
     let sendData = { Currency: savedCurrency };
@@ -80,6 +44,23 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
         Currency: savedCurrency,
       };
     }
+
+    if (pathname === "1") {
+      try {
+        const response = await axiosInstance.get(
+          `/client/promocodes/${gameId}`,
+          {
+            headers: sendData,
+          }
+        );
+        setCode(response.data || []);
+      } catch (error) {
+        console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     if (data.id) {
       try {
         const response = await axiosInstance.get(
@@ -87,28 +68,18 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
           { headers: sendData }
         );
 
-        // Server bo'yicha filtrlash
-        let filteredData = response.data;
-        if (server) {
-          filteredData = response.data.filter(
-            (item) =>
-              item.server && item.server.toLowerCase() === server.toLowerCase()
-          );
-        }
-
-        // Maxsus gameId lar uchun count ni 1000 qilish
         if (
           gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
           gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
           gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
         ) {
-          const updatedData = filteredData.map((item) => ({
+          const updatedData = response.data.map((item) => ({
             ...item,
             count: 1000,
           }));
           setCode(updatedData);
         } else {
-          setCode(filteredData || []);
+          setCode(response.data || []);
         }
       } catch (error) {
         console.error("Ma'lumotlarni yuklashda xatolik:", error);
@@ -187,7 +158,8 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
           className={`${
             gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
             gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-            gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
+            gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2" ||
+            gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d"
               ? "col-span-5 lg:grid-cols-5"
               : "col-span-3 lg:grid-cols-3"
           } grid grid-cols-1 md:grid-cols-2 gap-5 max-sm:grid-cols-2 max-sm:col-span-5 max-sm:gap-2`}
@@ -268,7 +240,8 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
                       {/* Miqdorni boshqarish */}
                       {gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc" &&
                         gameId !== "322d0721-1dca-4720-a0a3-68371ba8ed22" &&
-                        gameId !== "7d64856a-ae76-4ddc-be75-3a361dcbf9a2" && (
+                        gameId !== "7d64856a-ae76-4ddc-be75-3a361dcbf9a2" &&
+                        gameId !== "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d" && (
                           <div className="flex justify-between items-center gap-2">
                             <button
                               className={`px-2 py-1 text-[28px] max-sm:p-0 ${
@@ -452,7 +425,7 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
                       onClick={() => setShowPurchaseModal(1)}
                       className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium mb-[10px] border-b-2 border-[black] max-sm:m-0"
                     >
-                      {t("all-games-text10")}
+                      {/* {t("all-games-text10")} */}
                     </button>
                   )}
                   {gameId !== "28f97b34-7c40-4a98-947c-a0499c108141" &&
@@ -493,8 +466,8 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
       )}
       {showMobileModal && (
         <MobileModal
-          server={server}
           cart={cart}
+          gameId={gameId}
           clear={clearCart}
           onClose={() => setShowMobileModal(false)}
         />
