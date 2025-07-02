@@ -375,37 +375,40 @@ const GameContent = ({ data, gameId, savedCurrency, t }) => {
 
                 {/* Korzinkadagi mahsulotlar ro'yxati (faqat desktop uchun) */}
                 {cart.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between items-center bg-[#F4F4F4] py-3 px-5 rounded-[10px] shadow-lg mt-4 max-sm:hidden"
-                  >
-                    <div className="flex items-center gap-4">
-                      <Image
-                        src={
-                          gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-                          gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-                          gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
-                            ? item.photo || "/mobile.webp"
-                            : "/uccard_converted.webp"
-                        }
-                        alt={`${item?.name || "Unknown"} UC`}
-                        width={56}
-                        height={56}
-                        className="w-[56px] h-[56px]"
-                      />
-                      <span>{item.name}</span>
+                  <>
+                    {console.log(item)}
+                    <div
+                      key={item.id}
+                      className="flex justify-between items-center bg-[#F4F4F4] py-3 px-5 rounded-[10px] shadow-lg mt-4 max-sm:hidden"
+                    >
+                      <div className="flex items-center gap-4">
+                        <Image
+                          src={
+                            gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
+                            gameId !== "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
+                            gameId !== "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
+                              ? item.photo || "/mobile.webp"
+                              : "/uccard_converted.webp"
+                          }
+                          alt={`${item?.name || "Unknown"} UC`}
+                          width={56}
+                          height={56}
+                          className="w-[56px] h-[56px]"
+                        />
+                        <span>{item.name}</span>
+                      </div>
+                      <span>
+                        {(item.price * item.quantity)
+                          .toLocaleString("fr-FR", {
+                            useGrouping: true,
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 3,
+                          })
+                          .replace(",", ".")}{" "}
+                        {savedCurrency}
+                      </span>
                     </div>
-                    <span>
-                      {(item.price * item.quantity)
-                        .toLocaleString("fr-FR", {
-                          useGrouping: true,
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 3,
-                        })
-                        .replace(",", ".")}{" "}
-                      {savedCurrency}
-                    </span>
-                  </div>
+                  </>
                 ))}
               </div>
 

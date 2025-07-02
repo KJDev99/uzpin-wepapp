@@ -185,6 +185,13 @@ export default function BalansCardModal({
     }
   }, [token, selectedCurrency]);
 
+  useEffect(() => {
+    if (selectedCard) {
+      setCrypto(false);
+      setInputValue("");
+    }
+  }, [selectedCard]);
+
   if (!isOpen) {
     return null;
   }
@@ -353,6 +360,7 @@ export default function BalansCardModal({
 
             <div className="flex gap-2 flex-wrap mt-4">
               {(crypto || selectedCard?.is_auto_pay === false) &&
+                inputValue &&
                 selectedCard?.extra_cards?.map((card) => (
                   <div
                     key={card.id}
@@ -611,20 +619,40 @@ export default function BalansCardModal({
                     width="100%"
                     height="200px"
                   />
-                  // <iframe
-                  //   width="100%"
-                  //   height="200"
-                  //   src={selectedCard?.video_url}
-                  //   allowFullScreen
-                  // ></iframe>
                 )}
 
-                {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
+                {inputValue && selectedCurrency === "USD" && (
+                  <>
+                    <Image
+                      src={selectedCard.qr_code}
+                      className="mt-5 mx-auto w-[200px] h-[200px]"
+                      width={241}
+                      height={241}
+                      alt="img"
+                    />
+                    <button
+                      ref={buttonRef}
+                      className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
+                        selectedCard.card_number.length > 19 ? "text-[9px]" : ""
+                      } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
+                      onClick={copyCryptoNumber}
+                    >
+                      {copied2 ? (
+                        <MdCheck size={24} />
+                      ) : (
+                        <MdOutlineContentCopy size={24} />
+                      )}
+                      {selectedCard.card_number}
+                    </button>
+                  </>
+                )}
+
+                {/* {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
                   <>
                     {crypto && (
                       <>
                         <Image
-                          src="/trc20.jpg"
+                          src={selectedCard.qr_code}
                           className="mt-5 mx-auto w-[200px] h-[200px]"
                           width={241}
                           height={241}
@@ -644,7 +672,7 @@ export default function BalansCardModal({
                           ) : (
                             <MdOutlineContentCopy size={24} />
                           )}
-                          TAKhi9hHNuajmi5WyWj2fLDmaCFUKPuGVQ
+                          {selectedCard.card_number}
                         </button>
                       </>
                     )}
@@ -722,7 +750,7 @@ export default function BalansCardModal({
                       alt="img"
                     />
                   </>
-                ) : null}
+                ) : null} */}
               </div>
             )}
             {selectedCard && selectedCurrency !== "USD" && (
@@ -741,13 +769,6 @@ export default function BalansCardModal({
                     height="200px"
                     className="mt-5 rounded-xl"
                   />
-                  // <iframe
-                  //   width="100%"
-                  //   height="200"
-                  //   src={selectedCard?.video_url}
-                  //   className="mt-5 rounded-xl"
-                  //   allowFullScreen
-                  // ></iframe>
                 )}
                 {crypto && selectedCard?.extra_cards?.length === 0 && (
                   <button
