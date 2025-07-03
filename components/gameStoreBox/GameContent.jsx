@@ -22,7 +22,8 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
     gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
     gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
     gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2" ||
-    gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d";
+    gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d" ||
+    gameId === "628861ab-0687-4868-971c-94ba7e5e2134";
 
   // Token ni localStoragedan olish
   useEffect(() => {
@@ -164,7 +165,8 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
             gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
             gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
             gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2" ||
-            gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d"
+            gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d" ||
+            gameId === "628861ab-0687-4868-971c-94ba7e5e2134"
               ? "col-span-5 lg:grid-cols-5"
               : "col-span-3 lg:grid-cols-3"
           } grid grid-cols-1 md:grid-cols-2 gap-5 max-sm:grid-cols-2 max-sm:col-span-5 max-sm:gap-2`}
@@ -246,7 +248,8 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
                       {gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc" &&
                         gameId !== "322d0721-1dca-4720-a0a3-68371ba8ed22" &&
                         gameId !== "7d64856a-ae76-4ddc-be75-3a361dcbf9a2" &&
-                        gameId !== "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d" && (
+                        gameId !== "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d" &&
+                        gameId !== "628861ab-0687-4868-971c-94ba7e5e2134" && (
                           <div className="flex justify-between items-center gap-2">
                             <button
                               className={`px-2 py-1 text-[28px] max-sm:p-0 ${
