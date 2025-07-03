@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-export function MobileModal({ isOpen, onClose, cart, clear, gameId }) {
+export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   const pathname = usePathname();
   const id = pathname.replace("/all-games/", "");
   const router = useRouter();
@@ -76,6 +76,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId }) {
     if (gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
       formattedData.server = ru;
     }
+
     setLoading(true);
     try {
       const response = await axiosInstance.post(
@@ -181,11 +182,11 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId }) {
     if (promo_code.trim() !== "") {
       formattedData.promo_code = promo_code;
     }
-    if (
-      gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-      gameId === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
-    ) {
+    if (gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc") {
       formattedData.server = ph;
+    }
+    if (server) {
+      formattedData.server = server;
     }
     if (gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22") {
       formattedData.server = ru;
@@ -194,10 +195,13 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId }) {
       formattedData.extra = true;
     }
     setLoading(true);
+    console.log(server);
     if (
       gameId === "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
       gameId === "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-      gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d"
+      gameId === "b9f1aeb0-50fa-4826-87e2-cb9c906dbe1d" ||
+      server === "ru" ||
+      server === null
     ) {
       try {
         setLoading(true);

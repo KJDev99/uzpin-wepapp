@@ -10,7 +10,7 @@ import { MobileModal } from "./MobileModal";
 import { PurchaseModal } from "./PurchaseModal";
 
 // GameContent komponenti - asosiy mantiq va UI uchun
-const GameContent = ({ data, gameId, savedCurrency, t }) => {
+const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
   const pathname = useParams().game;
   const [cart, setCart] = useState([]);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
@@ -89,6 +89,11 @@ const GameContent = ({ data, gameId, savedCurrency, t }) => {
     }
   };
 
+  const filteredCode =
+    server === "ph" || server === "ru"
+      ? code.filter((pkg) => pkg.server === server)
+      : code;
+
   // Komponent yuklanganda va kerakli o'zgarishlarda ma'lumotlarni yangilash
   useEffect(() => {
     fetchStats();
@@ -164,7 +169,7 @@ const GameContent = ({ data, gameId, savedCurrency, t }) => {
               : "col-span-3 lg:grid-cols-3"
           } grid grid-cols-1 md:grid-cols-2 gap-5 max-sm:grid-cols-2 max-sm:col-span-5 max-sm:gap-2`}
         >
-          {code.map(
+          {filteredCode.map(
             (pkg) =>
               ![
                 "38ade9a5-98f9-4c61-afb2-198434af8612",
@@ -375,40 +380,37 @@ const GameContent = ({ data, gameId, savedCurrency, t }) => {
 
                 {/* Korzinkadagi mahsulotlar ro'yxati (faqat desktop uchun) */}
                 {cart.map((item) => (
-                  <>
-                    {console.log(item)}
-                    <div
-                      key={item.id}
-                      className="flex justify-between items-center bg-[#F4F4F4] py-3 px-5 rounded-[10px] shadow-lg mt-4 max-sm:hidden"
-                    >
-                      <div className="flex items-center gap-4">
-                        <Image
-                          src={
-                            gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
-                            gameId !== "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
-                            gameId !== "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
-                              ? item.photo || "/mobile.webp"
-                              : "/uccard_converted.webp"
-                          }
-                          alt={`${item?.name || "Unknown"} UC`}
-                          width={56}
-                          height={56}
-                          className="w-[56px] h-[56px]"
-                        />
-                        <span>{item.name}</span>
-                      </div>
-                      <span>
-                        {(item.price * item.quantity)
-                          .toLocaleString("fr-FR", {
-                            useGrouping: true,
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 3,
-                          })
-                          .replace(",", ".")}{" "}
-                        {savedCurrency}
-                      </span>
+                  <div
+                    key={item.id}
+                    className="flex justify-between items-center bg-[#F4F4F4] py-3 px-5 rounded-[10px] shadow-lg mt-4 max-sm:hidden"
+                  >
+                    <div className="flex items-center gap-4">
+                      <Image
+                        src={
+                          gameId !== "00984e54-78f0-44f8-ad48-dac23d838bdc" ||
+                          gameId !== "322d0721-1dca-4720-a0a3-68371ba8ed22" ||
+                          gameId !== "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
+                            ? item.photo || "/mobile.webp"
+                            : "/uccard_converted.webp"
+                        }
+                        alt={`${item?.name || "Unknown"} UC`}
+                        width={56}
+                        height={56}
+                        className="w-[56px] h-[56px]"
+                      />
+                      <span>{item.name}</span>
                     </div>
-                  </>
+                    <span>
+                      {(item.price * item.quantity)
+                        .toLocaleString("fr-FR", {
+                          useGrouping: true,
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 3,
+                        })
+                        .replace(",", ".")}{" "}
+                      {savedCurrency}
+                    </span>
+                  </div>
                 ))}
               </div>
 
@@ -471,6 +473,7 @@ const GameContent = ({ data, gameId, savedCurrency, t }) => {
         <MobileModal
           cart={cart}
           gameId={gameId}
+          server={server}
           clear={clearCart}
           onClose={() => setShowMobileModal(false)}
         />

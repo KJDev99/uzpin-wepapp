@@ -84,11 +84,21 @@ const GameStore = ({ data, gameId }) => {
               <TabsTrigger
                 key={item.id}
                 value={item.id}
-                className="w-[25%] max-sm:w-full py-3 text-[18px] border-2 border-[#c0bfbf] data-[state=active]:bg-[#ffba00] text-black data-[state=active]:text-black data-[state=active]:border-none"
+                className="w-[25%] min-w-fit max-sm:w-full py-3 text-[18px] border-2 border-[#c0bfbf] data-[state=active]:bg-[#ffba00] text-black data-[state=active]:text-black data-[state=active]:border-none"
               >
                 {item.name}
               </TabsTrigger>
             ))}
+            {/* {data.some(
+              (item) => item.id === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
+            ) && (
+              <TabsTrigger
+                value="MLBB-RU"
+                className="w-[25%] min-w-fit max-sm:w-full py-3 text-[18px] border-2 border-[#c0bfbf] data-[state=active]:bg-[#ffba00] text-black data-[state=active]:text-black data-[state=active]:border-none"
+              >
+                MLBB RU
+              </TabsTrigger>
+            )} */}
           </TabsList>
 
           {data.map((item) => (
@@ -96,11 +106,29 @@ const GameStore = ({ data, gameId }) => {
               <GameContent
                 data={data}
                 gameId={item.id}
+                server={
+                  item.id === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
+                    ? "ph"
+                    : null
+                }
                 savedCurrency={savedCurrency}
                 t={t}
               />
             </TabsContent>
           ))}
+          {/* {data.some(
+            (item) => item.id === "7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
+          ) && (
+            <TabsContent value="MLBB-RU">
+              <GameContent
+                data={data}
+                server="ru"
+                gameId="7d64856a-ae76-4ddc-be75-3a361dcbf9a2"
+                savedCurrency={savedCurrency}
+                t={t}
+              />
+            </TabsContent>
+          )} */}
         </Tabs>
       ) : (
         <div className="max-w-[1200px] w-full mt-5 mx-auto">
