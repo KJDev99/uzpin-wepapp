@@ -433,7 +433,7 @@ const GameContent = ({ data, gameId, savedCurrency, t, server }) => {
                       onClick={() => setShowPurchaseModal(1)}
                       className="w-full py-2 bg-[#FFBA00] rounded text-black font-medium mb-[10px] border-b-2 border-[black] max-sm:m-0"
                     >
-                      {/* {t("all-games-text10")} */}
+                      {t("all-games-text10")}
                     </button>
                   )}
                   {gameId !== "28f97b34-7c40-4a98-947c-a0499c108141" &&
