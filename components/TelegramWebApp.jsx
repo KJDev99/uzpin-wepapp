@@ -14,7 +14,7 @@ const TelegramApp = () => {
         sessionStorage.setItem("userId", chatId);
       } else if (window.Telegram) {
         const tg = window.Telegram.WebApp;
-        tg.setClosingBehavior("manual");
+        // tg.setClosingBehavior("manual");
         tg.ready();
         tg.themeParams;
         tg.expand();
