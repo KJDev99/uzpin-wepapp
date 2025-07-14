@@ -7,6 +7,15 @@
   --font-readex-pro: "Readex Pro", sans-serif;
 }
 
+html,
+body,
+#__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: var(--font-readex-pro);
 }
@@ -57,8 +66,6 @@ body {
     display: none;
   }
 }
-
-
 
 @layer base {
   :root {
@@ -115,8 +122,6 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {
