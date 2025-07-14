@@ -12,10 +12,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-      />
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js?56" />
         <link rel="icon" href="/favicon.ico" />
