@@ -7,6 +7,12 @@ const TelegramApp = () => {
   const chatId = searchParams?.get("chat_id") || null;
 
   useEffect(() => {
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.expand();
+    }
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       // if (chatId || sessionStorage.getItem("userId") || true) {
       if (chatId || sessionStorage.getItem("userId")) {
