@@ -356,6 +356,7 @@ export default function BalansBox() {
 
   const rublAutoPay = async () => {
     try {
+      setLoading1(true);
       const response = await axiosInstance.post(
         "client/create-code-pay-payment/",
         {
@@ -371,6 +372,8 @@ export default function BalansBox() {
       window.open(response.data.url, "_blank");
     } catch (error) {
       setRublError(true);
+    } finally {
+      setLoading1(false);
     }
   };
 
@@ -470,7 +473,7 @@ export default function BalansBox() {
         <IoIosArrowBack className="text-2xl md:hidden" />
         <h2 className="text-xl font-bold md:mb-4">{t("profile2")}</h2>
       </Link>
-      {/* web */}
+
       <div className="flex justify-between items-center mt-5 mb-8 max-sm:hidden">
         <h1 className="text-2xl font-semibold">{t("profile2")}</h1>
         <div className="flex gap-2">
@@ -508,7 +511,6 @@ export default function BalansBox() {
           </button>
         </div>
       </div>
-      {/* web */}
 
       <div className="grid md:grid-cols-2 gap-8 max-sm:mt-5 max-sm:gap-20">
         <div className="bg-[#FFFCF6] p-6 rounded-2xl shadow-custom max-sm:pt-0 max-sm:pb-[10px] max-sm:px-5">
@@ -605,7 +607,6 @@ export default function BalansBox() {
             </div>
           </div>
           {/* mobile */}
-
           <div className="space-y-4">
             {selectedCurrency !== "USD" && selectedCurrency !== "UZS" && (
               <div>
@@ -629,38 +630,50 @@ export default function BalansBox() {
             <button
               onClick={selectedCurrency === "RUB" ? rublAutoPay : openModal}
               disabled={
-                selectedCurrency !== "USD" &&
-                selectedCurrency !== "UZS" &&
-                inputValue < 10
+                (selectedCurrency !== "USD" &&
+                  selectedCurrency !== "UZS" &&
+                  inputValue < 10) ||
+                loading1
               }
-              className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors max-sm:hidden ${
-                selectedCurrency !== "USD" &&
-                selectedCurrency !== "UZS" &&
-                inputValue < 10
+              className={`w-full flex items-center justify-center py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors max-sm:hidden ${
+                (selectedCurrency !== "USD" &&
+                  selectedCurrency !== "UZS" &&
+                  inputValue < 10) ||
+                loading1
                   ? "bg-[#b7b7b7] hover:bg-[#b7b7b7] cursor-not-allowed"
                   : ""
               }`}
             >
-              {t("profile23")}
+              {loading1 ? (
+                <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+              ) : (
+                t("profile23")
+              )}
             </button>
             <button
               onClick={
                 selectedCurrency === "RUB" ? rublAutoPay : toggleCardVisibile
               }
               disabled={
-                selectedCurrency !== "USD" &&
-                selectedCurrency !== "UZS" &&
-                inputValue < 10
+                (selectedCurrency !== "USD" &&
+                  selectedCurrency !== "UZS" &&
+                  inputValue < 10) ||
+                loading1
               }
-              className={`w-full py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden ${
-                inputValue < 10 &&
-                selectedCurrency !== "USD" &&
-                selectedCurrency !== "UZS"
+              className={`w-full flex items-center justify-center py-3 bg-[#FFC149] hover:bg-[#FFB529] text-black font-medium rounded-lg transition-colors sm:hidden ${
+                (inputValue < 10 &&
+                  selectedCurrency !== "USD" &&
+                  selectedCurrency !== "UZS") ||
+                loading1
                   ? "bg-[#b7b7b7] hover:bg-[#b7b7b7] cursor-not-allowed"
                   : ""
               }`}
             >
-              {t("profile23")}
+              {loading1 ? (
+                <AiOutlineLoading3Quarters className="animate-spin mr-2" />
+              ) : (
+                t("profile23")
+              )}
             </button>
           </div>
 
@@ -781,104 +794,6 @@ export default function BalansBox() {
                     </button>
                   </>
                 )}
-
-                {/* {selectedCard.id === "36832140-0df0-4541-9644-6bb7b8f20540" ? (
-                  <>
-                    {crypto && (
-                      <>
-                        <Image
-                          src="/trc20.jpg"
-                          className="mt-5 mx-auto w-[200px] h-[200px]"
-                          width={241}
-                          height={241}
-                          alt="img"
-                        />
-                        <button
-                          ref={buttonRef}
-                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                            selectedCard.card_number.length > 19
-                              ? "text-[9px]"
-                              : ""
-                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                          onClick={copyCryptoNumber}
-                        >
-                          {copied2 ? (
-                            <MdCheck size={24} />
-                          ) : (
-                            <MdOutlineContentCopy size={24} />
-                          )}
-                          TAKhi9hHNuajmi5WyWj2fLDmaCFUKPuGVQ
-                        </button>
-                      </>
-                    )}
-                  </>
-                ) : selectedCard.id ===
-                  "444e1647-80ac-4777-a209-0e28f3a66f84" ? (
-                  <>
-                    {crypto && (
-                      <>
-                        <Image
-                          src="/bep20.jpg"
-                          className="mt-5 mx-auto w-[200px] h-[200px]"
-                          width={241}
-                          height={241}
-                          alt="img"
-                        />
-                        <button
-                          ref={buttonRef}
-                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                            selectedCard.card_number.length > 19
-                              ? "text-[9px]"
-                              : ""
-                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                          onClick={copyCryptoNumber}
-                        >
-                          {copied2 ? (
-                            <MdCheck size={24} />
-                          ) : (
-                            <MdOutlineContentCopy size={24} />
-                          )}
-                          0x1b246eee83c122106612d36bbaedc241933f4d94
-                        </button>
-                      </>
-                    )}
-                  </>
-                ) : selectedCard.id ===
-                  "07873980-c9d4-4de6-8e19-964f7d37afbe" ? (
-                  <>
-                    {crypto && (
-                      <>
-                        <Image
-                          src="/aptos.jpg"
-                          className="mt-5 mx-auto w-[200px] h-[200px]"
-                          width={241}
-                          height={241}
-                          alt="img"
-                        />
-                        <button
-                          ref={buttonRef}
-                          className={`flex items-center gap-[5px] mx-auto mt-3 py-[10px] px-[15px] font-medium ${
-                            selectedCard.card_number.length > 19
-                              ? "text-[9px]"
-                              : ""
-                          } text-[16px] leading-[18px] bg-[#ffba00] rounded-[10px]`}
-                          onClick={copyCryptoNumber}
-                        >
-                          {copied2 ? (
-                            <MdCheck size={24} />
-                          ) : (
-                            <MdOutlineContentCopy size={24} />
-                          )}
-                          <span className="text-left">
-                            0x523f93300e905007437ca0c7180716
-                            <br className="block sm:hidden" />
-                            384b6d690b11093f7b50816cff4b9c005d
-                          </span>
-                        </button>
-                      </>
-                    )}
-                  </>
-                ) : null} */}
 
                 {(crypto || selectedCard?.is_auto_pay === false) &&
                   inputValue &&

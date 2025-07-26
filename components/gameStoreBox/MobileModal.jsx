@@ -330,6 +330,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
 
           setSuccess(true);
         } catch (error) {
+          setLoading(false);
           setErrorMessage(
             error.response.data.detail || error.response.data.error
           );
@@ -411,6 +412,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
 
           setSuccess(true);
         } catch (error) {
+          setLoading(false);
           setErrorMessage(
             error.response.data.detail || error.response.data.error
           );
@@ -769,7 +771,11 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
                                 : "bg-[#FFBA00] border-[black]"
                             }`}
                           >
-                            Sotib olish
+                            {loading ? (
+                              <AiOutlineLoading3Quarters className="animate-spin" />
+                            ) : (
+                              "Sotib olish"
+                            )}
                           </button>
                         )}
                       </div>
