@@ -26,6 +26,7 @@ export function PurchaseModal({
   const [promo_code, setPromo_Code] = useState("");
   const [token, setToken] = useState(null);
   const [error2, setError] = useState(false);
+  const [apiError, setApiError] = useState(false);
   const [error3, setError3] = useState(false);
   const [error4, setError4] = useState(false);
   const [error5, setError5] = useState(false);
@@ -169,10 +170,18 @@ export function PurchaseModal({
           setError5(false);
           onClose();
         }, 2000);
-      } else {
+      } else if (
+        error.response.data.error === "hisobingizda mablag' yetarli emas"
+      ) {
         setError(true);
         setTimeout(() => {
           setError(false);
+          onClose();
+        }, 2000);
+      } else {
+        setApiError(true);
+        setTimeout(() => {
+          setApiError(false);
           onClose();
         }, 2000);
       }
@@ -193,6 +202,9 @@ export function PurchaseModal({
       className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
       open={isOpen}
     >
+      {apiError && (
+        <Alert status={400} title={t("error_text")} message={t("profile57")} />
+      )}
       {error2 && (
         <Alert status={400} title={t("profile14")} message={t("profile15")} />
       )}

@@ -22,6 +22,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
   const { t } = useTranslation();
   const [token, setToken] = useState(null);
   const [error2, setError] = useState(false);
+  const [apiError, setApiError] = useState(false);
   const [error3, setError3] = useState(false);
   const [error4, setError4] = useState(false);
   const [error5, setError5] = useState(false);
@@ -282,10 +283,18 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
             setError5(false);
             onClose();
           }, 2000);
-        } else {
+        } else if (
+          error.response.data.error === "hisobingizda mablag' yetarli emas"
+        ) {
           setError(true);
           setTimeout(() => {
             setError(false);
+            onClose();
+          }, 2000);
+        } else {
+          setApiError(true);
+          setTimeout(() => {
+            setApiError(false);
             onClose();
           }, 2000);
         }
@@ -371,10 +380,18 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
               setError5(false);
               onClose();
             }, 2000);
-          } else {
+          } else if (
+            error.response.data.error === "hisobingizda mablag' yetarli emas"
+          ) {
             setError(true);
             setTimeout(() => {
               setError(false);
+              onClose();
+            }, 2000);
+          } else {
+            setApiError(true);
+            setTimeout(() => {
+              setApiError(false);
               onClose();
             }, 2000);
           }
@@ -453,10 +470,18 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
               setError5(false);
               onClose();
             }, 2000);
-          } else {
+          } else if (
+            error.response.data.error === "hisobingizda mablag' yetarli emas"
+          ) {
             setError(true);
             setTimeout(() => {
               setError(false);
+              onClose();
+            }, 2000);
+          } else {
+            setApiError(true);
+            setTimeout(() => {
+              setApiError(false);
               onClose();
             }, 2000);
           }
@@ -489,6 +514,7 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
     setError3(false);
     setError4(false);
     setError5(false);
+    setApiError(false);
   };
 
   const ClearTash = () => {
@@ -498,6 +524,14 @@ export function MobileModal({ isOpen, onClose, cart, clear, gameId, server }) {
 
   return (
     <>
+      {apiError && (
+        <Alert
+          status={400}
+          title={t("error_text")}
+          message={t("profile57")}
+          onClose={handleClose}
+        />
+      )}
       {errormessage && (
         <Alert
           status={400}
